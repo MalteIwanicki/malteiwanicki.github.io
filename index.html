@@ -23,17 +23,19 @@
         a {
             color: #BB86FC;
         }
-.ascii-art {
+    left: 30%;
+    top: 0;
     font-family: monospace;
     white-space: pre;
-    font-size: 0.1em;
-}
+    font-size: 1vw;
+    line-height: 1vw;
+    position: fixed;
+    height: 100%;
     </style>
 </head>
 
 <body>
-    <div class="container">
-        <div class="ascii-art", id="portrait">
+     <div class="ascii-art", id="portrait">
             <script>
                 fetch('portrait.txt')
                     .then(response => response.text())
@@ -42,6 +44,7 @@
                     });
             </script>
         </div>
+    <div class="container">
         <h1>Malte Iwanicki</h1>
         <p>
             Greetings from Berlin! I'm Malte Iwanicki, a seasoned Python engineer with a passion for turning problems
