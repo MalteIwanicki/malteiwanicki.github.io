@@ -14,38 +14,61 @@
             padding: 0;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
         a {
             color: #BB86FC;
         }
-.ascii-art{
-    left: 30%;
-    top: 0;
-    font-family: monospace;
-    white-space: pre;
-    font-size: 1vw;
-    line-height: 1vw;
-    position: fixed;
-    overflow:hidden;
-    height: 100%;}
+
+        @media (max-width: 520px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+
+            .ascii-art {
+                font-family: monospace;
+                white-space: pre;
+                font-size: 0.9vw;
+                line-height: 0.9vw;
+                width: 100vw;
+                overflow: hidden;
+            }
+        }
+
+        @media (min-width: 520px) {
+            .container {
+                max-width: 800px;
+                margin: 0 auto;
+                margin-right: 38%;
+                padding: 20px;
+            }
+
+            .ascii-art {
+                top: 0;
+                font-family: monospace;
+                white-space: pre;
+                font-size: 0.7vh;
+                line-height: 0.7vh;
+                position: fixed;
+                overflow: hidden;
+                height: 100vh;
+                margin-left: 55%;
+            }
+        }
+
     </style>
 </head>
 
 <body>
-     <div class="ascii-art", id="portrait">
-            <script>
-                fetch('portrait.txt')
-                    .then(response => response.text())
-                    .then(data => {
-                        document.getElementById('portrait').textContent = data;
-                    });
-            </script>
-        </div>
+    <div class="ascii-art" , id="portrait">
+        <script>
+            fetch('portrait.txt')
+                .then(response => response.text())
+                .then(data => {
+                    document.getElementById('portrait').textContent = data;
+                });
+        </script>
+    </div>
     <div class="container">
         <h1>Malte Iwanicki</h1>
         <p>
