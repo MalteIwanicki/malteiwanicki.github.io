@@ -270,7 +270,7 @@
 					"amount": "100ml"
 				},
 				{
-					"food": "garlic cloves",
+					"food": "garlic",
 					"amount": "2",
 					"how": "chopped"
 				},
@@ -421,7 +421,7 @@
 					"how": "chopped"
 				},
 				{
-					"food": "garlic clove",
+					"food": "garlic",
 					"amount": "1",
 					"how": "chopped"
 				},
@@ -460,7 +460,7 @@
 					"amount": "20g"
 				},
 				{
-					"food": "garlic clove"
+					"food": "garlic"
 				},
 				{
 					"food": "olive oil",
@@ -561,7 +561,7 @@
 					"how": "sliced"
 				},
 				{
-					"food": "garlic clove",
+					"food": "garlic",
 					"amount": "1",
 					"how": "chopped"
 				},
@@ -618,7 +618,7 @@
 					"how": "chopped"
 				},
 				{
-					"food": "garlic clove",
+					"food": "garlic",
 					"amount": "1",
 					"how": "chopped"
 				},
@@ -693,7 +693,7 @@
 					"how": "chopped"
 				},
 				{
-					"food": "garlic cloves",
+					"food": "garlic",
 					"amount": "2",
 					"how": "chopped"
 				},
@@ -822,7 +822,7 @@
 					"how": "chopped"
 				},
 				{
-					"food": "garlic clove",
+					"food": "garlic",
 					"amount": "1",
 					"how": "chopped"
 				},
@@ -868,7 +868,7 @@
 					"how": "chopped"
 				},
 				{
-					"food": "garlic cloves",
+					"food": "garlic",
 					"amount": "2",
 					"how": "chopped"
 				},
@@ -971,7 +971,7 @@
 					"amount": "3 Tbsp"
 				},
 				{
-					"food": "garlic clove",
+					"food": "garlic",
 					"amount": "1",
 					"how": "crushed"
 				},
