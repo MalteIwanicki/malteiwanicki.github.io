@@ -74,7 +74,13 @@ function renderSummary() {
   summaryList.innerHTML = '';
 
   const uniqueIngredients = [...new Set(selectedRecipes)];
-
+  // Sort alphabetically
+  uniqueIngredients.sort((a, b) => {
+    if (a.food < b.food) return -1;
+    if (a.food > b.food) return 1;
+    return 0;
+  });
+  
   uniqueIngredients.forEach(ingredient => {
     const listItem = document.createElement('li');
     listItem.textContent = ingredient;
