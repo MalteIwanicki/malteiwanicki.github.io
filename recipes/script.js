@@ -86,7 +86,7 @@ async function translateAndUpdateLink(name, nameItem) {
         const germanName = data.responseData.translatedText;
 
         // Update the link with the German translation
-        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}">${name} (${germanName})</a>`;
+        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}">${name}</a>`;
     } catch (error) {
         // Handle any errors that occur during the translation
         console.error('Error translating name:', error);
