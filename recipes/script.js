@@ -110,7 +110,7 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    nameItem.textContent = name;
+    nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${name}">${name}</a>`;
     listItem.appendChild(nameItem);
 
     if (details.length > 0) {
