@@ -75,21 +75,6 @@ function updateSummary(event) {
   }
   renderSummary();
 }
-
-function bakup_updateSummary(event) {
-  const checkbox = event.target;
-  const recipe = checkbox.closest('.recipe');
-  const ingredientsList = recipe.querySelector('.ingredients-list');
-  const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => item.textContent);
-
-  if (checkbox.checked) {
-    selectedRecipes.push(...ingredients);
-  } else {
-    selectedRecipes = selectedRecipes.filter(item => !ingredients.includes(item));
-  }
-
-  renderSummary();
-}
 function renderSummary() {
   const summaryList = document.getElementById('summary-list');
   summaryList.innerHTML = '';
@@ -103,47 +88,44 @@ function renderSummary() {
     if (!groupedIngredients[key]) {
       groupedIngredients[key] = {
         name: key,
-        amounts: [],
-        how: how || ''
+        details: []
       };
     }
 
+    const detail = [];
     if (amount) {
-      groupedIngredients[key].amounts.push(amount);
+      detail.push(amount);
+    }
+    if (how) {
+      detail.push(`(${how})`);
+    }
+    if (detail.length > 0) {
+      groupedIngredients[key].details.push(detail.join(' '));
     }
   });
 
   const sortedIngredients = Object.values(groupedIngredients).sort((a, b) => a.name.localeCompare(b.name));
 
   sortedIngredients.forEach(ingredient => {
-    const { name, amounts, how } = ingredient;
+    const { name, details } = ingredient;
     const listItem = document.createElement('li');
-    const amountsText = amounts.length > 0 ? ` (${amounts.join(', ')})` : '';
-    const howText = how ? ` (${how})` : '';
-    listItem.textContent = `${name}${amountsText}${howText}`;
+    const nameItem = document.createElement('span');
+    nameItem.textContent = name;
+    listItem.appendChild(nameItem);
+
+    if (details.length > 0) {
+      const detailsList = document.createElement('ul');
+      details.forEach(detail => {
+        const detailItem = document.createElement('li');
+        detailItem.textContent = detail;
+        detailsList.appendChild(detailItem);
+      });
+      listItem.appendChild(detailsList);
+    }
+
     summaryList.appendChild(listItem);
   });
 }
-
-function backuprenderSummary() {
-  const summaryList = document.getElementById('summary-list');
-  summaryList.innerHTML = '';
-
-  const uniqueIngredients = [...new Set(selectedRecipes)];
-  // Sort alphabetically
-  uniqueIngredients.sort((a, b) => {
-    if (a.food < b.food) return -1;
-    if (a.food > b.food) return 1;
-    return 0;
-  });
-  
-  uniqueIngredients.forEach(ingredient => {
-    const listItem = document.createElement('li');
-    listItem.textContent = ingredient;
-    summaryList.appendChild(listItem);
-  });
-}
-
 // Function to build and display recipes
 function buildRecipes() {
   const recipesContainer = document.getElementById('recipes-container');
