@@ -110,7 +110,19 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${name}">${name}</a>`;
+    
+    // translate to german
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const germanName = data.responseData.translatedText;
+        nameItem.innerHTML=`<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}">${name}</a>`;
+    } catch (error) {
+        console.error('Error translating name:', error);
+        nameItem.innerHTML=`<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}">${name}</a>`;
+    }
+    
     listItem.appendChild(nameItem);
 
     if (details.length > 0) {
