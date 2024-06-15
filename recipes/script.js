@@ -75,6 +75,25 @@ function updateSummary(event) {
   }
   renderSummary();
 }
+
+
+async function translateAndUpdateLink(name, nameItem) {
+    // Translate the name from English to German using MyMemoryTranslated API
+    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
+    try {
+        const response = await fetch(apiUrl);
+        const data = await response.json();
+        const germanName = data.responseData.translatedText;
+
+        // Update the link with the German translation
+        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}">${name} (${germanName})</a>`;
+    } catch (error) {
+        // Handle any errors that occur during the translation
+        console.error('Error translating name:', error);
+        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}">${name}</a>`;
+    }
+}
+
 function renderSummary() {
   const summaryList = document.getElementById('summary-list');
   summaryList.innerHTML = '';
@@ -112,17 +131,7 @@ function renderSummary() {
     const nameItem = document.createElement('span');
     
     // translate to german
-    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        const germanName = data.responseData.translatedText;
-        nameItem.innerHTML=`<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}">${name}</a>`;
-    } catch (error) {
-        console.error('Error translating name:', error);
-        nameItem.innerHTML=`<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}">${name}</a>`;
-    }
-    
+    translateAndUpdateLink(name, nameItem);    
     listItem.appendChild(nameItem);
 
     if (details.length > 0) {
