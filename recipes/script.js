@@ -58,6 +58,28 @@ function updateSummary(event) {
   const checkbox = event.target;
   const recipe = checkbox.closest('.recipe');
   const ingredientsList = recipe.querySelector('.ingredients-list');
+  const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => {
+    const nameSpan = item.querySelector('span.name');
+    const amountSpan = item.querySelector('span.amount');
+    const howSpan = item.querySelector('span.how');
+    const name = nameSpan ? nameSpan.textContent : '';
+    const amount = amountSpan ? amountSpan.textContent : '';
+    const how = howSpan ? howSpan.textContent : '';
+    return { name, amount, how };
+  });
+
+  if (checkbox.checked) {
+    selectedRecipes.push(...ingredients);
+  } else {
+    selectedRecipes = selectedRecipes.filter(item => !ingredients.some(i => i.name === item.name && i.amount === item.amount && i.how === item.how));
+  }
+  renderSummary();
+}
+
+function bakup_updateSummary(event) {
+  const checkbox = event.target;
+  const recipe = checkbox.closest('.recipe');
+  const ingredientsList = recipe.querySelector('.ingredients-list');
   const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => item.textContent);
 
   if (checkbox.checked) {
