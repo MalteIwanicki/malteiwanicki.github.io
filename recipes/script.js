@@ -24,10 +24,10 @@ function createRecipeDiv(recipe) {
     const ingredientItem = document.createElement('li');
      let itemText = `<span class="name">${ingredient.food}</span>`;
     if (ingredient.amount) {
-      itemText += ` <span class="amount">${ingredient.amount}</span>`;
+      itemText += `, <span class="amount">${ingredient.amount}</span>`;
     }
     if (ingredient.how) {
-      itemText += `<span class="how">${itemText} (${ingredient.how})</span>`;
+      itemText += `, <span class="how">${ingredient.how}</span>`;
     }
     ingredientItem.innerHTML = itemText;
     ingredientsList.appendChild(ingredientItem);
