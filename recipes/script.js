@@ -90,8 +90,42 @@ function bakup_updateSummary(event) {
 
   renderSummary();
 }
-
 function renderSummary() {
+  const summaryList = document.getElementById('summary-list');
+  summaryList.innerHTML = '';
+
+  const groupedIngredients = {};
+
+  selectedRecipes.forEach(ingredient => {
+    const { name, amount, how } = ingredient;
+    const key = name;
+
+    if (!groupedIngredients[key]) {
+      groupedIngredients[key] = {
+        name: key,
+        amounts: [],
+        how: how || ''
+      };
+    }
+
+    if (amount) {
+      groupedIngredients[key].amounts.push(amount);
+    }
+  });
+
+  const sortedIngredients = Object.values(groupedIngredients).sort((a, b) => a.name.localeCompare(b.name));
+
+  sortedIngredients.forEach(ingredient => {
+    const { name, amounts, how } = ingredient;
+    const listItem = document.createElement('li');
+    const amountsText = amounts.length > 0 ? ` (${amounts.join(', ')})` : '';
+    const howText = how ? ` (${how})` : '';
+    listItem.textContent = `${name}${amountsText}${howText}`;
+    summaryList.appendChild(listItem);
+  });
+}
+
+function backuprenderSummary() {
   const summaryList = document.getElementById('summary-list');
   summaryList.innerHTML = '';
 
