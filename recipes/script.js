@@ -22,9 +22,9 @@ function createRecipeDiv(recipe) {
   ingredientsList.classList.add('ingredients-list');
   recipe.ingredients.forEach(ingredient => {
     const ingredientItem = document.createElement('li');
-    let itemText = ingredient.food;
+    let itemText = `<span class="${ingredient.food}">${ingredient.food}</span>`;
     if (ingredient.amount) {
-      itemText = `${ingredient.amount} ${itemText}`;
+      itemText = `${itemText} - <span class="amount"> ${ingredient.amount}</span>`;
     }
     if (ingredient.how) {
       itemText = `${itemText} (${ingredient.how})`;
