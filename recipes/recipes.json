@@ -960,6 +960,27 @@
 		{
 			"meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and red onion rings",
 			"ingredients": [
+				{
+					"food": "potatoes",
+					"amount": "5"
+				},
+				{
+					"food": "cauliflower",
+					"amount": "1"
+				},
+				{
+					"food": "tzatziki",
+					"amount": "1"
+				},
+				{
+					"food": "onion",
+					"amount": "1",
+					"how":"rings",
+				},
+				{
+					"food": "green pesto",
+					"amount": "1"
+				},
 
 			]
 		},
