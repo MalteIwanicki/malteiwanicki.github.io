@@ -90,7 +90,6 @@ async function translateAndUpdateLink(name, nameItem) {
     } catch (error) {
         // Handle any errors that occur during the translation
         console.error('Error translating name:', error);
-        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC">${name}</a>`;
     }
 }
 
@@ -129,10 +128,11 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
+    nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC">${name}</a>`;
+    listItem.appendChild(nameItem);
     
     // translate to german
     translateAndUpdateLink(name, nameItem);    
-    listItem.appendChild(nameItem);
 
     if (details.length > 0) {
       const detailsList = document.createElement('ul');
