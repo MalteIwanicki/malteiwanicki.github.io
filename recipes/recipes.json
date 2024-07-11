@@ -975,12 +975,12 @@
 				{
 					"food": "onion",
 					"amount": "1",
-					"how":"rings",
+					"how":"rings"
 				},
 				{
 					"food": "green pesto",
 					"amount": "1"
-				},
+				}
 
 			]
 		},
