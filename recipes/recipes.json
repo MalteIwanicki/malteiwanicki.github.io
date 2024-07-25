@@ -1,1107 +1,1201 @@
 {
-	"recipes": [
-		{
-			"meal": "Sausages, Potato, Veg & Sauerkraut",
-			"ingredients": [
-				{
-					"food": "Nürnberger Würstchen",
-					"amount": "1 pack"
-				},
-				{
-					"food": "potatoes",
-					"how": "chopped into chips"
-				},
-				{
-					"food": "mixed vegetables",
-					"how": "defrosted"
-				},
-				{
-					"food": "sauerkraut"
-				}
-			],
-			"instructions": [
-				"Fry sausages",
-				"Put potato chips in the oven",
-				"Defrost vegetables",
-				"Cook sauerkraut"
-			]
-		},
-		{
-			"meal": "Curry Peanut Noodles",
-			"ingredients": [
-				{
-					"food": "fettuccine",
-					"amount": "250g"
-				},
-				{
-					"food": "oil",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "sugar",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "salted peanuts",
-					"amount": "40g"
-				},
-				{
-					"food": "red chili",
-					"amount": "1",
-					"how": "cut in fine strips"
-				},
-				{
-					"food": "garlic + ginger in oil",
-					"amount": "30g",
-					"how": "2 cloves garlic, bit of ginger"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "finely chopped"
-				},
-				{
-					"food": "curry powder",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "vegetable stock",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "peanut butter",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "red pepper",
-					"amount": "1",
-					"how": "cut in fine strips"
-				},
-				{
-					"food": "lime",
-					"amount": "1",
-					"how": "quartered"
-				},
-				{
-					"food": "spinach",
-					"amount": "50g"
-				},
-				{
-					"food": "coconut milk",
-					"amount": "250ml"
-				}
-			],
-			"instructions": [
-				"Cook fettuccine in salted water and remember to keep 100ml of the cooking water",
-				"Heat 1 Tbsp oil, sugar, peanuts and ½ of the chili and stir until the sugar is melted. Put in a bowl to the side",
-				"In the same pan, heat 1 Tbsp oil. Add garlic + ginger oil, onion and rest of chili and fry for 1 min",
-				"Add curry powder, stock and peanut butter and fry for 1 min",
-				"Add red pepper, juice from 1 lime quarter, coconut milk and saved cooking water. Mix until sauce is a bit thicker",
-				"Add fettuccine and spinach, mix, season and serve with peanuts and lime quarters"
-			]
-		},
-		{
-			"meal": "Chicken Fettuccine",
-			"ingredients": [
-				{
-					"food": "dried fettuccine",
-					"amount": "250g"
-				},
-				{
-					"food": "oil",
-					"amount": "1 Tbsp"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "breadcrumbs",
-					"amount": "25g"
-				},
-				{
-					"food": "parmesan cheese",
-					"amount": "20+20g",
-					"how": "grated"
-				},
-				{
-					"food": "chicken",
-					"amount": "250g",
-					"how": "cut into 1 cm strips"
-				},
-				{
-					"food": "mushrooms",
-					"amount": "100g",
-					"how": "cut into 1 cm strips"
-				},
-				{
-					"food": "cream",
-					"amount": "200ml"
-				},
-				{
-					"food": "vegetable stock",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "parsley",
-					"amount": "10g",
-					"how": "chopped"
-				}
-			],
-			"instructions": [
-				"Cook fettuccine",
-				"Garlic Crumb: Heat oil in a pan, add 20g garlic, breadcrumbs and parmesan and fry for 1-2 minutes while stirring. Take out of the pan and put aside",
-				"Fettuccine: In the same pan, heat oil and fry chicken and mushrooms until chicken is lightly browned on a high heat",
-				"Add cream, stock and the other garlic clove to the pan and simmer until the sauce thickens. Add the rest of the parmesan and season with pepper",
-				"Add the fettuccine and parsley",
-				"Serve and top with the garlic crumb"
-			]
-		},
-		{
-			"meal": "Leek, Pea and Pepper Risotto",
-			"ingredients": [
-				{
-					"food": "vegetable stock",
-					"amount": "1¼ L"
-				},
-				{
-					"food": "olive oil",
-					"amount": "1 Tbsp"
-				},
-				{
-					"food": "red peppers",
-					"amount": "2",
-					"how": "sliced"
-				},
-				{
-					"food": "leek",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "risotto rice",
-					"amount": "300g"
-				},
-				{
-					"food": "frozen peas",
-					"amount": "150g"
-				},
-				{
-					"food": "parmesan",
-					"amount": "50g",
-					"how": "grated"
-				},
-				{
-					"food": "chives",
-					"amount": "1 bunch",
-					"how": "chopped"
-				}
-			],
-			"instructions": [
-				"Heat oil and fry the red peppers and leek until softened",
-				"Add rice and cook for 1 minute",
-				"Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
-				"Stir in peas to heat through",
-				"Season, then stir through most of the parmesan and chives, saving a little of each to scatter over before serving"
-			]
-		},
-		{
-			"meal": "Red Pepper Toast",
-			"ingredients": [
-				{
-					"food": "English muffins",
-					"amount": "4"
-				},
-				{
-					"food": "oil",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "red pepper",
-					"amount": "1",
-					"how": "diced"
-				},
-				{
-					"food": "slices of cheese",
-					"amount": "4"
-				},
-				{
-					"food": "eggs",
-					"amount": "4"
-				}
-			],
-			"instructions": [
-				"Toast the bread",
-				"Heat 1 Tbsp oil in a pan and cook the red pepper for 3-4 minutes. Season with salt and pepper",
-				"Spread the red pepper on the bread and cover each with ½ a slice of cheese",
-				"Bake at 200°C until the cheese starts to brown",
-				"Fry the eggs, season with salt and pepper and put ½ an egg on top of each slice"
-			]
-		},
-		{
-			"meal": "Fish Sticks, Potato & Veg",
-			"ingredients": [
-				{
-					"food": "fish fingers"
-				},
-				{
-					"food": "potato slices or frozen chips"
-				},
-				{
-					"food": "veggies"
-				}
-			],
-			"instructions": [
-				"Put fish fingers with potatoes in the oven until ready",
-				"Defrost vegetables"
-			]
-		},
-		{
-			"meal": "Spaghetti Aglio e Olio",
-			"ingredients": [
-				{
-					"food": "broccoli",
-					"amount": "head / 2 servings",
-					"how": "mouthsize cut"
-				},
-				{
-					"food": "olive oil",
-					"amount": "100ml"
-				},
-				{
-					"food": "garlic",
-					"amount": "2",
-					"how": "chopped"
-				},
-				{
-					"food": "spaghetti",
-					"amount": "250g"
-				},
-				{
-					"food": "parmesan",
-					"amount": "100g",
-					"how": "grated"
-				}
-			],
-			"instructions": [
-				"Cut the broccoli including the stem into small pieces",
-				"Blanch the broccoli in boiling salted water for 5 minutes in the colander",
-				"Heat the oil and fry the garlic. Immediately add the broccoli with some of its cooking water",
-				"Cook the spaghetti in the broccoli water",
-				"Let the broccoli cook over low heat until the spaghetti is ready, then add spaghetti to the pan",
-				"Season with salt and pepper and mix parmesan in"
-			]
-		},
-		{
-			"meal": "Mustard Meatballs & Veggie Rice",
-			"ingredients": [
-				{
-					"food": "carrot",
-					"amount": "1",
-					"how": "grated"
-				},
-				{
-					"food": "leek",
-					"amount": "1",
-					"how": "halved lengthways and chopped"
-				},
-				{
-					"food": "rice",
-					"amount": "150g"
-				},
-				{
-					"food": "cream",
-					"amount": "200ml"
-				},
-				{
-					"food": "stock powder",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "mustard",
-					"amount": "2+1 Tbsp"
-				},
-				{
-					"food": "honey",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "parsley/chives",
-					"amount": "10g",
-					"how": "chopped"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "breadcrumbs",
-					"amount": "25g"
-				},
-				{
-					"food": "mince",
-					"amount": "250g"
-				},
-				{
-					"food": "oil",
-					"amount": "1 Tbsp"
-				}
-			],
-			"instructions": [
-				"Boil 300ml water with a bit of salt. Boil carrot, leek and rice covered at a low temperature for ~10 min. Take off the heat and leave the lid on for 10 min",
-				"Mix 50ml water, cream, stock, 1 Tbsp mustard and honey until there are no clumps",
-				"Mix parsley, onion, breadcrumbs, mince, 2 tsp mustard, salt and pepper and form ~12 meatballs",
-				"Heat oil at a high heat and fry meatballs for 2-3 min. Take the meatballs out of the pan and drain the fat",
-				"Wipe the pan and boil the sauce mix gently. Season with salt and pepper. Add meatballs, reduce heat and simmer for 5-8 min. Add water if the sauce gets too thick",
-				"Serve and garnish with chives"
-			]
-		},
-		{
-			"meal": "Maultaschen",
-			"ingredients": [
-				{
-					"food": "maultaschen",
-					"amount": "2 packs",
-					"how": "1 cm stripes"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped into rings"
-				},
-				{
-					"food": "olive oil",
-					"amount": "1 Tbsp"
-				}
-			],
-			"instructions": [
-				"Cook Maultaschen in olive oil until crispy",
-				"Add onion rings at the end and cook until clear"
-			]
-		},
-		{
-			"meal": "Vegetable Soup or Ready-made Soup or Microwave Rice",
-			"ingredients": [
-				{
-					"food": "vegetables"
-				},
-				{
-					"food": "soup (ready-made)"
-				},
-				{
-					"food": "microwave rice"
-				}
-			],
-			"instructions": [
-
-			]
-		},
-		{
-			"meal": "One-Pot Pasta",
-			"ingredients": [
-				{
-					"food": "cream",
-					"amount": "100ml"
-				},
-				{
-					"food": "zucchini",
-					"amount": "1 small",
-					"how": "chopped"
-				},
-				{
-					"food": "cherry tomatoes or canned tomatoes",
-					"amount": "250g",
-					"how": "quartered or canned"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "dried oregano",
-					"amount": "2 tsp"
-				},
-				{
-					"food": "water",
-					"amount": "380ml",
-					"how": "1 can"
-				},
-				{
-					"food": "salt",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "chilli"
-				},
-				{
-					"food": "wholewheat pasta",
-					"amount": "250g"
-				}
-			],
-			"instructions": [
-				"Put everything in a big pot, cover and bring to a boil. Move the pasta around so it doesn’t stick together",
-				"After 10 minutes reduce heat and cook without a lid for 5 minutes. If the pasta is too hard, add a bit more water",
-				"Season with salt and pepper"
-			]
-		},
-		{
-			"meal": "Gnocchipfanne mit Pesto",
-			"ingredients": [
-				{
-					"food": "walnuts",
-					"amount": "20g"
-				},
-				{
-					"food": "garlic"
-				},
-				{
-					"food": "olive oil",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "water",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "parmesan",
-					"amount": "20g",
-					"how": "grated"
-				},
-				{
-					"food": "basil",
-					"amount": "20g"
-				},
-				{
-					"food": "spinach",
-					"amount": "100+100g"
-				},
-				{
-					"food": "cream cheese",
-					"amount": "50+20g"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "gnocchi",
-					"amount": "500g to 600g"
-				}
-			],
-			"instructions": [
-				"Make Pesto",
-				"Blend walnuts, garlic, olive oil, water, parmesan, basil and spinach. Then add cream cheese, salt and pepper",
-				"Make Gnocchi",
-				"Fry the onions until clear.",
-				"Add gnocchi and fry until golden brown.",
-				"Add spinach and half of the pesto.",
-				"Serve gnocchi topped with pesto, a blob of cream cheese, basil and fresh pepper"
-			]
-		},
-		{
-			"meal": "Cheesy Tuna Melts",
-			"ingredients": [
-				{
-					"food": "tuna",
-					"amount": "1 can"
-				},
-				{
-					"food": "spring onions",
-					"amount": "a bunch",
-					"how": "chopped"
-				},
-				{
-					"food": "mayonnaise",
-					"amount": "4 Tbsp"
-				},
-				{
-					"food": "toast or English muffins"
-				},
-				{
-					"food": "cheddar cheese",
-					"how": "grated"
-				},
-				{
-					"food": "paprika",
-					"amount": "a pinch"
-				}
-			],
-			"instructions": [
-				"Preheat the grill to its highest setting",
-				"Mix everything except paprika. Season with salt and pepper",
-				"Spread tuna mix on bread and sprinkle cheese over",
-				"Grill until cheese bubbles",
-				"Sprinkle paprika on top"
-			]
-		},
-		{
-			"meal": "Spicy Coconut Soup",
-			"ingredients": [
-				{
-					"food": "olive oil",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "red pepper",
-					"amount": "1",
-					"how": "2cm diced"
-				},
-				{
-					"food": "spring onions",
-					"amount": "1 bunch",
-					"how": "sliced"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "curry powder",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "chopped tomatoes",
-					"amount": "1 can"
-				},
-				{
-					"food": "kidney beans",
-					"amount": "1 can",
-					"how": "rinsed"
-				},
-				{
-					"food": "coconut milk",
-					"amount": "1 can"
-				},
-				{
-					"food": "corn tortillas",
-					"how": "cut to triangles"
-				},
-				{
-					"food": "lime juice"
-				},
-				{
-					"food": "grated coconut"
-				}
-			],
-			"instructions": [
-				"Heat 1 Tbsp of Olive Oil, fry red pepper, white spring onions, and garlic for 3-5 minutes",
-				"Add curry powder, tomato, kidney beans, and coconut milk. Season with salt and pepper. Simmer for 10-12 minutes",
-				"Spread tortillas on a tray and drizzle with 1 Tbsp olive oil. Put into the grill oven until lightly browned",
-				"Add lime juice to soup",
-				"Serve and garnish with green spring onions and grated coconut"
-			]
-		},
-		{
-			"meal": "One-Pot Pasta with Spinach and Pine Nuts",
-			"ingredients": [
-				{
-					"food": "pine nuts",
-					"amount": "10g"
-				},
-				{
-					"food": "olive oil",
-					"amount": "1 Tbsp"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "pasta",
-					"amount": "250g"
-				},
-				{
-					"food": "hot water",
-					"amount": "500ml"
-				},
-				{
-					"food": "vegetable stock",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "salt",
-					"amount": "½ tsp"
-				},
-				{
-					"food": "red chilli",
-					"amount": "1",
-					"how": "deseeded, chopped finely"
-				},
-				{
-					"food": "cherry tomatoes",
-					"amount": "125g",
-					"how": "quartered"
-				},
-				{
-					"food": "cream cheese",
-					"amount": "100g"
-				},
-				{
-					"food": "calabrese pesto",
-					"amount": "50g"
-				},
-				{
-					"food": "baby spinach",
-					"amount": "100g"
-				},
-				{
-					"food": "parmesan",
-					"amount": "40g",
-					"how": "grated"
-				}
-			],
-			"instructions": [
-				"Roast pine nuts in an oil-free pot stirring until light brown, set aside",
-				"In the same pot, heat oil and fry onion and garlic until glassy",
-				"Add pasta, hot water, vegetable stock, and salt. Boil, cover and cook for 9 minutes. Remember to stir",
-				"While pasta is cooking, cut the chilli and tomatoes",
-				"Add cream cheese, pesto, and chilli to the pasta and mix to become a sauce",
-				"Add spinach and cherry tomatoes to the pasta",
-				"Serve pasta with roasted pine nuts and grated parmesan"
-			]
-		},
-		{
-			"meal": "Tortellini Pikante",
-			"ingredients": [
-				{
-					"food": "tortellini with ricotta",
-					"amount": "400g"
-				},
-				{
-					"food": "olive oil",
-					"amount": "1 Tbsp"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "garlic",
-					"amount": "2",
-					"how": "chopped"
-				},
-				{
-					"food": "chilli powder",
-					"amount": "1 heaped tsp"
-				},
-				{
-					"food": "crushed tomatoes",
-					"amount": "1 can"
-				},
-				{
-					"food": "green olives",
-					"amount": "75g",
-					"how": "halved"
-				},
-				{
-					"food": "basil",
-					"amount": "3 Tbsp",
-					"how": "chopped"
-				},
-				{
-					"food": "mozzarella",
-					"amount": "125g",
-					"how": "sliced"
-				}
-			],
-			"instructions": [
-				"Cook tortellini al-dente",
-				"Heat olive oil and fry onion",
-				"Add garlic and chilli powder and fry",
-				"Add tomato, season and cook for 15 min",
-				"Add olives and basil to the sauce",
-				"Put everything mixed together in an ovenproof dish",
-				"Cover with mozzarella and bake in the oven for 15-20 min at 200°C"
-			]
-		},
-		{
-			"meal": "Eggs Benedict",
-			"ingredients": [
-				{
-					"food": "eggs"
-				},
-				{
-					"food": "Hollandaise Sauce"
-				},
-				{
-					"food": "English muffins"
-				},
-				{
-					"food": "bacon"
-				},
-				{
-					"food": "hash browns"
-				},
-				{
-					"food": "spinach"
-				}
-			],
-			"instructions": [
-
-			]
-		},
-		{
-			"meal": "Mexican Beef Nachos",
-			"ingredients": [
-				{
-					"food": "beef"
-				},
-				{
-					"food": "Taco seasoning"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "finely chopped"
-				},
-				{
-					"food": "spring onions",
-					"amount": "sliced"
-				},
-				{
-					"food": "Grated cheese",
-					"amount": "70g"
-				},
-				{
-					"food": "Tomato",
-					"amount": "2",
-					"how": "diced"
-				},
-				{
-					"food": "paprika",
-					"amount": "1",
-					"how": "diced"
-				},
-				{
-					"food": "nachos"
-				}
-			],
-			"instructions": [
-				"Fry beef and onion",
-				"Mix everything on a tray and cover with cheese, grill until cheese is melted"
-			]
-		},
-		{
-			"meal": "Blue Cheese Fettuccine",
-			"ingredients": [
-				{
-					"food": "chicken strips",
-					"amount": "250g"
-				},
-				{
-					"food": "dried fettuccine",
-					"amount": "250g"
-				},
-				{
-					"food": "broccoli"
-				},
-				{
-					"food": "olive oil",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "cream",
-					"amount": "200ml"
-				},
-				{
-					"food": "vegetable stock",
-					"amount": "200ml"
-				},
-				{
-					"food": "gorgonzola",
-					"amount": "150g",
-					"how": "cubed"
-				},
-				{
-					"food": "nutmeg",
-					"amount": "a Pinch"
-				},
-				{
-					"food": "parsley",
-					"amount": "30g",
-					"how": "chopped"
-				}
-			],
-			"instructions": [
-				"Fry chicken strips, season with salt and pepper then set aside",
-				"Cook fettuccine and steam broccoli over the top",
-				"Heat olive oil and fry onion until glassy",
-				"Add garlic and fry for 1 minute",
-				"Add cream and stock and simmer for a short time",
-				"Reduce heat and add gorgonzola, stirring until it has melted. Season with salt, pepper, and nutmeg",
-				"Mix the sauce with the fettuccine, broccoli, and chicken and garnish with parsley"
-			]
-		},
-		{
-			"meal": "Coconut Lentil Curry",
-			"ingredients": [
-				{
-					"food": "onion",
-					"amount": "1",
-					"how": "chopped"
-				},
-				{
-					"food": "garlic",
-					"amount": "2",
-					"how": "chopped"
-				},
-				{
-					"food": "fresh ginger",
-					"amount": "2cm",
-					"how": "chopped"
-				},
-				{
-					"food": "tomato paste",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "curry powder",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "chilli flakes",
-					"amount": "½ tsp"
-				},
-				{
-					"food": "vegetable stock",
-					"amount": "1 L"
-				},
-				{
-					"food": "coconut milk",
-					"amount": "1 can"
-				},
-				{
-					"food": "chopped tomatoes",
-					"amount": "1 can"
-				},
-				{
-					"food": "red lentils",
-					"amount": "1 cup"
-				},
-				{
-					"food": "rice",
-					"amount": "1 cup"
-				},
-				{
-					"food": "spinach",
-					"amount": "2 handfuls"
-				}
-			],
-			"instructions": [
-				"Fry onion, garlic, and ginger for a few minutes",
-				"Add tomato paste, curry powder, and chilli flakes. Cook for 1 minute",
-				"Add stock, coconut milk, tomato can, lentils, rice, and spinach",
-				"Cover, bring to the boil, simmer on low for 20-30 mins until lentils are cooked",
-				"Season with salt and pepper"
-			]
-		},
-		{
-			"meal": "Allgäuer Käsespätzle",
-			"ingredients": [
-				{
-					"food": "butter",
-					"amount": "2 Tbsp"
-				},
-				{
-					"food": "shallots",
-					"amount": "3",
-					"how": "cut in rings"
-				},
-				{
-					"food": "spätzle",
-					"amount": "400g"
-				},
-				{
-					"food": "Allgäuer Bergkäse",
-					"amount": "300g",
-					"how": "grated"
-				},
-				{
-					"food": "Parsley"
-				},
-				{
-					"food": "Frozen mixed veggies"
-				}
-			],
-			"instructions": [
-				"Heat butter in a pan and fry shallots",
-				"Cook spätzle if necessary",
-				"Mix cheese, shallots, and spätzle in an oven dish and bake at 175°C for 10 min",
-				"Serve with parsley and veggies on the side"
-			]
-		},
-		{
-			"meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and red onion rings",
-			"ingredients": [
-				{
-					"food": "potatoes",
-					"amount": "5"
-				},
-				{
-					"food": "cauliflower",
-					"amount": "1"
-				},
-				{
-					"food": "tzatziki",
-					"amount": "1"
-				},
-				{
-					"food": "onion",
-					"amount": "1",
-					"how":"rings"
-				},
-				{
-					"food": "green pesto",
-					"amount": "1"
-				}
-
-			]
-		},
-		{
-			"meal": "Courgette Pasta",
-			"ingredients": [
-				{
-					"food": "olive oil",
-					"amount": "3 Tbsp"
-				},
-				{
-					"food": "garlic",
-					"amount": "1",
-					"how": "crushed"
-				},
-				{
-					"food": "courgettes",
-					"amount": "300g",
-					"how": "quartered and sliced"
-				},
-				{
-					"food": "long dried pasta",
-					"amount": "250g"
-				},
-				{
-					"food": "cream",
-					"amount": "1 cup"
-				},
-				{
-					"food": "lemon",
-					"amount": "1",
-					"how": "grated zest and juice"
-				},
-				{
-					"food": "parmesan cheese",
-					"amount": "20g",
-					"how": "grated"
-				},
-				{
-					"food": "nutmeg",
-					"amount": "Pinch of"
-				}
-			],
-			"instructions": [
-				"Heat the oil in a pan over medium heat. Add garlic and courgettes and cook gently for 10 minutes, stirring occasionally",
-				"Meanwhile cook the pasta in boiling salt water according to the packet instructions",
-				"Add the cream and lemon to the courgette mixture. Add cheese, nutmeg, salt, and pepper. Heat through gently",
-				"Drain the pasta, add to the sauce, mix and serve immediately",
-				"Decorate with some more cheese and a candle on the table"
-			]
-		},
-		{
-			"meal": "Fish and Chips",
-			"ingredients": [
-				{
-					"food": "chips"
-				},
-				{
-					"food": "fish"
-				}
-			],
-			"instructions": [
-
-			]
-		},
-		{
-			"meal": "Mac and Cheese",
-			"ingredients": [
-				{
-					"food": "macaroni pasta",
-					"amount": "250g"
-				},
-				{
-					"food": "butter",
-					"amount": "40g"
-				},
-				{
-					"food": "flour",
-					"amount": "40g"
-				},
-				{
-					"food": "curry powder",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "milk",
-					"amount": "~400ml"
-				},
-				{
-					"food": "mustard",
-					"amount": "1 Tbsp"
-				},
-				{
-					"food": "chilli sauce",
-					"amount": "1 tsp"
-				},
-				{
-					"food": "nutmeg",
-					"amount": "½ tsp"
-				},
-				{
-					"food": "grated cheese",
-					"amount": "120g"
-				},
-				{
-					"food": "parmesan",
-					"amount": "50g"
-				},
-				{
-					"food": "mixed frozen vegetables"
-				}
-			],
-			"instructions": [
-				"Cook pasta, then pour into an ovenproof dish",
-				"Melt butter, then add flour and curry powder and whisk over low heat until mixture bubbles and separates.",
-				"Add milk gradually, whisking constantly.",
-				"Add mustard, chilli sauce, nutmeg, salt, and pepper and whisk until thickened.",
-				"Mix in 100g of the grated cheese",
-				"Steam vegetables",
-				"Pour sauce over cooked pasta, sprinkle parmesan/remaining cheese on top and grill until golden"
-			]
-		}
-	]
+  "recipes": [
+    {
+      "meal": "Sausages, Potato, Veg & Sauerkraut",
+      "ingredients": [
+        {
+          "food": "Nürnberger Würstchen",
+          "amount": "1 pack"
+        },
+        {
+          "food": "potatoes",
+          "how": "chopped into chips"
+        },
+        {
+          "food": "mixed vegetables",
+          "how": "defrosted"
+        },
+        {
+          "food": "sauerkraut"
+        }
+      ],
+      "instructions": [
+        "Fry sausages",
+        "Put potato chips in the oven",
+        "Defrost vegetables",
+        "Cook sauerkraut"
+      ]
+    },
+    {
+      "meal": "Curry Peanut Noodles",
+      "ingredients": [
+        {
+          "food": "fettuccine",
+          "amount": "250g"
+        },
+        {
+          "food": "oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "sugar",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "salted peanuts",
+          "amount": "40g"
+        },
+        {
+          "food": "red chili",
+          "amount": "1",
+          "how": "cut in fine strips"
+        },
+        {
+          "food": "garlic + ginger in oil",
+          "amount": "30g",
+          "how": "2 cloves garlic, bit of ginger"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "finely chopped"
+        },
+        {
+          "food": "curry powder",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "peanut butter",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "red pepper",
+          "amount": "1",
+          "how": "cut in fine strips"
+        },
+        {
+          "food": "lime",
+          "amount": "1",
+          "how": "quartered"
+        },
+        {
+          "food": "spinach",
+          "amount": "50g"
+        },
+        {
+          "food": "coconut milk",
+          "amount": "250ml"
+        }
+      ],
+      "instructions": [
+        "Cook fettuccine in salted water (and remember to keep 100ml of the cooking water try without)",
+        "Heat 1 Tbsp oil, sugar, peanuts and ½ of the chili and stir until the sugar is melted. Put in a bowl to the side",
+        "In the same pan, heat 1 Tbsp oil. Add garlic + ginger oil, onion and rest of chili and fry for 1 min",
+        "Add curry powder, stock and peanut butter and fry for 1 min",
+        "Add red pepper, juice from 1 lime quarter, coconut milk and saved cooking water. Mix until sauce is a bit thicker",
+        "Add fettuccine and spinach, mix, season and serve with peanuts and lime quarters"
+      ]
+    },
+    {
+      "meal": "Chicken Fettuccine",
+      "ingredients": [
+        {
+          "food": "dried fettuccine",
+          "amount": "250g"
+        },
+        {
+          "food": "oil",
+          "amount": "1 Tbsp"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "breadcrumbs",
+          "amount": "25g"
+        },
+        {
+          "food": "parmesan cheese",
+          "amount": "20+20g",
+          "how": "grated"
+        },
+        {
+          "food": "chicken",
+          "amount": "250g",
+          "how": "cut into 1 cm strips"
+        },
+        {
+          "food": "mushrooms",
+          "amount": "100g",
+          "how": "cut into 1 cm strips"
+        },
+        {
+          "food": "cream",
+          "amount": "200ml"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "parsley",
+          "amount": "10g",
+          "how": "chopped"
+        }
+      ],
+      "instructions": [
+        "Cook fettuccine",
+        "Garlic Crumb: Heat oil in a pan, add 20g garlic, breadcrumbs and parmesan and fry for 1-2 minutes while stirring. Take out of the pan and put aside",
+        "Fettuccine: In the same pan, heat oil and fry chicken and mushrooms until chicken is lightly browned on a high heat",
+        "Add cream, stock and the other garlic clove to the pan and simmer until the sauce thickens. Add the rest of the parmesan and season with pepper",
+        "Add the fettuccine and parsley",
+        "Serve and top with the garlic crumb"
+      ]
+    },
+    {
+      "meal": "Leek, Pea and Pepper Risotto",
+      "ingredients": [
+        {
+          "food": "vegetable stock",
+          "amount": "1¼ L"
+        },
+        {
+          "food": "olive oil",
+          "amount": "1 Tbsp"
+        },
+        {
+          "food": "red peppers",
+          "amount": "2",
+          "how": "sliced"
+        },
+        {
+          "food": "leek",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "risotto rice",
+          "amount": "300g"
+        },
+        {
+          "food": "frozen peas",
+          "amount": "150g"
+        },
+        {
+          "food": "parmesan",
+          "amount": "50g",
+          "how": "grated"
+        },
+        {
+          "food": "chives",
+          "amount": "1 bunch",
+          "how": "chopped"
+        }
+      ],
+      "instructions": [
+        "Heat oil and fry the red peppers and leek until softened",
+        "Add rice and cook for 1 minute",
+        "Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
+        "Stir in peas to heat through",
+        "Season, then stir through most of the parmesan and chives, saving a little of each to scatter over before serving"
+      ]
+    },
+    {
+      "meal": "Red Pepper Toast",
+      "ingredients": [
+        {
+          "food": "English muffins",
+          "amount": "4"
+        },
+        {
+          "food": "oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "red pepper",
+          "amount": "1",
+          "how": "diced"
+        },
+        {
+          "food": "slices of cheese",
+          "amount": "4"
+        },
+        {
+          "food": "eggs",
+          "amount": "4"
+        }
+      ],
+      "instructions": [
+        "Toast the bread",
+        "Heat 1 Tbsp oil in a pan and cook the red pepper for 3-4 minutes. Season with salt and pepper",
+        "Spread the red pepper on the bread and cover each with ½ a slice of cheese",
+        "Bake at 200°C until the cheese starts to brown",
+        "Fry the eggs, season with salt and pepper and put ½ an egg on top of each slice"
+      ]
+    },
+    {
+      "meal": "Spinach Pasta bake",
+      "ingredients": [
+        {
+          "food": "pasta",
+          "amount": "250g"
+        },
+        {
+          "food": "cherry tomatoes",
+          "amount": "200g",
+          "how": "halved"
+        },
+        {
+          "food": "spinach",
+          "amount": "200g"
+        },
+        {
+          "food": "mini mozarella",
+          "amount": "1 pck"
+        },
+        {
+          "food": "cream",
+          "amount": "200ml"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "500ml"
+        }
+      ],
+      "instructions": [
+        "Lay it all out in a tray and 45 minutes at 180 degrees in oven",
+        "mix halfway through"
+      ]
+    },
+    {
+      "meal": "Fish Sticks, Potato & Veg",
+      "ingredients": [
+        {
+          "food": "fish fingers"
+        },
+        {
+          "food": "potato slices or frozen chips"
+        },
+        {
+          "food": "veggies"
+        }
+      ],
+      "instructions": [
+        "Put fish fingers with potatoes in the oven until ready",
+        "Defrost vegetables"
+      ]
+    },
+    {
+      "meal": "Spaghetti Aglio e Olio",
+      "ingredients": [
+        {
+          "food": "broccoli",
+          "amount": "head / 2 servings",
+          "how": "mouthsize cut"
+        },
+        {
+          "food": "olive oil",
+          "amount": "100ml"
+        },
+        {
+          "food": "garlic",
+          "amount": "2",
+          "how": "chopped"
+        },
+        {
+          "food": "spaghetti",
+          "amount": "250g"
+        },
+        {
+          "food": "parmesan",
+          "amount": "100g",
+          "how": "grated"
+        }
+      ],
+      "instructions": [
+        "Cut the broccoli including the stem into small pieces",
+        "Blanch the broccoli in boiling salted water for 5 minutes in the colander",
+        "Heat the oil and fry the garlic. Immediately add the broccoli with some of its cooking water",
+        "Cook the spaghetti in the broccoli water",
+        "Let the broccoli cook over low heat until the spaghetti is ready, then add spaghetti to the pan",
+        "Season with salt and pepper and mix parmesan in"
+      ]
+    },
+    {
+      "meal": "Mustard Meatballs & Veggie Rice",
+      "ingredients": [
+        {
+          "food": "carrot",
+          "amount": "1",
+          "how": "grated"
+        },
+        {
+          "food": "leek",
+          "amount": "1",
+          "how": "halved lengthways and chopped"
+        },
+        {
+          "food": "rice",
+          "amount": "150g"
+        },
+        {
+          "food": "cream",
+          "amount": "200ml"
+        },
+        {
+          "food": "stock powder",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "mustard",
+          "amount": "2+1 Tbsp"
+        },
+        {
+          "food": "honey",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "parsley/chives",
+          "amount": "10g",
+          "how": "chopped"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "breadcrumbs",
+          "amount": "25g"
+        },
+        {
+          "food": "mince",
+          "amount": "250g"
+        },
+        {
+          "food": "oil",
+          "amount": "1 Tbsp"
+        }
+      ],
+      "instructions": [
+        "Boil 300ml water with a bit of salt. Boil carrot, leek and rice covered at a low temperature for ~10 min. Take off the heat and leave the lid on for 10 min",
+        "Mix 50ml water, cream, stock, 1 Tbsp mustard and honey until there are no clumps",
+        "Mix parsley, onion, breadcrumbs, mince, 2 tsp mustard, salt and pepper and form ~12 meatballs",
+        "Heat oil at a high heat and fry meatballs for 2-3 min. Take the meatballs out of the pan and drain the fat",
+        "Wipe the pan and boil the sauce mix gently. Season with salt and pepper. Add meatballs, reduce heat and simmer for 5-8 min. Add water if the sauce gets too thick",
+        "Serve and garnish with chives"
+      ]
+    },
+    {
+      "meal": "Thai Basil Noodles",
+      "ingredients": [
+        {
+          "food": "green beans",
+          "amount": "200g",
+          "how": "halved"
+        },
+        {
+          "food": "band noodles / fettuccine",
+          "amount": "250g"
+        },
+        {
+          "food": "red onion",
+          "amount": "1",
+          "how": "finely chopped"
+        },
+        {
+          "food": "garlic clove",
+          "amount": "1",
+          "how": "finely chopped"
+        },
+        {
+          "food": "ginger",
+          "amount": "15g",
+          "how": "finely chopped"
+        },
+        {
+          "food": "basil",
+          "amount": "10g"
+        },
+        {
+          "food": "oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "sweet chilli sauce",
+          "amount": "50g"
+        },
+        {
+          "food": "soy sauce",
+          "amount": "50ml"
+        },
+        {
+          "food": "maple syrup or agave syrup",
+          "amount": "10ml"
+        },
+        {
+          "food": "roasted peanuts",
+          "amount": "20g"
+        },
+        {
+          "food": "chilli"
+        }
+      ],
+      "instructions": [
+        "Boil a pot of salted water",
+        "Cut beans in half",
+        "Steam beans for 8 minutes and add noodles to water and cook for necessary time",
+        "Finely chop onion and garlic",
+        "Finely chop ginger and basil",
+        "Mix sweet chilli sauce, soy sauce, syrup, ginger and 2 Tbsp water to make a sauce",
+        "Heat oil in a pan. Fry onion and garlic until clear",
+        "Add noodles and beans and fry for 1 minute",
+        "Add sauce and ¼ of the basil, simmer for 30 seconds, then serve with the rest of the basil, peanuts and chilli to taste"
+      ]
+    },
+    {
+      "meal": "Maultaschen",
+      "ingredients": [
+        {
+          "food": "maultaschen",
+          "amount": "2 packs",
+          "how": "1 cm stripes"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped into rings"
+        },
+        {
+          "food": "olive oil",
+          "amount": "1 Tbsp"
+        }
+      ],
+      "instructions": [
+        "Cook Maultaschen in olive oil until crispy",
+        "Add onion rings at the end and cook until clear"
+      ]
+    },
+    {
+      "meal": "Vegetable Soup or Ready-made Soup or Microwave Rice",
+      "ingredients": [
+        {
+          "food": "vegetables"
+        },
+        {
+          "food": "soup (ready-made)"
+        },
+        {
+          "food": "microwave rice"
+        }
+      ],
+      "instructions": []
+    },
+    {
+      "meal": "One-Pot Pasta",
+      "ingredients": [
+        {
+          "food": "cream",
+          "amount": "100ml"
+        },
+        {
+          "food": "zucchini",
+          "amount": "1 small",
+          "how": "chopped"
+        },
+        {
+          "food": "cherry tomatoes or canned tomatoes",
+          "amount": "250g",
+          "how": "quartered or canned"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "dried oregano",
+          "amount": "2 tsp"
+        },
+        {
+          "food": "water",
+          "amount": "380ml",
+          "how": "1 can"
+        },
+        {
+          "food": "salt",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "chilli"
+        },
+        {
+          "food": "wholewheat pasta",
+          "amount": "250g"
+        }
+      ],
+      "instructions": [
+        "Put everything in a big pot, cover and bring to a boil. Move the pasta around so it doesn’t stick together",
+        "After 10 minutes reduce heat and cook without a lid for 5 minutes. If the pasta is too hard, add a bit more water",
+        "Season with salt and pepper"
+      ]
+    },
+    {
+      "meal": "Gnocchipfanne mit Pesto",
+      "ingredients": [
+        {
+          "food": "walnuts",
+          "amount": "20g"
+        },
+        {
+          "food": "garlic"
+        },
+        {
+          "food": "olive oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "water",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "parmesan",
+          "amount": "20g",
+          "how": "grated"
+        },
+        {
+          "food": "basil",
+          "amount": "20g"
+        },
+        {
+          "food": "spinach",
+          "amount": "100+100g"
+        },
+        {
+          "food": "cream cheese",
+          "amount": "50+20g"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "gnocchi",
+          "amount": "500g to 600g"
+        }
+      ],
+      "instructions": [
+        "Make Pesto",
+        "Blend walnuts, garlic, olive oil, water, parmesan, basil and spinach. Then add cream cheese, salt and pepper",
+        "Make Gnocchi",
+        "Fry the onions until clear.",
+        "Add gnocchi and fry until golden brown.",
+        "Add spinach and half of the pesto.",
+        "Serve gnocchi topped with pesto, a blob of cream cheese, basil and fresh pepper"
+      ]
+    },
+    {
+      "meal": "Cheesy Tuna Melts",
+      "ingredients": [
+        {
+          "food": "tuna",
+          "amount": "1 can"
+        },
+        {
+          "food": "spring onions",
+          "amount": "a bunch",
+          "how": "chopped"
+        },
+        {
+          "food": "mayonnaise",
+          "amount": "4 Tbsp"
+        },
+        {
+          "food": "toast or English muffins"
+        },
+        {
+          "food": "cheddar cheese",
+          "how": "grated"
+        },
+        {
+          "food": "paprika",
+          "amount": "a pinch"
+        }
+      ],
+      "instructions": [
+        "Preheat the grill to its highest setting",
+        "Mix everything except paprika. Season with salt and pepper",
+        "Spread tuna mix on bread and sprinkle cheese over",
+        "Grill until cheese bubbles",
+        "Sprinkle paprika on top"
+      ]
+    },
+    {
+      "meal": "Spicy Coconut Soup",
+      "ingredients": [
+        {
+          "food": "olive oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "red pepper",
+          "amount": "1",
+          "how": "2cm diced"
+        },
+        {
+          "food": "spring onions",
+          "amount": "1 bunch",
+          "how": "sliced"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "curry powder",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "chopped tomatoes",
+          "amount": "1 can"
+        },
+        {
+          "food": "kidney beans",
+          "amount": "1 can",
+          "how": "rinsed"
+        },
+        {
+          "food": "coconut milk",
+          "amount": "1 can"
+        },
+        {
+          "food": "corn tortillas",
+          "how": "cut to triangles"
+        },
+        {
+          "food": "lime juice"
+        },
+        {
+          "food": "grated coconut"
+        }
+      ],
+      "instructions": [
+        "Heat 1 Tbsp of Olive Oil, fry red pepper, white spring onions, and garlic for 3-5 minutes",
+        "Add curry powder, tomato, kidney beans, and coconut milk. Season with salt and pepper. Simmer for 10-12 minutes",
+        "Spread tortillas on a tray and drizzle with 1 Tbsp olive oil. Put into the grill oven until lightly browned",
+        "Add lime juice to soup",
+        "Serve and garnish with green spring onions and grated coconut"
+      ]
+    },
+    {
+      "meal": "One-Pot Pasta with Spinach and Pine Nuts",
+      "ingredients": [
+        {
+          "food": "pine nuts",
+          "amount": "10g"
+        },
+        {
+          "food": "olive oil",
+          "amount": "1 Tbsp"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "pasta",
+          "amount": "250g"
+        },
+        {
+          "food": "hot water",
+          "amount": "500ml"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "salt",
+          "amount": "½ tsp"
+        },
+        {
+          "food": "red chilli",
+          "amount": "1",
+          "how": "deseeded, chopped finely"
+        },
+        {
+          "food": "cherry tomatoes",
+          "amount": "125g",
+          "how": "quartered"
+        },
+        {
+          "food": "cream cheese",
+          "amount": "100g"
+        },
+        {
+          "food": "calabrese pesto",
+          "amount": "50g"
+        },
+        {
+          "food": "baby spinach",
+          "amount": "100g"
+        },
+        {
+          "food": "parmesan",
+          "amount": "40g",
+          "how": "grated"
+        }
+      ],
+      "instructions": [
+        "Roast pine nuts in an oil-free pot stirring until light brown, set aside",
+        "In the same pot, heat oil and fry onion and garlic until glassy",
+        "Add pasta, hot water, vegetable stock, and salt. Boil, cover and cook for 9 minutes. Remember to stir",
+        "While pasta is cooking, cut the chilli and tomatoes",
+        "Add cream cheese, pesto, and chilli to the pasta and mix to become a sauce",
+        "Add spinach and cherry tomatoes to the pasta",
+        "Serve pasta with roasted pine nuts and grated parmesan"
+      ]
+    },
+    {
+      "meal": "Tortellini Pikante",
+      "ingredients": [
+        {
+          "food": "tortellini with ricotta",
+          "amount": "400g"
+        },
+        {
+          "food": "olive oil",
+          "amount": "1 Tbsp"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "2",
+          "how": "chopped"
+        },
+        {
+          "food": "chilli powder",
+          "amount": "1 heaped tsp"
+        },
+        {
+          "food": "crushed tomatoes",
+          "amount": "1 can"
+        },
+        {
+          "food": "green olives",
+          "amount": "75g",
+          "how": "halved"
+        },
+        {
+          "food": "basil",
+          "amount": "3 Tbsp",
+          "how": "chopped"
+        },
+        {
+          "food": "mozzarella",
+          "amount": "125g",
+          "how": "sliced"
+        }
+      ],
+      "instructions": [
+        "Cook tortellini al-dente",
+        "Heat olive oil and fry onion",
+        "Add garlic and chilli powder and fry",
+        "Add tomato, season and cook for 15 min",
+        "Add olives and basil to the sauce",
+        "Put everything mixed together in an ovenproof dish",
+        "Cover with mozzarella and bake in the oven for 15-20 min at 200°C"
+      ]
+    },
+    {
+      "meal": "Eggs Benedict",
+      "ingredients": [
+        {
+          "food": "eggs"
+        },
+        {
+          "food": "Hollandaise Sauce"
+        },
+        {
+          "food": "English muffins"
+        },
+        {
+          "food": "bacon"
+        },
+        {
+          "food": "hash browns"
+        },
+        {
+          "food": "spinach"
+        }
+      ],
+      "instructions": []
+    },
+    {
+      "meal": "Mexican Beef Nachos",
+      "ingredients": [
+        {
+          "food": "beef"
+        },
+        {
+          "food": "Taco seasoning"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "finely chopped"
+        },
+        {
+          "food": "spring onions",
+          "amount": "sliced"
+        },
+        {
+          "food": "Grated cheese",
+          "amount": "70g"
+        },
+        {
+          "food": "Tomato",
+          "amount": "2",
+          "how": "diced"
+        },
+        {
+          "food": "paprika",
+          "amount": "1",
+          "how": "diced"
+        },
+        {
+          "food": "nachos"
+        }
+      ],
+      "instructions": [
+        "Fry beef and onion",
+        "Mix everything on a tray and cover with cheese, grill until cheese is melted"
+      ]
+    },
+    {
+      "meal": "Blue Cheese Fettuccine",
+      "ingredients": [
+        {
+          "food": "chicken strips",
+          "amount": "250g"
+        },
+        {
+          "food": "dried fettuccine",
+          "amount": "250g"
+        },
+        {
+          "food": "broccoli"
+        },
+        {
+          "food": "olive oil",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "cream",
+          "amount": "200ml"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "200ml"
+        },
+        {
+          "food": "gorgonzola",
+          "amount": "150g",
+          "how": "cubed"
+        },
+        {
+          "food": "nutmeg",
+          "amount": "a Pinch"
+        },
+        {
+          "food": "parsley",
+          "amount": "30g",
+          "how": "chopped"
+        }
+      ],
+      "instructions": [
+        "Fry chicken strips, season with salt and pepper then set aside",
+        "Cook fettuccine and steam broccoli over the top",
+        "Heat olive oil and fry onion until glassy",
+        "Add garlic and fry for 1 minute",
+        "Add cream and stock and simmer for a short time",
+        "Reduce heat and add gorgonzola, stirring until it has melted. Season with salt, pepper, and nutmeg",
+        "Mix the sauce with the fettuccine, broccoli, and chicken and garnish with parsley"
+      ]
+    },
+    {
+      "meal": "Coconut Lentil Curry",
+      "ingredients": [
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "2",
+          "how": "chopped"
+        },
+        {
+          "food": "fresh ginger",
+          "amount": "2cm",
+          "how": "chopped"
+        },
+        {
+          "food": "tomato paste",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "curry powder",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "chilli flakes",
+          "amount": "½ tsp"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1 L"
+        },
+        {
+          "food": "coconut milk",
+          "amount": "1 can"
+        },
+        {
+          "food": "chopped tomatoes",
+          "amount": "1 can"
+        },
+        {
+          "food": "red lentils",
+          "amount": "1 cup"
+        },
+        {
+          "food": "rice",
+          "amount": "1 cup"
+        },
+        {
+          "food": "spinach",
+          "amount": "2 handfuls"
+        }
+      ],
+      "instructions": [
+        "Fry onion, garlic, and ginger for a few minutes",
+        "Add tomato paste, curry powder, and chilli flakes. Cook for 1 minute",
+        "Add stock, coconut milk, tomato can, lentils, rice, and spinach",
+        "Cover, bring to the boil, simmer on low for 20-30 mins until lentils are cooked",
+        "Season with salt and pepper"
+      ]
+    },
+    {
+      "meal": "Allgäuer Käsespätzle",
+      "ingredients": [
+        {
+          "food": "butter",
+          "amount": "2 Tbsp"
+        },
+        {
+          "food": "shallots",
+          "amount": "3",
+          "how": "cut in rings"
+        },
+        {
+          "food": "spätzle",
+          "amount": "400g"
+        },
+        {
+          "food": "Allgäuer Bergkäse",
+          "amount": "300g",
+          "how": "grated"
+        },
+        {
+          "food": "Parsley"
+        },
+        {
+          "food": "Frozen mixed veggies"
+        }
+      ],
+      "instructions": [
+        "Heat butter in a pan and fry shallots",
+        "Cook spätzle if necessary",
+        "Mix cheese, shallots, and spätzle in an oven dish and bake at 175°C for 10 min",
+        "Serve with parsley and veggies on the side"
+      ]
+    },
+    {
+      "meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and red onion rings",
+      "ingredients": [
+        {
+          "food": "potatoes",
+          "amount": "5"
+        },
+        {
+          "food": "cauliflower",
+          "amount": "1"
+        },
+        {
+          "food": "tzatziki",
+          "amount": "1"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "rings"
+        },
+        {
+          "food": "green pesto",
+          "amount": "1"
+        }
+      ]
+    },
+    {
+      "meal": "Courgette Pasta",
+      "ingredients": [
+        {
+          "food": "olive oil",
+          "amount": "3 Tbsp"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "crushed"
+        },
+        {
+          "food": "courgettes",
+          "amount": "300g",
+          "how": "quartered and sliced"
+        },
+        {
+          "food": "long dried pasta",
+          "amount": "250g"
+        },
+        {
+          "food": "cream",
+          "amount": "1 cup"
+        },
+        {
+          "food": "lemon",
+          "amount": "1",
+          "how": "grated zest and juice"
+        },
+        {
+          "food": "parmesan cheese",
+          "amount": "20g",
+          "how": "grated"
+        },
+        {
+          "food": "nutmeg",
+          "amount": "Pinch of"
+        }
+      ],
+      "instructions": [
+        "Heat the oil in a pan over medium heat. Add garlic and courgettes and cook gently for 10 minutes, stirring occasionally",
+        "Meanwhile cook the pasta in boiling salt water according to the packet instructions",
+        "Add the cream and lemon to the courgette mixture. Add cheese, nutmeg, salt, and pepper. Heat through gently",
+        "Drain the pasta, add to the sauce, mix and serve immediately",
+        "Decorate with some more cheese and a candle on the table"
+      ]
+    },
+    {
+      "meal": "Fish and Chips",
+      "ingredients": [
+        {
+          "food": "chips"
+        },
+        {
+          "food": "fish"
+        }
+      ],
+      "instructions": []
+    },
+    {
+      "meal": "Mac and Cheese",
+      "ingredients": [
+        {
+          "food": "macaroni pasta",
+          "amount": "250g"
+        },
+        {
+          "food": "butter",
+          "amount": "40g"
+        },
+        {
+          "food": "flour",
+          "amount": "40g"
+        },
+        {
+          "food": "curry powder",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "milk",
+          "amount": "~400ml"
+        },
+        {
+          "food": "mustard",
+          "amount": "1 Tbsp"
+        },
+        {
+          "food": "chilli sauce",
+          "amount": "1 tsp"
+        },
+        {
+          "food": "nutmeg",
+          "amount": "½ tsp"
+        },
+        {
+          "food": "grated cheese",
+          "amount": "120g"
+        },
+        {
+          "food": "parmesan",
+          "amount": "50g"
+        },
+        {
+          "food": "mixed frozen vegetables"
+        }
+      ],
+      "instructions": [
+        "Cook pasta, then pour into an ovenproof dish",
+        "Melt butter, then add flour and curry powder and whisk over low heat until mixture bubbles and separates.",
+        "Add milk gradually, whisking constantly.",
+        "Add mustard, chilli sauce, nutmeg, salt, and pepper and whisk until thickened.",
+        "Mix in 100g of the grated cheese",
+        "Steam vegetables",
+        "Pour sauce over cooked pasta, sprinkle parmesan/remaining cheese on top and grill until golden"
+      ]
+    }
+  ]
 }
