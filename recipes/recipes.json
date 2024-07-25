@@ -1078,7 +1078,11 @@
           "food": "green pesto",
           "amount": "1"
         }
-      ]
+      ],
+      "instructions": [
+                "everything in the oven",
+                "serve with Tzatziki and Pesto"
+            ]
     },
     {
       "meal": "Courgette Pasta",
@@ -1138,7 +1142,7 @@
           "food": "fish"
         }
       ],
-      "instructions": []
+      "instructions": ["everything in the oven and bake it","warm up veggies"]
     },
     {
       "meal": "Mac and Cheese",
