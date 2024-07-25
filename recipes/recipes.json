@@ -405,7 +405,7 @@
           "amount": "250g"
         },
         {
-          "food": "red onion",
+          "food": "onion",
           "amount": "1",
           "how": "finely chopped"
         },
@@ -1055,7 +1055,7 @@
       ]
     },
     {
-      "meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and red onion rings",
+      "meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and onion rings",
       "ingredients": [
         {
           "food": "potatoes",
