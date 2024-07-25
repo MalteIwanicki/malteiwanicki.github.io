@@ -42,7 +42,6 @@ function createRecipeDiv(recipe) {
   checkbox.type = 'checkbox';
   checkbox.classList.add('recipe-checkbox');
   checkbox.dataset.meal = recipe.meal;
-  checkbox.addEventListener('change', updateSummary);
   checkbox.addEventListener('change', updateCookie);
 
   recipeDiv.appendChild(checkbox);
