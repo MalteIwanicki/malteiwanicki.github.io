@@ -112,6 +112,10 @@ main {
 #summary-list>li>span>a:active {
   text-decoration: line-through;
 }
+#summary-list>li>span>a:visited {
+  text-decoration: line-through;
+    color: #6599cd;
+}
 
 #summary-list ul {
   list-style-type: none;
@@ -121,5 +125,4 @@ main {
 
 #summary-list ul li {
   color: #666;
-  font-style: italic;
 }
