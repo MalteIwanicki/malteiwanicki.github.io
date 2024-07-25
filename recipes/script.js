@@ -205,6 +205,14 @@ function buildRecipes() {
           recipesContainer.appendChild(recipeDiv);
         });
         renderSummary(); // Call renderSummary after creating recipe divs
+        const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
+        // recover clicked meals
+        selectedMeals.forEach(meal => {
+            const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
+            if (checkbox) {
+                checkbox.checked = true;
+            }
+        });
       } else {
         console.error('Error: recipes is not an array');
       }
@@ -214,13 +222,7 @@ function buildRecipes() {
     });
 
     // Restore selected meals from cookie
-    const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
-    selectedMeals.forEach(meal => {
-        const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
-        if (checkbox) {
-            checkbox.checked = true;
-        }
-    });
+    
 }
 
 // Call the buildRecipes function when the page loads
