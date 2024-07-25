@@ -1,4 +1,34 @@
 // Function to create a recipe div element
+function setCookie(name, value, days) {
+    let date = new Date();
+    date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + ";" + expires + ";path=/";
+}
+
+function getCookie(name) {
+    const nameEQ = name + "=";
+    const ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+    }
+    return null;
+}
+
+// Update cookie with selected meals
+function updateCookie() {
+    const checkboxes = document.querySelectorAll('.recipe-checkbox');
+    const selectedMeals = [];
+    checkboxes.forEach(checkbox => {
+        if (checkbox.checked) {
+            selectedMeals.push(checkbox.dataset.meal);
+        }
+    });
+    setCookie("selectedMeals", JSON.stringify(selectedMeals), 30);  // Save for 30 days
+}
+
 function createRecipeDiv(recipe) {
   const recipeDiv = document.createElement('div');
   recipeDiv.classList.add('recipe');
@@ -10,7 +40,10 @@ function createRecipeDiv(recipe) {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
   checkbox.classList.add('recipe-checkbox');
+  checkbox.dataset.meal = recipe.meal;
   checkbox.addEventListener('change', updateSummary);
+  checkbox.addEventListener('change', updateCookie);
+
   recipeDiv.appendChild(checkbox);
 
   const ingredientsDetails = document.createElement('details');
@@ -48,6 +81,17 @@ function createRecipeDiv(recipe) {
   });
   instructionsDetails.appendChild(instructionsList);
   recipeDiv.appendChild(instructionsDetails);
+  // Function to handle toggling expansion
+  const handleToggle = () => {
+        if (ingredientsDetails.open || instructionsDetails.open) {
+            recipeDiv.classList.add('expanded');
+        } else {
+            recipeDiv.classList.remove('expanded');
+        }
+    };
+  ingredientsDetails.addEventListener('toggle', handleToggle);
+  instructionsDetails.addEventListener('toggle', handleToggle);
+
 
   return recipeDiv;
 }
@@ -86,7 +130,7 @@ async function translateAndUpdateLink(name, nameItem) {
         const germanName = data.responseData.translatedText;
 
         // Update the link with the German translation
-        nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC">${name}</a>`;
+        nameItem.innerHTML = `<a target="_blank" href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC">${name}</a>`;
     } catch (error) {
         // Handle any errors that occur during the translation
         console.error('Error translating name:', error);
@@ -128,17 +172,17 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    nameItem.innerHTML = `<a href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC">${name}</a>`;
+    nameItem.innerHTML = `<a target="_blank" href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC">${name}</a>`;
     listItem.appendChild(nameItem);
     
     // translate to german
     translateAndUpdateLink(name, nameItem);    
 
     if (details.length > 0) {
-      const detailsList = document.createElement('ul');
+      const detailsList = document.createElement('span');
       details.forEach(detail => {
-        const detailItem = document.createElement('li');
-        detailItem.textContent = detail;
+        const detailItem = document.createElement('span');
+        detailItem.textContent =" " + detail;
         detailsList.appendChild(detailItem);
       });
       listItem.appendChild(detailsList);
@@ -167,6 +211,15 @@ function buildRecipes() {
     })
     .catch(error => {
       console.error('Error loading recipes:', error);
+    });
+
+    // Restore selected meals from cookie
+    const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
+    selectedMeals.forEach(meal => {
+        const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
+        if (checkbox) {
+            checkbox.checked = true;
+        }
     });
 }
 

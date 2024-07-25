@@ -9,7 +9,8 @@ body {
   min-height: 100vh;
 }
 
-header {
+header,
+footer {
   background-color: #333;
   color: #fff;
   padding: 14px;
@@ -22,26 +23,29 @@ main {
   padding: 20px;
   flex-grow: 1;
 }
-
-footer {
-  background-color: #333;
-  color: #fff;
-  padding: 10px;
-  text-align: center;
-}
-
-/* Recipe Styles */
+/* New Grid Layout for Recipes */
 #recipes-container {
-  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 20px;
 }
-
 .recipe {
   background-color: #fff;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
   padding: 20px;
   position: relative;
+  overflow: hidden;
+  transition: transform 0.3s ease, grid-column 0.3s ease, grid-row 0.3s ease;
+}
+
+.recipe.expanded {
+  grid-column: 1 / -1;
+  transform: scale(1.0);
+}
+
+.recipe:hover {
+  transform: translateY(-5px);
 }
 
 .recipe h2 {
@@ -65,54 +69,53 @@ footer {
 .recipe summary {
   cursor: pointer;
   font-weight: bold;
-  display: flex;
-  align-items: center;
-}
-
-.recipe summary::-webkit-details-marker {
-  display: none;
-}
-
-.recipe summary::after {
-  content: '▶';
-  margin-left: 8px;
-  transition: transform 0.3s ease;
-}
-
-.recipe details[open] summary::after {
-  transform: rotate(90deg);
-}
-
-.recipe ul,
-.recipe ol {
-  padding-left: 20px;
-}
-
-.recipe li {
-  margin-bottom: 8px;
-  color: #555;
 }
 
 /* Summary Styles */
-#summary {
-  background-color: #fff;
+
+/* foo */
+#summary-panel {
+  background-color: #f8f8f8;
+  border: 1px solid #e0e0e0;
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
   padding: 20px;
-  margin-top: 20px;
+  max-width: 600px;
+  margin: 20px auto;
 }
 
-#summary h2 {
+#summary-panel h2 {
   color: #333;
-  margin-top: 0;
+  border-bottom: 2px solid #ddd;
+  padding-bottom: 10px;
+  margin-bottom: 20px;
 }
 
 #summary-list {
   list-style-type: square;
-  padding-left: 20px;
+  padding-left: 0;
 }
 
 #summary-list li {
-  margin-bottom: 8px;
-  color: #555;
+  margin-bottom: 10px;
+}
+
+#summary-list>li>span>a {
+  color: #0066cc;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+#summary-list>li>span>a:hover {
+  text-decoration: underline;
+}
+
+#summary-list ul {
+  list-style-type: none;
+  padding-left: 20px;
+  margin-top: 5px;
+}
+
+#summary-list ul li {
+  color: #666;
+  font-style: italic;
 }
