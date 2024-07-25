@@ -18,7 +18,7 @@ function getCookie(name) {
 }
 
 // Update cookie with selected meals
-function updateCookie() {
+function updateCookie(event) {
     const checkboxes = document.querySelectorAll('.recipe-checkbox');
     const selectedMeals = [];
     checkboxes.forEach(checkbox => {
@@ -27,6 +27,7 @@ function updateCookie() {
         }
     });
     setCookie("selectedMeals", JSON.stringify(selectedMeals), 30);  // Save for 30 days
+    updateSummary(event)
 }
 
 function createRecipeDiv(recipe) {
@@ -182,7 +183,7 @@ function renderSummary() {
       const detailsList = document.createElement('span');
       details.forEach(detail => {
         const detailItem = document.createElement('span');
-        detailItem.textContent =" " + detail;
+        detailItem.textContent =", " + detail;
         detailsList.appendChild(detailItem);
       });
       listItem.appendChild(detailsList);
@@ -204,8 +205,9 @@ function buildRecipes() {
           const recipeDiv = createRecipeDiv(recipe);
           recipesContainer.appendChild(recipeDiv);
         });
-        renderSummary(); // Call renderSummary after creating recipe divs
         const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
+        renderSummary(); // Call renderSummary after creating recipe divs
+
         // recover clicked meals
         selectedMeals.forEach(meal => {
             const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
