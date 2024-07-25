@@ -27,7 +27,6 @@ function updateCookie(event) {
         }
     });
     setCookie("selectedMeals", JSON.stringify(selectedMeals), 30);  // Save for 30 days
-    updateSummary(event)
 }
 
 function createRecipeDiv(recipe) {
@@ -43,7 +42,7 @@ function createRecipeDiv(recipe) {
   checkbox.classList.add('recipe-checkbox');
   checkbox.dataset.meal = recipe.meal;
   checkbox.addEventListener('change', updateCookie);
-
+  checkbox.addEventListener("change", updateSummary);
   recipeDiv.appendChild(checkbox);
 
   const ingredientsDetails = document.createElement('details');
@@ -212,6 +211,7 @@ function buildRecipes() {
             const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
             if (checkbox) {
                 checkbox.checked = true;
+                checknbox.dispatchEvent(new Event("change"))
             }
         });
       } else {
