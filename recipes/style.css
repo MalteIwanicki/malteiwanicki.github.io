@@ -114,7 +114,7 @@ main {
 }
 #summary-list>li>span>a:visited {
   text-decoration: line-through;
-    color: #6599cd;
+  color: #8bacce;
 }
 
 #summary-list ul {
