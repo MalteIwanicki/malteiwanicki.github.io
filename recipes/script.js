@@ -121,6 +121,7 @@ function updateSummary(event) {
     const howSpan = item.querySelector('span.how');
     const name = nameSpan ? nameSpan.textContent : '';
     const amount = amountSpan ? amountSpan.textContent : '';
+    const unit = unitSpan ? unitSpan.textContent : '';
     const how = howSpan ? howSpan.textContent : '';
     return { name, amount, unit, how };
   });
