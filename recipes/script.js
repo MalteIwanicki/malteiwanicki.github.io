@@ -145,14 +145,14 @@ let lastRequestTime = 0;
 async function translateAndUpdateLink(name, nameItem) {
   const currentTime = Date.now();
   const timeSinceLastRequest = currentTime - lastRequestTime;
-  const minDelayBetweenRequests = 1000; // 1 second delay between requests
+  const minDelayBetweenRequests = 3000; // 1 second delay between requests
 
   if (timeSinceLastRequest < minDelayBetweenRequests) {
     await delay(minDelayBetweenRequests - timeSinceLastRequest);
   }
 
   // Translate the name from English to German using MyMemoryTranslated API
-  const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
+  const apiUrl = ` /get?q=${encodeURIComponent(name)}&langpair=en|de`;
   try {
     lastRequestTime = Date.now(); // Update the last request time
     const response = await fetch(apiUrl);
@@ -210,7 +210,7 @@ function renderSummary() {
     listItem.appendChild(nameItem);
     
     // translate to german
-    translateAndUpdateLink(name, nameItem);    
+    if !(foodLinks[name]) {translateAndUpdateLink(name, nameItem);}
 
     if (details.length > 0) {
       const detailsList = document.createElement('span');
