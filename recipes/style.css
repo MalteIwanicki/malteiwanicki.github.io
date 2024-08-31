@@ -23,12 +23,14 @@ main {
   padding: 20px;
   flex-grow: 1;
 }
-/* New Grid Layout for Recipes */
+
+/* Responsive Grid Layout for Recipes */
 #recipes-container {
   display: grid;
-  grid-template-columns: repeat(5, 1fr);
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
   gap: 20px;
 }
+
 .recipe {
   background-color: #fff;
   border-radius: 8px;
@@ -72,8 +74,6 @@ main {
 }
 
 /* Summary Styles */
-
-/* foo */
 #summary-panel {
   background-color: #f8f8f8;
   border: 1px solid #e0e0e0;
@@ -112,6 +112,7 @@ main {
 #summary-list>li>span>a:active {
   text-decoration: line-through;
 }
+
 #summary-list>li>span>a:visited {
   text-decoration: line-through;
   color: #8bacce;
@@ -125,4 +126,38 @@ main {
 
 #summary-list ul li {
   color: #666;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  main {
+    padding: 10px;
+  }
+
+  #recipes-container {
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+  }
+
+  .recipe {
+    padding: 15px;
+  }
+
+  #summary-panel {
+    padding: 15px;
+  }
+}
+
+@media (max-width: 480px) {
+  #recipes-container {
+    grid-template-columns: 1fr;
+  }
+
+  .recipe {
+    padding: 10px;
+  }
+
+  #summary-panel {
+    padding: 10px;
+  }
 }
