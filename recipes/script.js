@@ -99,6 +99,16 @@ function createRecipeDiv(recipe) {
 }
 
 let selectedRecipes = [];
+let foodLinks = {};
+
+async function loadFoodLinks() {
+    try {
+        const response = await fetch('https://malteiwanicki.github.io/recipes/food_links.json');
+        foodLinks = await response.json();
+    } catch (error) {
+        console.error('Error loading food links:', error);
+    }
+}
 
 function updateSummary(event) {
   const checkbox = event.target;
@@ -131,9 +141,9 @@ async function translateAndUpdateLink(name, nameItem) {
         const response = await fetch(apiUrl);
         const data = await response.json();
         const germanName = data.responseData.translatedText;
-
+        const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC`
         // Update the link with the German translation
-        nameItem.innerHTML = `<a target="_blank" href="https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC">${name}</a>`;
+        nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
     } catch (error) {
         // Handle any errors that occur during the translation
         console.error('Error translating name:', error);
@@ -178,7 +188,8 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    nameItem.innerHTML = `<a target="_blank" href="https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC">${name}</a>`;
+    const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC`;
+    nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
     listItem.appendChild(nameItem);
     
     // translate to german
@@ -199,8 +210,9 @@ function renderSummary() {
 }
 // Function to build and display recipes
 function buildRecipes() {
+  await loadFoodLinks();
   const recipesContainer = document.getElementById('recipes-container');
-
+  
   fetch('https://malteiwanicki.github.io/recipes/recipes.json')
     .then(response => response.json())
     .then(data => {
