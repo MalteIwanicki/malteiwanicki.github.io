@@ -189,7 +189,7 @@ function renderSummary() {
     const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC`;
+    const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC`;
     nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
     listItem.appendChild(nameItem);
     
