@@ -55,7 +55,7 @@ function createRecipeDiv(recipe) {
   recipe.ingredients.forEach(ingredient => {
     const ingredientItem = document.createElement('li');
      let itemText = `<span class="name">${ingredient.food}</span>`;
-    if (ingredient.amount) && (ingredient.unit) {
+    if ((ingredient.amount) && (ingredient.unit)) {
       itemText += `, <span class="amount">${ingredient.amount} ${ingredient.unit}</span>`;
     }
     if (ingredient.how) {
