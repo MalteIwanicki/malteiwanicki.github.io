@@ -4,7 +4,7 @@
       "meal": "Sausages, Potato, Veg & Sauerkraut",
       "ingredients": [
         {
-          "food": "Nürnberger Würstchen",
+          "food": "nürnberger würstchen",
           "amount": "1 pack"
         },
         {
@@ -210,7 +210,7 @@
       "meal": "Red Pepper Toast",
       "ingredients": [
         {
-          "food": "English muffins",
+          "food": "english muffins",
           "amount": "4"
         },
         {
@@ -361,8 +361,13 @@
           "amount": "1 tsp"
         },
         {
-          "food": "parsley/chives",
-          "amount": "10g",
+          "food": "parsley",
+          "amount": "5g",
+          "how": "chopped"
+        },
+        {
+          "food": "chives",
+          "amount": "5g",
           "how": "chopped"
         },
         {
@@ -837,10 +842,10 @@
           "food": "eggs"
         },
         {
-          "food": "Hollandaise Sauce"
+          "food": "hollandaise sauce"
         },
         {
-          "food": "English muffins"
+          "food": "english muffins"
         },
         {
           "food": "bacon"
@@ -861,7 +866,7 @@
           "food": "beef"
         },
         {
-          "food": "Taco seasoning"
+          "food": "taco seasoning"
         },
         {
           "food": "onion",
@@ -873,11 +878,11 @@
           "amount": "sliced"
         },
         {
-          "food": "Grated cheese",
+          "food": "grated cheese",
           "amount": "70g"
         },
         {
-          "food": "Tomato",
+          "food": "tomato",
           "amount": "2",
           "how": "diced"
         },
@@ -896,7 +901,7 @@
       ]
     },
     {
-      "meal": "Blue Cheese Fettuccine",
+      "meal": "blue cheese fettuccine",
       "ingredients": [
         {
           "food": "chicken strips",
@@ -1036,15 +1041,15 @@
           "amount": "400g"
         },
         {
-          "food": "Allgäuer Bergkäse",
+          "food": "allgäuer bergkäse",
           "amount": "300g",
           "how": "grated"
         },
         {
-          "food": "Parsley"
+          "food": "parsley"
         },
         {
-          "food": "Frozen mixed veggies"
+          "food": "frozen mixed veggies"
         }
       ],
       "instructions": [
@@ -1085,7 +1090,7 @@
             ]
     },
     {
-      "meal": "Courgette Pasta",
+      "meal": "courgette pasta",
       "ingredients": [
         {
           "food": "olive oil",
