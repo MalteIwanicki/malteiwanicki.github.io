@@ -7,7 +7,7 @@
 "beef":"https://shop.rewe.de/p/ja-rinder-hackfleisch-500g/7978794",
 "broccoli":"https://shop.rewe.de/p/ja-broccoli-roeschen-tiefgefroren-1kg/7073900",
 "butter":"https://shop.rewe.de/p/ja-markenbutter-mild-gesaeuert-250g/5883121",
-"calbrese pesto":"https://shop.rewe.de/p/ja-pesto-alla-calabrese-190g/8268091",
+"calabrese pesto":"https://shop.rewe.de/p/ja-pesto-alla-calabrese-190g/8268091",
 "carrot":"https://shop.rewe.de/p/karotten-2kg/8339524",
 "cauliflower":"https://shop.rewe.de/p/ja-blumenkohl-tiefgefroren-1kg/7067903",
 "cheddar cheese":"https://shop.rewe.de/p/ja-cheddar-in-scheiben-175g/8926272",
@@ -55,5 +55,9 @@
 "spinach":"https://shop.rewe.de/p/rewe-beste-wahl-junger-spinat-450g/157118",
 "spring onions":"https://shop.rewe.de/p/lauchzwiebeln-im-bund/482404",
 "tortellini with ricotta":"https://shop.rewe.de/p/ja-tortelloni-ricotta-spinat-250g/2272449",
-"vegetable stock":"https://shop.rewe.de/p/ja-klare-gemuesebruehe-140g/7033086"
+"vegetable stock":"https://shop.rewe.de/p/ja-klare-gemuesebruehe-140g/7033086",
+"water":"#",
+"hot water":"#",
+"salt":"https://shop.rewe.de/p/ja-jodsalz-500g/2037971",
+
 }
