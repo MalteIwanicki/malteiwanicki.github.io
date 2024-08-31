@@ -209,7 +209,7 @@ function renderSummary() {
   });
 }
 // Function to build and display recipes
-function buildRecipes() {
+async function buildRecipes() {
   await loadFoodLinks();
   const recipesContainer = document.getElementById('recipes-container');
   
@@ -246,4 +246,6 @@ function buildRecipes() {
 }
 
 // Call the buildRecipes function when the page loads
-window.addEventListener('load', buildRecipes);
+window.addEventListener('load', () => {
+  buildRecipes().catch(error => console.error('Error in buildRecipes:', error));
+});
