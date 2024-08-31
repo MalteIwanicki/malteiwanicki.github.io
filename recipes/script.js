@@ -55,8 +55,11 @@ function createRecipeDiv(recipe) {
   recipe.ingredients.forEach(ingredient => {
     const ingredientItem = document.createElement('li');
      let itemText = `<span class="name">${ingredient.food}</span>`;
-    if ((ingredient.amount) && (ingredient.unit)) {
-      itemText += `, <span class="amount">${ingredient.amount} ${ingredient.unit}</span>`;
+    if (ingredient.amount) {
+      itemText += `, <span class="amount">${ingredient.amount}</span>`;
+    }
+    if (ingredient.unit)) {
+      itemText += ` <span class="unit">${ingredient.unit}</span>`;
     }
     if (ingredient.how) {
       itemText += `, <span class="how">${ingredient.how}</span>`;
@@ -104,17 +107,18 @@ function updateSummary(event) {
   const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => {
     const nameSpan = item.querySelector('span.name');
     const amountSpan = item.querySelector('span.amount');
+    const unitSpan  = item.querySelector('span.unit');
     const howSpan = item.querySelector('span.how');
     const name = nameSpan ? nameSpan.textContent : '';
     const amount = amountSpan ? amountSpan.textContent : '';
     const how = howSpan ? howSpan.textContent : '';
-    return { name, amount, how };
+    return { name, amount, unit, how };
   });
 
   if (checkbox.checked) {
     selectedRecipes.push(...ingredients);
   } else {
-    selectedRecipes = selectedRecipes.filter(item => !ingredients.some(i => i.name === item.name && i.amount === item.amount && i.how === item.how));
+    selectedRecipes = selectedRecipes.filter(item => !ingredients.some(i => i.name === item.name && i.amount === item.amount && i.unit === item.unit && i.how === item.how));
   }
   renderSummary();
 }
@@ -214,7 +218,7 @@ function buildRecipes() {
             const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
             if (checkbox) {
                 checkbox.checked = true;
-                checknbox.dispatchEvent(new Event("change"))
+                checkbox.dispatchEvent(new Event("change"))
             }
         });
       } else {
