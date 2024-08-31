@@ -135,20 +135,36 @@ function updateSummary(event) {
 }
 
 
+function delay(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+// Variable to track the last request time
+let lastRequestTime = 0;
+
 async function translateAndUpdateLink(name, nameItem) {
-    // Translate the name from English to German using MyMemoryTranslated API
-    const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
-    try {
-        const response = await fetch(apiUrl);
-        const data = await response.json();
-        const germanName = data.responseData.translatedText;
-        const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC`
-        // Update the link with the German translation
-        nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
-    } catch (error) {
-        // Handle any errors that occur during the translation
-        console.error('Error translating name:', error);
-    }
+  const currentTime = Date.now();
+  const timeSinceLastRequest = currentTime - lastRequestTime;
+  const minDelayBetweenRequests = 1000; // 1 second delay between requests
+
+  if (timeSinceLastRequest < minDelayBetweenRequests) {
+    await delay(minDelayBetweenRequests - timeSinceLastRequest);
+  }
+
+  // Translate the name from English to German using MyMemoryTranslated API
+  const apiUrl = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(name)}&langpair=en|de`;
+  try {
+    lastRequestTime = Date.now(); // Update the last request time
+    const response = await fetch(apiUrl);
+    const data = await response.json();
+    const germanName = data.responseData.translatedText;
+    const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(germanName)}&sorting=PRICE_ASC`;
+    // Update the link with the German translation
+    nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
+  } catch (error) {
+    // Handle any errors that occur during the translation
+    console.error('Error translating name:', error);
+  }
 }
 
 function renderSummary() {
