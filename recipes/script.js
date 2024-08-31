@@ -55,8 +55,8 @@ function createRecipeDiv(recipe) {
   recipe.ingredients.forEach(ingredient => {
     const ingredientItem = document.createElement('li');
      let itemText = `<span class="name">${ingredient.food}</span>`;
-    if (ingredient.amount) {
-      itemText += `, <span class="amount">${ingredient.amount}</span>`;
+    if (ingredient.amount) and (ingredient.unit)) {
+      itemText += `, <span class="amount">${ingredient.amount} ${ingredient.unit}</span>`;
     }
     if (ingredient.how) {
       itemText += `, <span class="how">${ingredient.how}</span>`;
@@ -143,7 +143,7 @@ function renderSummary() {
   const groupedIngredients = {};
 
   selectedRecipes.forEach(ingredient => {
-    const { name, amount, how } = ingredient;
+    const { name, amount, unit, how } = ingredient;
     const key = name;
 
     if (!groupedIngredients[key]) {
@@ -156,6 +156,9 @@ function renderSummary() {
     const detail = [];
     if (amount) {
       detail.push(amount);
+    }
+    if (unit) {
+      detail.push(unit);
     }
     if (how) {
       detail.push(`(${how})`);

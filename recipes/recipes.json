@@ -5,7 +5,8 @@
       "ingredients": [
         {
           "food": "nürnberger würstchen",
-          "amount": "1 pack"
+          "amount": "1",
+          "unit":"pack"
         },
         {
           "food": "potatoes",
@@ -31,19 +32,23 @@
       "ingredients": [
         {
           "food": "fettuccine",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "sugar",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "salted peanuts",
-          "amount": "40g"
+          "amount": "40",
+          "unit":"g"
         },
         {
           "food": "red chili",
@@ -52,7 +57,8 @@
         },
         {
           "food": "garlic + ginger in oil",
-          "amount": "30g",
+          "amount": "30",
+          "unit":"g",
           "how": "2 cloves garlic, bit of ginger"
         },
         {
@@ -62,15 +68,18 @@
         },
         {
           "food": "curry powder",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "vegetable stock",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "peanut butter",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "red pepper",
@@ -84,11 +93,13 @@
         },
         {
           "food": "spinach",
-          "amount": "50g"
+          "amount": "50",
+          "unit":"g"
         },
         {
           "food": "coconut milk",
-          "amount": "250ml"
+          "amount": "250",
+          "unit":"ml"
         }
       ],
       "instructions": [
@@ -105,11 +116,13 @@
       "ingredients": [
         {
           "food": "dried fettuccine",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit":"Tbsp"
         },
         {
           "food": "garlic",
@@ -118,34 +131,47 @@
         },
         {
           "food": "breadcrumbs",
-          "amount": "25g"
+          "amount": "25",
+          "unit":"g"
         },
         {
           "food": "parmesan cheese",
-          "amount": "20+20g",
+          "amount": "20",
+          "unit":"g",
+          "how": "grated"
+        },
+        {
+          "food": "parmesan cheese",
+          "amount": "20",
+          "unit":"g",
           "how": "grated"
         },
         {
           "food": "chicken",
-          "amount": "250g",
+          "amount": "250",
+          "unit":"g",
           "how": "cut into 1 cm strips"
         },
         {
           "food": "mushrooms",
-          "amount": "100g",
+          "amount": "100",
+          "unit":"g",
           "how": "cut into 1 cm strips"
         },
         {
           "food": "cream",
-          "amount": "200ml"
+          "amount": "200",
+          "unit":"ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "parsley",
-          "amount": "10g",
+          "amount": "10",
+          "unit":"g",
           "how": "chopped"
         }
       ],
@@ -163,11 +189,13 @@
       "ingredients": [
         {
           "food": "vegetable stock",
-          "amount": "1¼ L"
+          "amount": "1¼",
+          "unit":"L"
         },
         {
           "food": "olive oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit":"Tbsp"
         },
         {
           "food": "red peppers",
@@ -181,20 +209,24 @@
         },
         {
           "food": "risotto rice",
-          "amount": "300g"
+          "amount": "300",
+          "unit":"g"
         },
         {
           "food": "frozen peas",
-          "amount": "150g"
+          "amount": "150",
+          "unit":"g"
         },
         {
           "food": "parmesan",
-          "amount": "50g",
+          "amount": "50",
+          "unit":"g",
           "how": "grated"
         },
         {
           "food": "chives",
-          "amount": "1 bunch",
+          "amount": "1",
+          "unit":"bunch",
           "how": "chopped"
         }
       ],
@@ -215,7 +247,8 @@
         },
         {
           "food": "oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "red pepper",
@@ -244,28 +277,34 @@
       "ingredients": [
         {
           "food": "pasta",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "cherry tomatoes",
-          "amount": "200g",
+          "amount": "200",
+          "unit":"g",
           "how": "halved"
         },
         {
           "food": "spinach",
-          "amount": "200g"
+          "amount": "200",
+          "unit":"g"
         },
         {
           "food": "mini mozarella",
-          "amount": "1 pck"
+          "amount": "1",
+          "unit":"pack"
         },
         {
           "food": "cream",
-          "amount": "200ml"
+          "amount": "200",
+          "unit":"ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "500ml"
+          "amount": "500",
+          "unit":"ml"
         }
       ],
       "instructions": [
@@ -301,7 +340,8 @@
         },
         {
           "food": "olive oil",
-          "amount": "100ml"
+          "amount": "100",
+          "unit":"ml"
         },
         {
           "food": "garlic",
@@ -310,11 +350,13 @@
         },
         {
           "food": "spaghetti",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "parmesan",
-          "amount": "100g",
+          "amount": "100",
+          "unit":"g",
           "how": "grated"
         }
       ],
@@ -342,32 +384,44 @@
         },
         {
           "food": "rice",
-          "amount": "150g"
+          "amount": "150",
+          "unit":"g"
         },
         {
           "food": "cream",
-          "amount": "200ml"
+          "amount": "200",
+          "unit":"ml"
         },
         {
           "food": "stock powder",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "mustard",
-          "amount": "2+1 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
+        },
+        {
+          "food": "mustard",
+          "amount": "1",
+          "unit":"Tbsp"
         },
         {
           "food": "honey",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "parsley",
-          "amount": "5g",
+          "amount": "5",
+          "unit":"g",
           "how": "chopped"
         },
         {
           "food": "chives",
-          "amount": "5g",
+          "amount": "5",
+          "unit":"g",
           "how": "chopped"
         },
         {
@@ -377,15 +431,18 @@
         },
         {
           "food": "breadcrumbs",
-          "amount": "25g"
+          "amount": "25",
+          "unit":"g"
         },
         {
           "food": "mince",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit":"Tbsp"
         }
       ],
       "instructions": [
@@ -402,12 +459,14 @@
       "ingredients": [
         {
           "food": "green beans",
-          "amount": "200g",
+          "amount": "200",
+          "unit":"g",
           "how": "halved"
         },
         {
           "food": "band noodles / fettuccine",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         },
         {
           "food": "onion",
@@ -421,32 +480,39 @@
         },
         {
           "food": "ginger",
-          "amount": "15g",
+          "amount": "15",
+          "unit":"g",
           "how": "finely chopped"
         },
         {
           "food": "basil",
-          "amount": "10g"
+          "amount": "10",
+          "unit":"g"
         },
         {
           "food": "oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "sweet chilli sauce",
-          "amount": "50g"
+          "amount": "50",
+          "unit":"g"
         },
         {
           "food": "soy sauce",
-          "amount": "50ml"
+          "amount": "50",
+          "unit":"ml"
         },
         {
           "food": "maple syrup",
-          "amount": "10ml"
+          "amount": "10",
+          "unit":"ml"
         },
         {
           "food": "roasted peanuts",
-          "amount": "20g"
+          "amount": "20",
+          "unit":"g"
         },
         {
           "food": "chilli"
@@ -469,7 +535,8 @@
       "ingredients": [
         {
           "food": "maultaschen",
-          "amount": "2 packs",
+          "amount": "2",
+          "unit":"pack",
           "how": "1 cm stripes"
         },
         {
@@ -479,7 +546,8 @@
         },
         {
           "food": "olive oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit":"Tbsp"
         }
       ],
       "instructions": [
@@ -507,16 +575,18 @@
       "ingredients": [
         {
           "food": "cream",
-          "amount": "100ml"
+          "amount": "100",
+          "unit":"ml"
         },
         {
           "food": "zucchini",
-          "amount": "1 small",
+          "amount": "1",
           "how": "chopped"
         },
         {
           "food": "cherry tomatoes or canned tomatoes",
-          "amount": "250g",
+          "amount": "250",
+          "unit":"g",
           "how": "quartered or canned"
         },
         {
@@ -531,23 +601,27 @@
         },
         {
           "food": "dried oregano",
-          "amount": "2 tsp"
+          "amount": "2",
+          "unit":"tsp"
         },
         {
           "food": "water",
-          "amount": "380ml",
+          "amount": "380",
+          "unit":"ml",
           "how": "1 can"
         },
         {
           "food": "salt",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit":"tsp"
         },
         {
           "food": "chilli"
         },
         {
           "food": "wholewheat pasta",
-          "amount": "250g"
+          "amount": "250",
+          "unit":"g"
         }
       ],
       "instructions": [
@@ -561,35 +635,52 @@
       "ingredients": [
         {
           "food": "walnuts",
-          "amount": "20g"
+          "amount": "20",
+          "unit":"g"
         },
         {
           "food": "garlic"
         },
         {
           "food": "olive oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "water",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit":"Tbsp"
         },
         {
           "food": "parmesan",
-          "amount": "20g",
+          "amount": "20",
+          "unit":"g",
           "how": "grated"
         },
         {
           "food": "basil",
-          "amount": "20g"
+          "amount": "20",
+          "unit":"g"
         },
         {
           "food": "spinach",
-          "amount": "100+100g"
+          "amount": "100",
+          "unit":"g"
+        },
+        {
+          "food": "spinach",
+          "amount": "100",
+          "unit":"g"
         },
         {
           "food": "cream cheese",
-          "amount": "50+20g"
+          "amount": "50",
+          "unit":"g"
+        },
+        {
+          "food": "cream cheese",
+          "amount": "20",
+          "unit":"g"
         },
         {
           "food": "onion",
@@ -598,7 +689,8 @@
         },
         {
           "food": "gnocchi",
-          "amount": "500g to 600g"
+          "amount": "600",
+          "unit":"g"
         }
       ],
       "instructions": [
@@ -616,16 +708,19 @@
       "ingredients": [
         {
           "food": "tuna",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "spring onions",
-          "amount": "a bunch",
+          "amount": "1",
+          "unit": "bunch",
           "how": "chopped"
         },
         {
           "food": "mayonnaise",
-          "amount": "4 Tbsp"
+          "amount": "4",
+          "unit": "Tbsp"
         },
         {
           "food": "toast or English muffins"
@@ -636,7 +731,8 @@
         },
         {
           "food": "paprika",
-          "amount": "a pinch"
+          "amount": "1",
+          "unit": "pinch"
         }
       ],
       "instructions": [
@@ -652,7 +748,8 @@
       "ingredients": [
         {
           "food": "olive oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit": "Tbsp"
         },
         {
           "food": "red pepper",
@@ -661,7 +758,8 @@
         },
         {
           "food": "spring onions",
-          "amount": "1 bunch",
+          "amount": "1",
+          "unit": "bunch",
           "how": "sliced"
         },
         {
@@ -671,20 +769,24 @@
         },
         {
           "food": "curry powder",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit": "tsp"
         },
         {
           "food": "chopped tomatoes",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "kidney beans",
-          "amount": "1 can",
+          "amount": "1",
+          "unit": "can",
           "how": "rinsed"
         },
         {
           "food": "coconut milk",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "corn tortillas",
@@ -710,11 +812,13 @@
       "ingredients": [
         {
           "food": "pine nuts",
-          "amount": "10g"
+          "amount": "10",
+          "unit": "g"
         },
         {
           "food": "olive oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit": "Tbsp"
         },
         {
           "food": "onion",
@@ -728,19 +832,23 @@
         },
         {
           "food": "pasta",
-          "amount": "250g"
+          "amount": "250",
+          "unit": "g"
         },
         {
           "food": "hot water",
-          "amount": "500ml"
+          "amount": "500",
+          "unit": "ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit": "tsp"
         },
         {
           "food": "salt",
-          "amount": "½ tsp"
+          "amount": "½",
+          "unit": "tsp"
         },
         {
           "food": "red chilli",
@@ -749,24 +857,29 @@
         },
         {
           "food": "cherry tomatoes",
-          "amount": "125g",
+          "amount": "125",
+          "unit": "g",
           "how": "quartered"
         },
         {
           "food": "cream cheese",
-          "amount": "100g"
+          "amount": "100",
+          "unit": "g"
         },
         {
           "food": "calabrese pesto",
-          "amount": "50g"
+          "amount": "50",
+          "unit": "g"
         },
         {
           "food": "spinach",
-          "amount": "100g"
+          "amount": "100",
+          "unit": "g"
         },
         {
           "food": "parmesan",
-          "amount": "40g",
+          "amount": "40",
+          "unit": "g",
           "how": "grated"
         }
       ],
@@ -785,11 +898,13 @@
       "ingredients": [
         {
           "food": "tortellini with ricotta",
-          "amount": "400g"
+          "amount": "400",
+          "unit": "g"
         },
         {
           "food": "olive oil",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit": "Tbsp"
         },
         {
           "food": "onion",
@@ -803,25 +918,30 @@
         },
         {
           "food": "chilli powder",
-          "amount": "1 heaped tsp"
+          "amount": "1",
+          "unit": "tsp"
         },
         {
           "food": "chopped tomatoes",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "green olives",
-          "amount": "75g",
+          "amount": "75",
+          "unit": "g",
           "how": "halved"
         },
         {
           "food": "basil",
-          "amount": "3 Tbsp",
+          "amount": "3",
+          "unit": "Tbsp",
           "how": "chopped"
         },
         {
           "food": "mozzarella",
-          "amount": "125g",
+          "amount": "125",
+          "unit": "g",
           "how": "sliced"
         }
       ],
@@ -879,7 +999,8 @@
         },
         {
           "food": "grated cheese",
-          "amount": "70g"
+          "amount": "70",
+          "unit": "g"
         },
         {
           "food": "tomato",
@@ -905,18 +1026,21 @@
       "ingredients": [
         {
           "food": "chicken strips",
-          "amount": "250g"
+          "amount": "250",
+          "unit": "g"
         },
         {
           "food": "dried fettuccine",
-          "amount": "250g"
+          "amount": "250",
+          "unit": "g"
         },
         {
           "food": "broccoli"
         },
         {
           "food": "olive oil",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit": "Tbsp"
         },
         {
           "food": "onion",
@@ -930,24 +1054,29 @@
         },
         {
           "food": "cream",
-          "amount": "200ml"
+          "amount": "200",
+          "unit": "ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "200ml"
+          "amount": "200",
+          "unit": "ml"
         },
         {
           "food": "gorgonzola",
-          "amount": "150g",
+          "amount": "150",
+          "unit": "g",
           "how": "cubed"
         },
         {
           "food": "nutmeg",
-          "amount": "a Pinch"
+          "amount": "1",
+          "unit": "pinch"
         },
         {
           "food": "parsley",
-          "amount": "30g",
+          "amount": "30",
+          "unit": "g",
           "how": "chopped"
         }
       ],
@@ -976,44 +1105,54 @@
         },
         {
           "food": "fresh ginger",
-          "amount": "2cm",
+          "amount": "2",
+          "unit": "cm",
           "how": "chopped"
         },
         {
           "food": "tomato paste",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit": "Tbsp"
         },
         {
           "food": "curry powder",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit": "Tbsp"
         },
         {
           "food": "chilli flakes",
-          "amount": "½ tsp"
+          "amount": "½",
+          "unit": "tsp"
         },
         {
           "food": "vegetable stock",
-          "amount": "1 L"
+          "amount": "1",
+          "unit": "L"
         },
         {
           "food": "coconut milk",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "chopped tomatoes",
-          "amount": "1 can"
+          "amount": "1",
+          "unit": "can"
         },
         {
           "food": "red lentils",
-          "amount": "1 cup"
+          "amount": "1",
+          "unit": "cup"
         },
         {
           "food": "rice",
-          "amount": "1 cup"
+          "amount": "1",
+          "unit": "cup"
         },
         {
           "food": "spinach",
-          "amount": "2 handfuls"
+          "amount": "2",
+          "unit": "handfulls"
         }
       ],
       "instructions": [
@@ -1029,7 +1168,8 @@
       "ingredients": [
         {
           "food": "butter",
-          "amount": "2 Tbsp"
+          "amount": "2",
+          "unit": "Tbsp"
         },
         {
           "food": "shallots",
@@ -1038,11 +1178,13 @@
         },
         {
           "food": "spätzle",
-          "amount": "400g"
+          "amount": "400",
+          "unit": "g"
         },
         {
           "food": "allgäuer bergkäse",
-          "amount": "300g",
+          "amount": "300",
+          "unit": "g",
           "how": "grated"
         },
         {
@@ -1094,7 +1236,8 @@
       "ingredients": [
         {
           "food": "olive oil",
-          "amount": "3 Tbsp"
+          "amount": "3",
+          "unit": "Tbsp"
         },
         {
           "food": "garlic",
@@ -1103,16 +1246,19 @@
         },
         {
           "food": "courgettes",
-          "amount": "300g",
+          "amount": "300",
+          "unit": "g",
           "how": "quartered and sliced"
         },
         {
           "food": "long dried pasta",
-          "amount": "250g"
+          "amount": "250",
+          "unit": "g"
         },
         {
           "food": "cream",
-          "amount": "1 cup"
+          "amount": "1",
+          "unit": "cup"
         },
         {
           "food": "lemon",
@@ -1121,12 +1267,14 @@
         },
         {
           "food": "parmesan cheese",
-          "amount": "20g",
+          "amount": "20",
+          "unit": "g",
           "how": "grated"
         },
         {
           "food": "nutmeg",
-          "amount": "Pinch of"
+          "amount": "1",
+          "unit": "pinch"
         }
       ],
       "instructions": [
@@ -1154,43 +1302,53 @@
       "ingredients": [
         {
           "food": "macaroni pasta",
-          "amount": "250g"
+          "amount": "250",
+          "unit": "g"
         },
         {
           "food": "butter",
-          "amount": "40g"
+          "amount": "40",
+          "unit": "g"
         },
         {
           "food": "flour",
-          "amount": "40g"
+          "amount": "40",
+          "unit": "g"
         },
         {
           "food": "curry powder",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit": "tsp"
         },
         {
           "food": "milk",
-          "amount": "~400ml"
+          "amount": "400",
+          "unit": "ml"
         },
         {
           "food": "mustard",
-          "amount": "1 Tbsp"
+          "amount": "1",
+          "unit": "Tbsp"
         },
         {
           "food": "chilli sauce",
-          "amount": "1 tsp"
+          "amount": "1",
+          "unit": "tsp"
         },
         {
           "food": "nutmeg",
-          "amount": "½ tsp"
+          "amount": "½",
+          "unit": "tsp"
         },
         {
           "food": "grated cheese",
-          "amount": "120g"
+          "amount": "120",
+          "unit": "g"
         },
         {
           "food": "parmesan",
-          "amount": "50g"
+          "amount": "50",
+          "unit": "g"
         },
         {
           "food": "mixed frozen vegetables"
