@@ -58,7 +58,7 @@ function createRecipeDiv(recipe) {
     if (ingredient.amount) {
       itemText += `, <span class="amount">${ingredient.amount}</span>`;
     }
-    if (ingredient.unit)) {
+    if (ingredient.unit) {
       itemText += ` <span class="unit">${ingredient.unit}</span>`;
     }
     if (ingredient.how) {
