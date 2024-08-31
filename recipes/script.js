@@ -210,7 +210,7 @@ function renderSummary() {
     listItem.appendChild(nameItem);
     
     // translate to german
-    if !(foodLinks[name]) {translateAndUpdateLink(name, nameItem);}
+    if (!foodLinks[name]) {translateAndUpdateLink(name, nameItem);}
 
     if (details.length > 0) {
       const detailsList = document.createElement('span');
