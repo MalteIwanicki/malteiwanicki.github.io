@@ -51,8 +51,9 @@
           "unit":"g"
         },
         {
-          "food": "red chili",
+          "food": "chilli",
           "amount": "1",
+          "unit":"piece",
           "how": "cut in fine strips"
         },
         {
@@ -104,8 +105,8 @@
       ],
       "instructions": [
         "Cook fettuccine in salted water (and remember to keep 100ml of the cooking water try without)",
-        "Heat 1 Tbsp oil, sugar, peanuts and ½ of the chili and stir until the sugar is melted. Put in a bowl to the side",
-        "In the same pan, heat 1 Tbsp oil. Add garlic + ginger oil, onion and rest of chili and fry for 1 min",
+        "Heat 1 Tbsp oil, sugar, peanuts and ½ of the chilli and stir until the sugar is melted. Put in a bowl to the side",
+        "In the same pan, heat 1 Tbsp oil. Add garlic + ginger oil, onion and rest of chilli and fry for 1 min",
         "Add curry powder, stock and peanut butter and fry for 1 min",
         "Add red pepper, juice from 1 lime quarter, coconut milk and saved cooking water. Mix until sauce is a bit thicker",
         "Add fettuccine and spinach, mix, season and serve with peanuts and lime quarters"
@@ -115,7 +116,7 @@
       "meal": "Chicken Fettuccine",
       "ingredients": [
         {
-          "food": "dried fettuccine",
+          "food": "fettuccine",
           "amount": "250",
           "unit":"g"
         },
@@ -515,7 +516,9 @@
           "unit":"g"
         },
         {
-          "food": "chilli"
+          "food": "chilli",
+          "amount": "1",
+          "unit":"piece"
         }
       ],
       "instructions": [
@@ -579,12 +582,12 @@
           "unit":"ml"
         },
         {
-          "food": "zucchini",
+          "food": "courgettes",
           "amount": "1",
           "how": "chopped"
         },
         {
-          "food": "cherry tomatoes or canned tomatoes",
+          "food": "cherry tomatoes",
           "amount": "250",
           "unit":"g",
           "how": "quartered or canned"
@@ -600,7 +603,7 @@
           "how": "chopped"
         },
         {
-          "food": "dried oregano",
+          "food": "oregano",
           "amount": "2",
           "unit":"tsp"
         },
@@ -616,7 +619,9 @@
           "unit":"tsp"
         },
         {
-          "food": "chilli"
+          "food": "chilli",
+          "amount":"1",
+          "unit":"piece"
         },
         {
           "food": "wholewheat pasta",
@@ -851,8 +856,9 @@
           "unit": "tsp"
         },
         {
-          "food": "red chilli",
+          "food": "chilli",
           "amount": "1",
+          "unit":"piece",
           "how": "deseeded, chopped finely"
         },
         {
@@ -1025,12 +1031,13 @@
       "meal": "blue cheese fettuccine",
       "ingredients": [
         {
-          "food": "chicken strips",
+          "food": "chicken",
           "amount": "250",
-          "unit": "g"
+          "unit": "g",
+          "how": "cut into 1 cm strips"
         },
         {
-          "food": "dried fettuccine",
+          "food": "fettuccine",
           "amount": "250",
           "unit": "g"
         },
@@ -1104,7 +1111,7 @@
           "how": "chopped"
         },
         {
-          "food": "fresh ginger",
+          "food": "ginger",
           "amount": "2",
           "unit": "cm",
           "how": "chopped"
@@ -1120,7 +1127,7 @@
           "unit": "Tbsp"
         },
         {
-          "food": "chilli flakes",
+          "food": "chilli",
           "amount": "½",
           "unit": "tsp"
         },
@@ -1251,7 +1258,7 @@
           "how": "quartered and sliced"
         },
         {
-          "food": "long dried pasta",
+          "food": "fettucine",
           "amount": "250",
           "unit": "g"
         },
