@@ -962,6 +962,114 @@
       ]
     },
     {
+  "meal": "Moroccan Pot",
+  "ingredients": [
+    {
+      "food": "olive oil",
+      "amount": "1",
+      "unit": "Tbsp"
+    },
+    {
+      "food": "potato",
+      "amount": "1",
+      "unit": "piece",
+      "how": "1 cm cubes"
+    },
+    {
+      "food": "onion",
+      "amount": "1",
+      "how": "chopped"
+    },
+    {
+      "food": "garlic",
+      "amount": "1",
+      "how": "chopped"
+    },
+    {
+      "food": "water",
+      "amount": "250",
+      "unit": "ml",
+      "note": "try with much less"
+    },
+    {
+      "food": "chopped tomatoes",
+      "amount": "1",
+      "unit": "can"
+    },
+    {
+      "food": "cumin",
+      "amount": "0.5",
+      "unit": "tsp"
+    },
+    {
+      "food": "chilli",
+      "amount": "0.5",
+      "unit": "tsp"
+    },
+    {
+      "food": "vegetable stock",
+      "amount": "1",
+      "unit": "tsp"
+    },
+    {
+      "food": "chickpeas",
+      "amount": "1",
+      "unit": "can",
+      "how": "drained"
+    },
+    {
+      "food": "spinach",
+      "amount": "50",
+      "unit": "g"
+    },
+    {
+      "food": "oregano",
+      "amount": "1",
+      "unit": "tsp"
+    },
+    {
+      "food": "parsley",
+      "amount": "1",
+      "unit": "tsp",
+      "how": "chopped"
+    },
+    {
+      "food": "lemon",
+      "amount": "1",
+      "how": "zested and quartered"
+    },
+    {
+      "food": "creme fraiche",
+      "amount": "200",
+      "unit": "g"
+    },
+    {
+      "food": "flatbreads",
+      "amount": "1-2",
+      "how": "quartered"
+    },
+    {
+      "food": "butter"
+    },
+    {
+      "food": "garlic",
+      "amount": "2-4",
+      "how": "chopped"
+    }
+  ],
+  "instructions": [
+    "Heat oil. Fry potato, onion and garlic for 2-3 minutes. Add water.",
+    "Add chopped tomatoes, cumin, chilli and vegetable stock. Cover and cook for 12 minutes.",
+    "Add chickpeas, spinach and oregano and cook for another ~3 minutes until the potato cubes are soft.",
+    "Season with salt and pepper.",
+    "Parsley dip: Grate 2 tsp lemon zest, then quarter the lemon.",
+    "Mix the creme fraiche, parsley, lemon zest, a little lemon juice, salt and pepper.",
+    "Flat bread: Add a bit of butter, garlic and salt to a frying pan and fry a flatbread quarter. Repeat for the remaining quarters.",
+    "Serve with lemon quarters."
+  ]
+},
+
+    {
       "meal": "Eggs Benedict",
       "ingredients": [
         {

@@ -113,6 +113,7 @@ async function loadFoodLinks() {
 function updateSummary(event) {
   const checkbox = event.target;
   const recipe = checkbox.closest('.recipe');
+  const recipeName = recipe.querySelector('h2').textContent;
   const ingredientsList = recipe.querySelector('.ingredients-list');
   const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => {
     const nameSpan = item.querySelector('span.name');
@@ -123,13 +124,13 @@ function updateSummary(event) {
     const amount = amountSpan ? amountSpan.textContent : '';
     const unit = unitSpan ? unitSpan.textContent : '';
     const how = howSpan ? howSpan.textContent : '';
-    return { name, amount, unit, how };
+    return { name, amount, unit, how, recipeName };
   });
 
   if (checkbox.checked) {
     selectedRecipes.push(...ingredients);
   } else {
-    selectedRecipes = selectedRecipes.filter(item => !ingredients.some(i => i.name === item.name && i.amount === item.amount && i.unit === item.unit && i.how === item.how));
+      selectedRecipes = selectedRecipes.filter(item => item.recipeName !== recipeName);
   }
   renderSummary();
 }
@@ -174,13 +175,15 @@ function renderSummary() {
   const groupedIngredients = {};
 
   selectedRecipes.forEach(ingredient => {
-    const { name, amount, unit, how } = ingredient;
+    const { name, amount, unit, how,recipeName } = ingredient;
     const key = name;
 
     if (!groupedIngredients[key]) {
       groupedIngredients[key] = {
         name: key,
-        details: []
+        details: [],
+        recipeNames: new Set()
+
       };
     }
 
@@ -197,12 +200,14 @@ function renderSummary() {
     if (detail.length > 0) {
       groupedIngredients[key].details.push(detail.join(' '));
     }
+    groupedIngredients[key].recipeNames.add(recipeName);
+
   });
 
   const sortedIngredients = Object.values(groupedIngredients).sort((a, b) => a.name.localeCompare(b.name));
 
   sortedIngredients.forEach(ingredient => {
-    const { name, details } = ingredient;
+    const { name, details,recipeNames } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
     const link = foodLinks[name] || `https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC`;
@@ -221,6 +226,9 @@ function renderSummary() {
       });
       listItem.appendChild(detailsList);
     }
+    const recipeNamesList = document.createElement('span');
+    recipeNamesList.textContent = ` (${Array.from(recipeNames).join(', ')})`;
+    listItem.appendChild(recipeNamesList);
 
     summaryList.appendChild(listItem);
   });
