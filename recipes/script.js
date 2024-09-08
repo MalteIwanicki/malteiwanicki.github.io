@@ -173,6 +173,7 @@ function renderSummary() {
   summaryList.innerHTML = '';
 
   const groupedIngredients = {};
+  const selectedRecipeNames = new Set();
 
   selectedRecipes.forEach(ingredient => {
     const { name, amount, unit, how,recipeName } = ingredient;
@@ -182,8 +183,6 @@ function renderSummary() {
       groupedIngredients[key] = {
         name: key,
         details: [],
-        recipeNames: new Set()
-
       };
     }
 
@@ -200,9 +199,30 @@ function renderSummary() {
     if (detail.length > 0) {
       groupedIngredients[key].details.push(detail.join(' '));
     }
-    groupedIngredients[key].recipeNames.add(recipeName);
+    selectedRecipeNames.add(recipeName);
 
   });
+
+  if (selectedRecipeNames.size > 0) {
+      const recipeNamesHeader = document.createElement('h3');
+      recipeNamesHeader.textContent = 'Selected Recipes:';
+      summaryList.appendChild(recipeNamesHeader);
+
+      const recipeNamesList = document.createElement('ul');
+      Array.from(selectedRecipeNames).sort().forEach(recipeName => {
+        const recipeNameItem = document.createElement('li');
+        recipeNameItem.textContent = recipeName;
+        recipeNamesList.appendChild(recipeNameItem);
+      });
+      summaryList.appendChild(recipeNamesList);
+
+      // Add a separator
+      const separator = document.createElement('hr');
+      summaryList.appendChild(separator);
+    }
+  const ingredientsHeader = document.createElement('h3');
+  ingredientsHeader.textContent = 'Ingredients:';
+  summaryList.appendChild(ingredientsHeader);
 
   const sortedIngredients = Object.values(groupedIngredients).sort((a, b) => a.name.localeCompare(b.name));
 
@@ -226,10 +246,6 @@ function renderSummary() {
       });
       listItem.appendChild(detailsList);
     }
-    const recipeNamesList = document.createElement('span');
-    recipeNamesList.textContent = ` (${Array.from(recipeNames).join(', ')})`;
-    listItem.appendChild(recipeNamesList);
-
     summaryList.appendChild(listItem);
   });
 }
