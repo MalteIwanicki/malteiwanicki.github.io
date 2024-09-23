@@ -1,3 +1,4 @@
+// Hi, This code was completly with chat-gpt or claude and my instructions generated. Don't judge it too hard.
 // Function to create a recipe div element
 function setCookie(name, value, days) {
     let date = new Date();
