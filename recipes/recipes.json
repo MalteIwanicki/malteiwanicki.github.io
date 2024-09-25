@@ -219,7 +219,7 @@
           "unit":"g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "50",
           "unit":"g",
           "how": "grated"
@@ -355,7 +355,7 @@
           "unit":"g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "100",
           "unit":"g",
           "how": "grated"
@@ -657,7 +657,7 @@
           "unit":"Tbsp"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "20",
           "unit":"g",
           "how": "grated"
@@ -883,7 +883,7 @@
           "unit": "g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "40",
           "unit": "g",
           "how": "grated"
@@ -1461,12 +1461,12 @@
           "unit": "g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "50",
           "unit": "g"
         },
         {
-          "food": "mixed frozen vegetables"
+          "food": "mixed vegetables"
         }
       ],
       "instructions": [
