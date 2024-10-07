@@ -199,7 +199,7 @@
           "unit":"Tbsp"
         },
         {
-          "food": "red peppers",
+          "food": "red pepper",
           "amount": "2",
           "how": "sliced"
         },
@@ -232,7 +232,7 @@
         }
       ],
       "instructions": [
-        "Heat oil and fry the red peppers and leek until softened",
+        "Heat oil and fry the red pepper and leek until softened",
         "Add rice and cook for 1 minute",
         "Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
         "Stir in peas to heat through",
