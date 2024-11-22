@@ -15,3 +15,6 @@ function calculateEarliestStartDate() {
 
   return startDate.toLocaleDateString();
 }
+document.addEventListener("DOMContentLoaded", function() {
+document.getElementById("start-date").textContent = calculateEarliestStartDate();
+});
