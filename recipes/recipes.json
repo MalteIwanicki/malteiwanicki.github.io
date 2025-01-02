@@ -323,7 +323,7 @@
           "food": "potato slices or frozen chips"
         },
         {
-          "food": "veggies"
+          "food": "vegetables"
         }
       ],
       "instructions": [
@@ -1306,14 +1306,14 @@
           "food": "parsley"
         },
         {
-          "food": "frozen mixed veggies"
+          "food": "vegetables"
         }
       ],
       "instructions": [
         "Heat butter in a pan and fry shallots",
         "Cook spätzle if necessary",
         "Mix cheese, shallots, and spätzle in an oven dish and bake at 175°C for 10 min",
-        "Serve with parsley and veggies on the side"
+        "Serve with parsley and vegetables on the side"
       ]
     },
     {
@@ -1410,7 +1410,7 @@
           "food": "fish"
         }
       ],
-      "instructions": ["everything in the oven and bake it","warm up veggies"]
+      "instructions": ["everything in the oven and bake it","warm up vegetables"]
     },
     {
       "meal": "Mac and Cheese",
