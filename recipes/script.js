@@ -210,7 +210,7 @@ function renderSummary() {
       summaryList.appendChild(recipeNamesHeader);
 
       const recipeNamesList = document.createElement('ul');
-      Array.from(selectedRecipeNames).sort().forEach(recipeName => {
+      Array.from(selectedRecipeNames).forEach(recipeName => {
         const recipeNameItem = document.createElement('li');
         recipeNameItem.textContent = recipeName;
         recipeNamesList.appendChild(recipeNameItem);
