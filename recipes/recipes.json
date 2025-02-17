@@ -199,7 +199,7 @@
           "unit":"Tbsp"
         },
         {
-          "food": "red peppers",
+          "food": "red pepper",
           "amount": "2",
           "how": "sliced"
         },
@@ -219,7 +219,7 @@
           "unit":"g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "50",
           "unit":"g",
           "how": "grated"
@@ -232,7 +232,7 @@
         }
       ],
       "instructions": [
-        "Heat oil and fry the red peppers and leek until softened",
+        "Heat oil and fry the red pepper and leek until softened",
         "Add rice and cook for 1 minute",
         "Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
         "Stir in peas to heat through",
@@ -293,7 +293,7 @@
           "unit":"g"
         },
         {
-          "food": "mini mozarella",
+          "food": "mini mozzarella",
           "amount": "1",
           "unit":"pack"
         },
@@ -323,7 +323,7 @@
           "food": "potato slices or frozen chips"
         },
         {
-          "food": "veggies"
+          "food": "vegetables"
         }
       ],
       "instructions": [
@@ -355,7 +355,7 @@
           "unit":"g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "100",
           "unit":"g",
           "how": "grated"
@@ -511,7 +511,7 @@
           "unit":"ml"
         },
         {
-          "food": "roasted peanuts",
+          "food": "salted peanuts",
           "amount": "20",
           "unit":"g"
         },
@@ -657,7 +657,7 @@
           "unit":"Tbsp"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "20",
           "unit":"g",
           "how": "grated"
@@ -883,7 +883,7 @@
           "unit": "g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "40",
           "unit": "g",
           "how": "grated"
@@ -1306,14 +1306,14 @@
           "food": "parsley"
         },
         {
-          "food": "frozen mixed veggies"
+          "food": "vegetables"
         }
       ],
       "instructions": [
         "Heat butter in a pan and fry shallots",
         "Cook spätzle if necessary",
         "Mix cheese, shallots, and spätzle in an oven dish and bake at 175°C for 10 min",
-        "Serve with parsley and veggies on the side"
+        "Serve with parsley and vegetables on the side"
       ]
     },
     {
@@ -1366,7 +1366,7 @@
           "how": "quartered and sliced"
         },
         {
-          "food": "fettucine",
+          "food": "fettuccine",
           "amount": "250",
           "unit": "g"
         },
@@ -1410,7 +1410,7 @@
           "food": "fish"
         }
       ],
-      "instructions": ["everything in the oven and bake it","warm up veggies"]
+      "instructions": ["everything in the oven and bake it","warm up vegetables"]
     },
     {
       "meal": "Mac and Cheese",
@@ -1461,12 +1461,12 @@
           "unit": "g"
         },
         {
-          "food": "parmesan",
+          "food": "parmesan cheese",
           "amount": "50",
           "unit": "g"
         },
         {
-          "food": "mixed frozen vegetables"
+          "food": "mixed vegetables"
         }
       ],
       "instructions": [

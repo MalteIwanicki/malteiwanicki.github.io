@@ -5,58 +5,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malte Iwanicki</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #121212;
-            color: #FFFFFF;
-            margin: 0;
-            padding: 0;
-        }
-
-        a {
-            color: #BB86FC;
-        }
-
-        @media (max-width: 520px) {
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-                padding: 20px;
-            }
-
-            .ascii-art {
-                font-family: monospace;
-                white-space: pre;
-                font-size: 1vw;
-                line-height: 1vw;
-                width: 100vw;
-                overflow: hidden;
-            }
-        }
-
-        @media (min-width: 520px) {
-            .container {
-                max-width: 800px;
-                margin: 0 auto;
-                margin-right: 38%;
-                padding: 20px;
-            }
-
-            .ascii-art {
-                top: 0;
-                font-family: monospace;
-                white-space: pre;
-                font-size: 0.7vh;
-                line-height: 0.7vh;
-                position: fixed;
-                overflow: hidden;
-                height: 100vh;
-                margin-left: 55%;
-            }
-        }
-
-    </style>
+    <link rel="stylesheet" href="index-style.css">
+    <script defer src="scripts.js"></script>
 </head>
 
 <body>
@@ -76,16 +26,17 @@
         <p>Beyond my technical career, I, once upon a time, finished my fine arts degree, that left a strong love for creativity and a passion for elegance.</p>
         <p>My love for board games and puzzles reflects my problem-solving mindset, and I'm always curious for new
             challenges.</p>
-        <h2>Skills</h2>
+        <h2>What I am good in:</h2>
         <ul>
-            <li>Advanced Problem Solving</li>
+            <li>Problem Solving</li>
             <li>Creativity</li>
-            <li>Expert Analysis</li>
-            <li>Intermediate Data Science</li>
+            <li>Data Analysis</li>
+            <li>Data Science</li>
             <li>Data Engineering</li>
             <li>Data Preparation</li>
             <li>Visualization</li>
             <li>Backend Development</li>
+            <li>Prototyping</li>
         </ul>
         <h2>Projects</h2>
         These are projects I worked on during my career as a freelancer or in a company. 
@@ -104,19 +55,21 @@
                 AI based predictor for solar panel efficiency based on the location and it's past weather data.</li>
             <li>And others</li>
         </ul>
-        These are projects I worked on during my free time.
+        These are public projects I worked on during my free time.
         <ul>
+            <li><a href="https://github.com/MalteIwanicki/PersonalTelegramBot">Personal Telegram Bot</a></li>
             <li><a href="https://github.com/MalteIwanicki/FoodScanner">Food-Scanner</a></li>
             <li><a href="https://github.com/MalteIwanicki/NutriScoreCalculator">Nutri-Score-Calculator</a></li>
             <li><a href="../recipes/mealplan.html">Mealplan</a></li>
         </ul>
         <h2>Contact</h2>
         <p>
-            Feel free to reach out to me at <a href="mailto:malte.iwa@gmail.com">malte.iwa@gmail.com</a>.
+            Feel free to reach out to me at <a href="mailto:malte.iwa+github@gmail.com">malte.iwa@gmail.com</a>.
         </p>
         <h2>Resume</h2>
         <p>
             You can get my full up to date resume <a href="mailto:malte.iwa+resume@gmail.com">here</a>.
+            I am available for new positions from <span id="start-date">{earliest start date}</span>.
         </p>
     </div>
 </body>

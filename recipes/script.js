@@ -1,3 +1,4 @@
+// Hi, This code was completly with chat-gpt or claude and my instructions generated. Don't judge it too hard.
 // Function to create a recipe div element
 function setCookie(name, value, days) {
     let date = new Date();
@@ -222,7 +223,7 @@ function renderSummary() {
       summaryList.appendChild(recipeNamesHeader);
 
       const recipeNamesList = document.createElement('ul');
-      Array.from(selectedRecipeNames).sort().forEach(recipeName => {
+      Array.from(selectedRecipeNames).forEach(recipeName => {
         const recipeNameItem = document.createElement('li');
         recipeNameItem.textContent = recipeName;
         recipeNamesList.appendChild(recipeNameItem);
