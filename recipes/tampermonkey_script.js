@@ -24,9 +24,6 @@
             // Check if the button exists and then trigger a click event
             if (addButton) {
                 addButton.click();
-                setTimeout(function() {
-                    window.close();
-                }, 2000);
             } else {
                 console.error('Add to Basket button not found.');
             }
