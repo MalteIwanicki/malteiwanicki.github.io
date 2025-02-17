@@ -30,19 +30,6 @@ function updateCookie(event) {
     setCookie("selectedMeals", JSON.stringify(selectedMeals), 30);  // Save for 30 days
 }
 
-document.getElementById('setupButton').onclick = function() {
-  fetch('/readme.md')
-    .then(response => response.text())
-    .then(data => {
-      var message = document.getElementById('setupMessage');
-      var readmeContent = document.getElementById('readmeContent');
-      readmeContent.textContent = data;
-      message.style.display = 'block';
-    })
-    .catch(error => console.error('Error fetching the README:', error));
-};
-
-
 function createRecipeDiv(recipe) {
   const recipeDiv = document.createElement('div');
   recipeDiv.classList.add('recipe');
