@@ -4,19 +4,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cheatsheet</title>
-    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
-    
+    <link rel="stylesheet" href="index-style.css">
+    <script src="https://cdn.jsdelivr.net/npm/@webcomponents/webcomponentsjs@2/webcomponents-loader.min.js"></script>
+    <script type="module" src="https://cdn.jsdelivr.net/gh/zerodevx/zero-md@1/src/zero-md.min.js"></script>
+
 </head>
 <body>
-    <div id="content"></div>
+<zero-md src="cheatsheet.md"></zero-md>
 </body>
-<script>
-    async function renderMarkdown() {
-        const response = await fetch('cheatsheet.md');
-        const markdown = await response.text();
-        const htmlContent = marked(markdown);
-        document.getElementById('content').innerHTML = htmlContent;
-    }
-    renderMarkdown();
-</script>
 </html>
