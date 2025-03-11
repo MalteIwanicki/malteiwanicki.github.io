@@ -22,6 +22,4 @@ poetry config virtualenvs.in-project true
 poetry init
 // to install project
 poetry install
-// to activate venv
-poetry shell
 ```
