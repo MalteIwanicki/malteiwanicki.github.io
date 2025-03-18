@@ -1,4 +1,4 @@
-# Cheatsheet
+# **Cheatsheet**
 
 ## Setup Environment
 ### Venv
@@ -23,3 +23,5 @@ poetry init
 // to install project
 poetry install
 ```
+## Create filetree
+[filetree script](https://github.com/MalteIwanicki/filetree/tree/main)
