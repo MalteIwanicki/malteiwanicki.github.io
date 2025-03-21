@@ -111,6 +111,59 @@
         "Add red pepper, juice from 1 lime quarter, coconut milk and saved cooking water. Mix until sauce is a bit thicker",
         "Add fettuccine and spinach, mix, season and serve with peanuts and lime quarters"
       ]
+    },{
+      "meal": "Quiche",
+      "ingredients": [
+        {
+          "food": "quiche pastry",
+          "amount": "200",
+          "unit":"g"
+        },
+        {
+          "food": "butter",
+          "amount": "1",
+          "unit":"Tbsp"
+        },
+        {
+          "food": "Speckwürfel",
+          "amount": "100",
+          "unit":"g"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how":"chopped"
+        },
+        {
+          "food": "leek",
+          "amount": "1",
+        },
+        {
+          "food": "flour",
+          "amount": "1",
+          "unit":"Tbsp"
+        },
+        {
+          "food": "milk",
+          "amount": "250",
+          "unit":"ml"
+        },
+        {
+          "food": "egg",
+          "amount": "2",
+        },
+        {
+          "food": "grated cheese",
+          "amount": "90",
+          "unit":"g"
+        },
+      ],
+      "instructions": [
+        "Preheat oven to 200°C, line pie dish with pastry and blind bake for 12 minutes",
+        "Melt butter in a saucepan. Add bacon, onion and leek. Cook until onion is clear. Stir in flour and cook until frothy. Gradually add milk, stirring constantly until mixture boils and thickens",
+        "Remove pan from heat. Lightly beat eggs with a fork. Add eggs and cheese to saucepan. Stir to combine. Season with salt and pepper to taste",
+        "Pour filling into pastry base. Return to oven and bake for a further 30 minutes or until filling is golden and set"
+      ]
     },
     {
       "meal": "Chicken Fettuccine",
@@ -559,7 +612,7 @@
       ]
     },
     {
-      "meal": "Vegetable Soup or Ready-made Soup or Microwave Rice",
+      "meal": "Vegetable Soup",
       "ingredients": [
         {
           "food": "vegetables"
@@ -568,7 +621,7 @@
           "food": "soup (ready-made)"
         },
         {
-          "food": "microwave rice"
+          "food":"garlic bread"
         }
       ],
       "instructions": []
