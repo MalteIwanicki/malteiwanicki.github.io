@@ -1,4 +1,4 @@
-# Cheatsheet
+# **Cheatsheet**
 
 ## Setup Environment
 ### Venv
