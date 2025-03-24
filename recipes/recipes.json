@@ -136,7 +136,7 @@
         },
         {
           "food": "leek",
-          "amount": "1",
+          "amount": "1"
         },
         {
           "food": "flour",
@@ -1162,7 +1162,9 @@
         },
         {
           "food": "spring onions",
-          "amount": "sliced"
+          "amount":"1",
+          "unit":"bunch",
+          "how": "sliced"
         },
         {
           "food": "grated cheese",
