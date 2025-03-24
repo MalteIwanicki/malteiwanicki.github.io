@@ -23,3 +23,12 @@ poetry init
 // to install project
 poetry install
 ```
+
+# Regulations
+## How to add licences of dependencies
+https://pypi.org/project/pip-licenses/
+```shell
+pip-licenses --format=markdown
+```
+
+the `LICENSE` file shall be in the codes ROOT folder.
