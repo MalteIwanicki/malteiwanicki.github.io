@@ -111,7 +111,8 @@
         "Add red pepper, juice from 1 lime quarter, coconut milk and saved cooking water. Mix until sauce is a bit thicker",
         "Add fettuccine and spinach, mix, season and serve with peanuts and lime quarters"
       ]
-    },{
+    },
+    {
       "meal": "Quiche",
       "ingredients": [
         {
@@ -156,7 +157,7 @@
           "food": "grated cheese",
           "amount": "90",
           "unit":"g"
-        },
+        }
       ],
       "instructions": [
         "Preheat oven to 200°C, line pie dish with pastry and blind bake for 12 minutes",
