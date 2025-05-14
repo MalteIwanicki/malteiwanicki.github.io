@@ -6,7 +6,7 @@
         {
           "food": "nürnberger würstchen",
           "amount": "1",
-          "unit":"pack"
+          "unit": "pack"
         },
         {
           "food": "potatoes",
@@ -33,33 +33,33 @@
         {
           "food": "fettuccine",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "oil",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "sugar",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "salted peanuts",
           "amount": "40",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "chilli",
           "amount": "1",
-          "unit":"piece",
+          "unit": "piece",
           "how": "cut in fine strips"
         },
         {
           "food": "garlic + ginger in oil",
           "amount": "30",
-          "unit":"g",
+          "unit": "g",
           "how": "2 cloves garlic, bit of ginger"
         },
         {
@@ -70,17 +70,17 @@
         {
           "food": "curry powder",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "vegetable stock",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "peanut butter",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "red pepper",
@@ -95,12 +95,12 @@
         {
           "food": "spinach",
           "amount": "50",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "coconut milk",
           "amount": "250",
-          "unit":"ml"
+          "unit": "ml"
         }
       ],
       "instructions": [
@@ -118,22 +118,22 @@
         {
           "food": "quiche pastry",
           "amount": "200",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "butter",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "Speckwürfel",
           "amount": "100",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "onion",
           "amount": "1",
-          "how":"chopped"
+          "how": "chopped"
         },
         {
           "food": "leek",
@@ -142,12 +142,12 @@
         {
           "food": "flour",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "milk",
           "amount": "250",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "egg",
@@ -156,7 +156,7 @@
         {
           "food": "grated cheese",
           "amount": "90",
-          "unit":"g"
+          "unit": "g"
         }
       ],
       "instructions": [
@@ -172,12 +172,12 @@
         {
           "food": "fettuccine",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "oil",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "garlic",
@@ -187,46 +187,46 @@
         {
           "food": "breadcrumbs",
           "amount": "25",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "parmesan cheese",
           "amount": "20",
-          "unit":"g",
+          "unit": "g",
           "how": "grated"
         },
         {
           "food": "parmesan cheese",
           "amount": "20",
-          "unit":"g",
+          "unit": "g",
           "how": "grated"
         },
         {
           "food": "chicken",
           "amount": "250",
-          "unit":"g",
+          "unit": "g",
           "how": "cut into 1 cm strips"
         },
         {
           "food": "mushrooms",
           "amount": "100",
-          "unit":"g",
+          "unit": "g",
           "how": "cut into 1 cm strips"
         },
         {
           "food": "cream",
           "amount": "200",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "vegetable stock",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "parsley",
           "amount": "10",
-          "unit":"g",
+          "unit": "g",
           "how": "chopped"
         }
       ],
@@ -245,12 +245,12 @@
         {
           "food": "vegetable stock",
           "amount": "1¼",
-          "unit":"L"
+          "unit": "L"
         },
         {
           "food": "olive oil",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "red pepper",
@@ -265,23 +265,23 @@
         {
           "food": "risotto rice",
           "amount": "300",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "frozen peas",
           "amount": "150",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "parmesan cheese",
           "amount": "50",
-          "unit":"g",
+          "unit": "g",
           "how": "grated"
         },
         {
           "food": "chives",
           "amount": "1",
-          "unit":"bunch",
+          "unit": "bunch",
           "how": "chopped"
         }
       ],
@@ -303,7 +303,7 @@
         {
           "food": "oil",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "red pepper",
@@ -333,33 +333,33 @@
         {
           "food": "pasta",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "cherry tomatoes",
           "amount": "200",
-          "unit":"g",
+          "unit": "g",
           "how": "halved"
         },
         {
           "food": "spinach",
           "amount": "200",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "mini mozzarella",
           "amount": "1",
-          "unit":"pack"
+          "unit": "pack"
         },
         {
           "food": "cream",
           "amount": "200",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "vegetable stock",
           "amount": "500",
-          "unit":"ml"
+          "unit": "ml"
         }
       ],
       "instructions": [
@@ -396,7 +396,7 @@
         {
           "food": "olive oil",
           "amount": "100",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "garlic",
@@ -406,12 +406,12 @@
         {
           "food": "spaghetti",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "parmesan cheese",
           "amount": "100",
-          "unit":"g",
+          "unit": "g",
           "how": "grated"
         }
       ],
@@ -440,43 +440,43 @@
         {
           "food": "rice",
           "amount": "150",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "cream",
           "amount": "200",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "stock powder",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "mustard",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "mustard",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "honey",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "parsley",
           "amount": "5",
-          "unit":"g",
+          "unit": "g",
           "how": "chopped"
         },
         {
           "food": "chives",
           "amount": "5",
-          "unit":"g",
+          "unit": "g",
           "how": "chopped"
         },
         {
@@ -487,17 +487,17 @@
         {
           "food": "breadcrumbs",
           "amount": "25",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "mince",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "oil",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         }
       ],
       "instructions": [
@@ -515,13 +515,13 @@
         {
           "food": "green beans",
           "amount": "200",
-          "unit":"g",
+          "unit": "g",
           "how": "halved"
         },
         {
           "food": "band noodles / fettuccine",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "onion",
@@ -536,43 +536,43 @@
         {
           "food": "ginger",
           "amount": "15",
-          "unit":"g",
+          "unit": "g",
           "how": "finely chopped"
         },
         {
           "food": "basil",
           "amount": "10",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "oil",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "sweet chilli sauce",
           "amount": "50",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "soy sauce",
           "amount": "50",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "maple syrup",
           "amount": "10",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "salted peanuts",
           "amount": "20",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "chilli",
           "amount": "1",
-          "unit":"piece"
+          "unit": "piece"
         }
       ],
       "instructions": [
@@ -593,7 +593,7 @@
         {
           "food": "maultaschen",
           "amount": "2",
-          "unit":"pack",
+          "unit": "pack",
           "how": "1 cm stripes"
         },
         {
@@ -604,7 +604,7 @@
         {
           "food": "olive oil",
           "amount": "1",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         }
       ],
       "instructions": [
@@ -622,7 +622,7 @@
           "food": "soup (ready-made)"
         },
         {
-          "food":"garlic bread"
+          "food": "garlic bread"
         }
       ],
       "instructions": []
@@ -633,7 +633,7 @@
         {
           "food": "cream",
           "amount": "100",
-          "unit":"ml"
+          "unit": "ml"
         },
         {
           "food": "courgettes",
@@ -643,7 +643,7 @@
         {
           "food": "cherry tomatoes",
           "amount": "250",
-          "unit":"g",
+          "unit": "g",
           "how": "quartered or canned"
         },
         {
@@ -659,28 +659,28 @@
         {
           "food": "oregano",
           "amount": "2",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "water",
           "amount": "380",
-          "unit":"ml",
+          "unit": "ml",
           "how": "1 can"
         },
         {
           "food": "salt",
           "amount": "1",
-          "unit":"tsp"
+          "unit": "tsp"
         },
         {
           "food": "chilli",
-          "amount":"1",
-          "unit":"piece"
+          "amount": "1",
+          "unit": "piece"
         },
         {
           "food": "wholewheat pasta",
           "amount": "250",
-          "unit":"g"
+          "unit": "g"
         }
       ],
       "instructions": [
@@ -695,7 +695,7 @@
         {
           "food": "walnuts",
           "amount": "20",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "garlic"
@@ -703,43 +703,43 @@
         {
           "food": "olive oil",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "water",
           "amount": "2",
-          "unit":"Tbsp"
+          "unit": "Tbsp"
         },
         {
           "food": "parmesan cheese",
           "amount": "20",
-          "unit":"g",
+          "unit": "g",
           "how": "grated"
         },
         {
           "food": "basil",
           "amount": "20",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "spinach",
           "amount": "100",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "spinach",
           "amount": "100",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "cream cheese",
           "amount": "50",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "cream cheese",
           "amount": "20",
-          "unit":"g"
+          "unit": "g"
         },
         {
           "food": "onion",
@@ -749,7 +749,7 @@
         {
           "food": "gnocchi",
           "amount": "600",
-          "unit":"g"
+          "unit": "g"
         }
       ],
       "instructions": [
@@ -912,7 +912,7 @@
         {
           "food": "chilli",
           "amount": "1",
-          "unit":"piece",
+          "unit": "piece",
           "how": "deseeded, chopped finely"
         },
         {
@@ -1016,112 +1016,112 @@
       ]
     },
     {
-  "meal": "Moroccan Pot",
-  "ingredients": [
-    {
-      "food": "olive oil",
-      "amount": "1",
-      "unit": "Tbsp"
+      "meal": "Moroccan Pot",
+      "ingredients": [
+        {
+          "food": "olive oil",
+          "amount": "1",
+          "unit": "Tbsp"
+        },
+        {
+          "food": "potato",
+          "amount": "1",
+          "unit": "piece",
+          "how": "1 cm cubes"
+        },
+        {
+          "food": "onion",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "water",
+          "amount": "250",
+          "unit": "ml",
+          "note": "try with much less"
+        },
+        {
+          "food": "chopped tomatoes",
+          "amount": "1",
+          "unit": "can"
+        },
+        {
+          "food": "cumin",
+          "amount": "0.5",
+          "unit": "tsp"
+        },
+        {
+          "food": "chilli",
+          "amount": "0.5",
+          "unit": "tsp"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1",
+          "unit": "tsp"
+        },
+        {
+          "food": "chickpeas",
+          "amount": "1",
+          "unit": "can",
+          "how": "drained"
+        },
+        {
+          "food": "spinach",
+          "amount": "50",
+          "unit": "g"
+        },
+        {
+          "food": "oregano",
+          "amount": "1",
+          "unit": "tsp"
+        },
+        {
+          "food": "parsley",
+          "amount": "1",
+          "unit": "tsp",
+          "how": "chopped"
+        },
+        {
+          "food": "lemon",
+          "amount": "1",
+          "how": "zested and quartered"
+        },
+        {
+          "food": "creme fraiche",
+          "amount": "200",
+          "unit": "g"
+        },
+        {
+          "food": "flatbreads",
+          "amount": "1-2",
+          "how": "quartered"
+        },
+        {
+          "food": "butter"
+        },
+        {
+          "food": "garlic",
+          "amount": "2-4",
+          "how": "chopped"
+        }
+      ],
+      "instructions": [
+        "Heat oil. Fry potato, onion and garlic for 2-3 minutes. Add water.",
+        "Add chopped tomatoes, cumin, chilli and vegetable stock. Cover and cook for 12 minutes.",
+        "Add chickpeas, spinach and oregano and cook for another ~3 minutes until the potato cubes are soft.",
+        "Season with salt and pepper.",
+        "Parsley dip: Grate 2 tsp lemon zest, then quarter the lemon.",
+        "Mix the creme fraiche, parsley, lemon zest, a little lemon juice, salt and pepper.",
+        "Flat bread: Add a bit of butter, garlic and salt to a frying pan and fry a flatbread quarter. Repeat for the remaining quarters.",
+        "Serve with lemon quarters."
+      ]
     },
-    {
-      "food": "potato",
-      "amount": "1",
-      "unit": "piece",
-      "how": "1 cm cubes"
-    },
-    {
-      "food": "onion",
-      "amount": "1",
-      "how": "chopped"
-    },
-    {
-      "food": "garlic",
-      "amount": "1",
-      "how": "chopped"
-    },
-    {
-      "food": "water",
-      "amount": "250",
-      "unit": "ml",
-      "note": "try with much less"
-    },
-    {
-      "food": "chopped tomatoes",
-      "amount": "1",
-      "unit": "can"
-    },
-    {
-      "food": "cumin",
-      "amount": "0.5",
-      "unit": "tsp"
-    },
-    {
-      "food": "chilli",
-      "amount": "0.5",
-      "unit": "tsp"
-    },
-    {
-      "food": "vegetable stock",
-      "amount": "1",
-      "unit": "tsp"
-    },
-    {
-      "food": "chickpeas",
-      "amount": "1",
-      "unit": "can",
-      "how": "drained"
-    },
-    {
-      "food": "spinach",
-      "amount": "50",
-      "unit": "g"
-    },
-    {
-      "food": "oregano",
-      "amount": "1",
-      "unit": "tsp"
-    },
-    {
-      "food": "parsley",
-      "amount": "1",
-      "unit": "tsp",
-      "how": "chopped"
-    },
-    {
-      "food": "lemon",
-      "amount": "1",
-      "how": "zested and quartered"
-    },
-    {
-      "food": "creme fraiche",
-      "amount": "200",
-      "unit": "g"
-    },
-    {
-      "food": "flatbreads",
-      "amount": "1-2",
-      "how": "quartered"
-    },
-    {
-      "food": "butter"
-    },
-    {
-      "food": "garlic",
-      "amount": "2-4",
-      "how": "chopped"
-    }
-  ],
-  "instructions": [
-    "Heat oil. Fry potato, onion and garlic for 2-3 minutes. Add water.",
-    "Add chopped tomatoes, cumin, chilli and vegetable stock. Cover and cook for 12 minutes.",
-    "Add chickpeas, spinach and oregano and cook for another ~3 minutes until the potato cubes are soft.",
-    "Season with salt and pepper.",
-    "Parsley dip: Grate 2 tsp lemon zest, then quarter the lemon.",
-    "Mix the creme fraiche, parsley, lemon zest, a little lemon juice, salt and pepper.",
-    "Flat bread: Add a bit of butter, garlic and salt to a frying pan and fry a flatbread quarter. Repeat for the remaining quarters.",
-    "Serve with lemon quarters."
-  ]
-},
 
     {
       "meal": "Eggs Benedict",
@@ -1163,8 +1163,8 @@
         },
         {
           "food": "spring onions",
-          "amount":"1",
-          "unit":"bunch",
+          "amount": "1",
+          "unit": "bunch",
           "how": "sliced"
         },
         {
@@ -1373,15 +1373,11 @@
       ]
     },
     {
-      "meal": "Potato and cauliflower cheese OR Smashed potato, yoghurt/tzatziki, pesto and onion rings",
+      "meal": "Smashed potato, yoghurt/tzatziki, pesto and onion rings",
       "ingredients": [
         {
           "food": "potatoes",
           "amount": "5"
-        },
-        {
-          "food": "cauliflower",
-          "amount": "1"
         },
         {
           "food": "tzatziki",
@@ -1398,9 +1394,9 @@
         }
       ],
       "instructions": [
-                "everything in the oven",
-                "serve with Tzatziki and Pesto"
-            ]
+        "everything in the oven",
+        "serve with Tzatziki and Pesto"
+      ]
     },
     {
       "meal": "courgette pasta",
@@ -1466,7 +1462,10 @@
           "food": "fish"
         }
       ],
-      "instructions": ["everything in the oven and bake it","warm up vegetables"]
+      "instructions": [
+        "everything in the oven and bake it",
+        "warm up vegetables"
+      ]
     },
     {
       "meal": "Mac and Cheese",

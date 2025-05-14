@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="SLA Availability Uptime and Downtime Calculator for software and system reliability metrics.">
+    <meta name="keywords" content="SLA, Uptime, Downtime, Availability Calculator, 99.9%, 99.99%, reliability">
+    <meta name="author" content="Pixida">
+    <title>Uptime and Downtime SLA Calculator</title>
+    <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+    <script type="text/javascript" id="MathJax-script"
+        src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <style>
+        body {
+            font-family: Roboto, sans-serif;
+            background: #f5f5f5;
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+        }
+
+        .container {
+            background: #fff;
+            padding: 2rem;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            max-width: 700px;
+            width: 100%;
+        }
+
+        h2 {
+            color: #1976d2;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        input,
+        select {
+            padding: 0.4rem;
+            border: none;
+            border-bottom: 1px solid #ccc;
+            font-size: 1rem;
+            background: transparent;
+        }
+
+        input:focus,
+        select:focus {
+            outline: none;
+            border-bottom: 2px solid #1976d2;
+        }
+
+        input[type=number]::-webkit-outer-spin-button,
+        input[type=number]::-webkit-inner-spin-button {
+            display: inline-block;
+        }
+
+        .latex {
+            margin-top: 2rem;
+            font-size: clamp(0.8rem, 2vw, 1rem);
+        }
+
+        .latex .mjx-math {
+            transform: scale(clamp(0.8, 2vw, 1));
+            transform-origin: left;
+        }
+
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 48;
+        }
+
+        .icon {
+            font-size: 2rem;
+            color: #1976d2;
+        }
+
+        .underline {
+            text-decoration: underline;
+        }
+
+        .actions {
+            margin-top: 1.5rem;
+            display: flex;
+            justify-content: space-between;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+
+        .action-group {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+        }
+
+
+        .info-box {
+            display: none;
+            background: #e3f2fd;
+            color: #0d47a1;
+            padding: 1rem;
+            margin-top: 1rem;
+            border-left: 5px solid #1976d2;
+            border-radius: 4px;
+        }
+
+        .circle-button,
+        .preset-link {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: #1976d2;
+            color: white;
+            font-weight: bold;
+            text-decoration: none;
+            cursor: pointer;
+            border: none;
+        }
+
+        .circle-button:hover,
+        .preset-link:hover {
+            background: #1565c0;
+        }
+
+        .preset-link {
+            font-size: 0.9rem;
+        }
+
+    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
+</head>
+
+<body>
+    <div class="container">
+        <h2><span class="material-symbols-outlined icon">calculate</span>Uptime and Downtime SLA Calculator</h2>
+        <div class="form-row">
+            <span>When the software is</span>
+            <input type="number" id="unavailableTime" value="0" style="width: 80px">
+            <select id="unit"></select>
+            <span>unavailable per</span>
+            <select id="frequency">
+                <option value="hourly">hour</option>
+                <option value="daily">day</option>
+                <option value="weekly">week</option>
+                <option value="yearly">year</option>
+            </select>
+            <span>we have an <span class="underline">Availability</span> of</span>
+            <input type="number" id="availability" value="100" step="0.01" style="width: 100px">
+            <span>%.</span>
+        </div>
+        <div class="latex" id="formulaDisplay"></div>
+
+        <div class="actions">
+            <div class="action-group">
+                <button class="circle-button" onclick="shareLink()">
+                    <span class="material-symbols-outlined">content_copy</span>
+                </button>
+                <button class="circle-button" onclick="shareLink()">
+                    <span class="material-symbols-outlined">share</span>
+                </button>
+                <button class="circle-button" onclick="shareLink()">
+                    <span class="material-symbols-outlined">link</span>
+                </button>
+            </div>
+            <div class="action-group">
+                <button class="circle-button" onclick="toggleInfo()">
+                    <span class="material-symbols-outlined">info</span>
+                </button>
+            </div>
+            <div class="action-group">
+                <a class="preset-link circle-button" href="?avail=99.9&unit=minutes&freq=yearly">9³</a>
+                <a class="preset-link circle-button" href="?avail=99.99&unit=minutes&freq=yearly">9⁴</a>
+                <a class="preset-link circle-button" href="?avail=99.999&unit=minutes&freq=yearly">9⁵</a>
+                <a class="preset-link circle-button" href="?avail=99.9999&unit=minutes&freq=yearly">9⁶</a>
+            </div>
+        </div>
+
+        <div class="info-box" id="infoBox">
+            The SLA calculations assume a requirement of continuous uptime (i.e. 24/7 all year long) with additional
+            approximations as described in the source.
+        </div>
+    </div>
+
+    <script>
+        const timeInput = document.getElementById("unavailableTime");
+        const unitSelect = document.getElementById("unit");
+        const frequencySelect = document.getElementById("frequency");
+        const availabilityInput = document.getElementById("availability");
+        const formulaDisplay = document.getElementById("formulaDisplay");
+        const infoBox = document.getElementById("infoBox");
+
+        const minutesPer = {
+            hourly: 60,
+            daily: 60 * 24,
+            weekly: 60 * 24 * 7,
+            yearly: 60 * 24 * 365
+        };
+
+        const unitToMinutes = {
+            seconds: 1 / 60,
+            minutes: 1,
+            hours: 60,
+            days: 1440,
+            weeks: 10080
+        };
+
+        const allowedUnits = {
+            hourly: ["seconds", "minutes"],
+            daily: ["seconds", "minutes", "hours"],
+            weekly: ["seconds", "minutes", "hours", "days"],
+            yearly: ["seconds", "minutes", "hours", "days", "weeks"]
+        };
+
+        let userChangingAvailability = false;
+        let userChangingTime = false;
+
+        function updateUnitOptions() {
+            const freq = frequencySelect.value;
+            const validUnits = allowedUnits[freq];
+            unitSelect.innerHTML = "";
+            validUnits.forEach(unit => {
+                const opt = document.createElement("option");
+                opt.value = unit;
+                opt.textContent = unit;
+                unitSelect.appendChild(opt);
+            });
+        }
+
+        function formatNumbers(value) {
+            return parseFloat(value.toFixed(4)).toString();
+        }
+
+        function updateFormula() {
+            const time = parseFloat(timeInput.value);
+            const unit = unitSelect.value;
+            const frequency = frequencySelect.value;
+
+            const totalMinutes = minutesPer[frequency];
+            const unavailableMinutes = time * unitToMinutes[unit];
+            const availability = ((totalMinutes - unavailableMinutes) / totalMinutes) * 100;
+
+
+            if (!userChangingAvailability) {
+                availabilityInput.value = formatNumbers(availability);
+            }
+
+            const formulaLatex = `\\text{Availability} = \\frac{${totalMinutes} - (${time} \\ \\text{${unit}})}{${totalMinutes}} \\times 100`;
+
+            formulaDisplay.innerHTML = `$$${formulaLatex}$$`;
+            if (window.MathJax) MathJax.typesetPromise();
+        }
+
+        function updateUnavailableTime() {
+            const desiredAvailability = parseFloat(availabilityInput.value);
+            const frequency = frequencySelect.value;
+            const unit = unitSelect.value;
+            const totalMinutes = minutesPer[frequency];
+            const unavailableMinutes = totalMinutes * (1 - desiredAvailability / 100);
+            const unavailableTime = unavailableMinutes / unitToMinutes[unit];
+            if (!userChangingTime) {
+                timeInput.value = formatNumbers(unavailableTime);
+            }
+            updateFormula();
+        }
+        function shareLink() {
+            const url = new URL(window.location.href);
+            url.searchParams.set("time", timeInput.value);
+            url.searchParams.set("unit", unitSelect.value);
+            url.searchParams.set("freq", frequencySelect.value);
+            url.searchParams.set("avail", availabilityInput.value);
+            navigator.clipboard.writeText(url.toString());
+            alert("Link copied to clipboard!");
+        }
+
+        function toggleInfo() {
+            infoBox.style.display = infoBox.style.display === "block" ? "none" : "block";
+        }
+
+        timeInput.addEventListener("input", () => {
+            userChangingTime = true;
+            userChangingAvailability = false;
+            updateFormula();
+            userChangingTime = false;
+        });
+
+        availabilityInput.addEventListener("input", () => {
+            userChangingAvailability = true;
+            userChangingTime = false;
+            updateUnavailableTime();
+            userChangingAvailability = false;
+        });
+
+        unitSelect.addEventListener("change", updateFormula);
+        frequencySelect.addEventListener("change", () => {
+            updateUnitOptions();
+            updateFormula();
+        });
+
+        // Initial setup
+        updateUnitOptions();
+
+        const params = new URLSearchParams(window.location.search);
+        if (params.has("time")) timeInput.value = params.get("time");
+        if (params.has("unit")) unitSelect.value = params.get("unit");
+        if (params.has("freq")) frequencySelect.value = params.get("freq");
+        if (params.has("avail")) {
+            availabilityInput.value = params.get("avail");
+            userChangingAvailability = true;
+            updateUnavailableTime();
+            userChangingAvailability = false;
+        }
+
+        updateFormula();
+    </script>
+</body>
+
+</html>
