@@ -101,7 +101,7 @@ function createRecipeDiv(recipe) {
 
 let selectedRecipes = [];
 let foodLinks = {};
-
+let staples = []
 async function loadFoodLinks() {
     try {
         const response = await fetch('https://malteiwanicki.github.io/recipes/food_links.json');
@@ -109,6 +109,15 @@ async function loadFoodLinks() {
     } catch (error) {
         console.error('Error loading food links:', error);
     }
+}
+
+async function loadStaples() {
+  try {
+    const staplesResponse = await fetch('https://malteiwanicki.github.io/recipes/staples.json');
+    staples = await staplesResponse.json();
+  } catch (error) {
+    console.error('Error loading staples:', error);
+  }
 }
 
 function updateSummary(event) {
@@ -127,7 +136,6 @@ function updateSummary(event) {
     const how = howSpan ? howSpan.textContent : '';
     return { name, amount, unit, how, recipeName };
   });
-
   if (checkbox.checked) {
     selectedRecipes.push(...ingredients);
   } else {
@@ -249,10 +257,53 @@ function renderSummary() {
     }
     summaryList.appendChild(listItem);
   });
+  
+
+
+  if (staples.length > 0) {
+    const separator = document.createElement('hr');
+    summaryList.appendChild(separator);
+    
+    const staplesHeader = document.createElement('h3');
+    staplesHeader.textContent = 'Staples:';
+    summaryList.appendChild(staplesHeader);
+
+    // Count occurrences
+    const stapleCounts = staples.reduce((acc, item) => {
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    }, {});
+
+    const stapleKeysSorted = Object.keys(stapleCounts).sort((a, b) => a.localeCompare(b));
+
+    stapleKeysSorted.forEach(stapleName => {
+      const listItem = document.createElement('li');
+      const nameItem = document.createElement('span');
+      const link = foodLinks[stapleName] + "#add_to_basket" || `https://shop.rewe.de/productList?attribute=discounted&search=${encodeURIComponent(stapleName)}&sorting=PRICE_ASC`;
+      nameItem.innerHTML = `<a target="_blank" href="${link}">${stapleName}</a>`;
+
+      listItem.appendChild(nameItem);
+
+      if (!foodLinks[stapleName]) {
+        translateAndUpdateLink(stapleName, nameItem);
+      }
+
+      if (stapleCounts[stapleName] > 1) {
+        const countSpan = document.createElement('span');
+        countSpan.textContent = ` (x${stapleCounts[stapleName]})`;
+        listItem.appendChild(countSpan);
+      }
+
+      summaryList.appendChild(listItem);
+    });
+  }
 }
+
 // Function to build and display recipes
 async function buildRecipes() {
   await loadFoodLinks();
+  await loadStaples();
+
   const recipesContainer = document.getElementById('recipes-container');
   
   fetch('https://malteiwanicki.github.io/recipes/recipes.json')
