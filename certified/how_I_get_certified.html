@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Microsoft Certification Guide</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: "Segoe UI", sans-serif;
+            background: #f2f4f8;
+        }
+
+        .card {
+            opacity: 0;
+            transform: translateY(40px);
+            transition: all 0.6s ease-out;
+            max-width: 800px;
+            margin: 60px auto;
+            padding: 40px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 12px 24px rgba(0, 0, 0, 0.1);
+        }
+
+        .card.visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        h1,
+        h2 {
+            color: #2c3e50;
+        }
+
+        a {
+            color: #0078d4;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        img,
+        embed {
+            max-width: 100%;
+            margin: 15px 0;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        ol,
+        ul {
+            padding-left: 1.2em;
+        }
+
+        li {
+            margin-bottom: 8px;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="card">
+        <h1>🎓 My Microsoft Certification Journey (AZ-900)</h1>
+        <p>This is how I approached the Microsoft certification. It helped me structure learning and build long-term
+            knowledge effectively.</p>
+    </div>
+
+    <div class="card">
+        <h2>✅ Step 1: Use Microsoft Learn</h2>
+        <p><a href="https://learn.microsoft.com/" target="_blank">Microsoft Learn</a> is the go-to platform, though
+            initially overwhelming due to the abundance of material.</p>
+    </div>
+
+    <div class="card">
+        <h2>🎯 Step 2: Pick a Goal</h2>
+        <p>Explore certification paths here: <a href="https://learn.microsoft.com/en-gb/credentials/"
+                target="_blank">Microsoft Credentials Overview</a></p>
+        <p>I found this poster especially helpful for a quick overview:</p>
+        <embed src="https://arch-center.azureedge.net/Credentials/Certification-Poster_en-us.pdf" type="application/pdf"
+            height="500px">
+    </div>
+
+    <div class="card">
+        <h2>🔗 Example: AZ-900</h2>
+        <p><a href="https://learn.microsoft.com/en-gb/credentials/certifications/azure-fundamentals/?practice-assessment-type=certification"
+                target="_blank">AZ-900: Azure Fundamentals</a> covers cloud basics and Azure services.</p>
+    </div>
+
+    <div class="card">
+        <h2>📚 Step 3: My Practice Routine</h2>
+        <ol>
+            <li>Work through each module.<br><img src="course_material.png" alt="Course material"></li>
+            <li>Create Anki cards along the way.</li>
+            <li>Repeat this process until all modules are covered.</li>
+            <li>Import cards from shared decks:<br><a href="https://ankiweb.net/shared/decks?search=az-900"
+                    target="_blank">Shared AZ-900 Decks</a><br><img src="shared_decks.png" alt="Shared decks"></li>
+            <li>Practice flashcards daily (~20 min/day). Took me 3 months to master all content.<img src="amount_of_cards.png" alt="Amount of Cards practised"></li>
+            <li>Test yourself with a practice exam.<br><img src="practise_exam.png" alt="Practice exam screenshot"></li>
+        </ol>
+    </div>
+
+    <div class="card">
+        <h2>🧠 Why I Love Anki</h2>
+        <p><a href="https://apps.ankiweb.net/" target="_blank">Anki</a> is a flashcard app using spaced repetition to
+            optimize memory.</p>
+        <ul>
+            <li>Simple, powerful, and supports rich content.</li>
+            <li>Great for consistent, daily study.</li>
+            <li>Helps you learn long-term — not just cram.</li>
+            <li>I’ve used Anki for years, including my bachelor's in computer science. It was essential to my success.
+            </li>
+        </ul>
+        <p>📢 <strong>I highly recommend Anki</strong> to anyone learning technical material.</p>
+    </div>
+
+    <div class="card">
+        <h2>🏁 Step 4: Get Certified</h2>
+        <ol start="7">
+            <li>Register via <a href="https://www.pearsonvue.com/" target="_blank">Pearson VUE</a> (I took it
+                online).<br><img src="exam_pearson_vue.png" alt="Pearson Vue screenshot"></li>
+            <li>Take the exam — mostly multiple choice and true/false questions.</li>
+        </ol>
+        <p>If you’ve prepared thoroughly, you’ll pass with confidence!</p>
+    </div>
+
+    <div class="card">
+        <h2>💡 Final Tips</h2>
+        <ul>
+            <li>Set a clear goal from the start.</li>
+            <li>Use spaced repetition — it’s a game changer.</li>
+            <li>Practice regularly, track your progress, and enjoy the process!</li>
+        </ul>
+        <p>🎉 Good luck on your certification journey!</p>
+    </div>
+
+    <script>
+        const cards = document.querySelectorAll('.card');
+
+        const observer = new IntersectionObserver(entries => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, {
+            threshold: 0.2
+        });
+
+        cards.forEach(card => {
+            observer.observe(card);
+        });
+    </script>
+</body>
+
+</html>
