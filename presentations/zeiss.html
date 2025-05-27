@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Who is Malte Iwanicki?</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        html,
+        body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .container {
+            height: 100%;
+            overflow-y: scroll;
+            scroll-snap-type: y mandatory;
+            scroll-behavior: smooth;
+        }
+
+        section {
+            scroll-snap-align: start;
+            min-height: 100vh;
+            padding: 7rem 10vw 5vh;
+            /* Reserve space for title bar */
+            font-size: 1.6rem;
+        }
+
+        section:nth-child(odd) {
+            background: #fdfdfd;
+        }
+
+        section:nth-child(even) {
+            background: #e6f0ff;
+        }
+
+        .title-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            padding: 1rem 2rem;
+            background-color: rgba(255, 255, 255, 0.35);
+            /* Slight transparency */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.02);
+            border-bottom: 2px solid rgba(200, 200, 200, 0.2);
+            font-size: 2rem;
+            font-weight: bold;
+            z-index: 10;
+            transition: all 0.4s ease;
+            backdrop-filter: blur(5px);
+        }
+
+        .pixida-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 2rem;
+            max-width: 80vw;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        .pixida-container ul {
+            flex: 1 1 300px;
+            font-size: 1.1em;
+            list-style-position: outside;
+            margin: 0;
+        }
+
+        .img-stack {
+            position: relative;
+            width: 420px;
+            height: 300px;
+            flex-shrink: 0;
+        }
+
+        .stack-img {
+            position: absolute;
+            width: 250px;
+            /* make image bigger */
+            max-width: 100%;
+            height: auto;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div class="title-bar sticky" id="title-bar">Slide 1</div>
+
+    <div class="container" id="scroll-container">
+        <section data-title="Who is Malte?">
+            <div style="display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem;height:80vh">
+                <ul style="flex: 1 1 300px; font-size: 1em;">
+                    <li>Malte</li>
+                    <li>31 years old</li>
+                    <li>Living in Berlin</li>
+                    <li>Dad of 2 + temporary foster children</li>
+                    <li>Loves cats and dogs equally</li>
+                    <li>Other Likes & Loves:
+                        <ul style="margin-left: 1.5rem; padding-left: 1rem; list-style-type: disc;">
+
+                            <li>Strategy Board- & Videogames</li>
+                            <li>Gardening</li>
+                            <li>Hiking</li>
+                            <li>Painting & Printing</li>
+                            <li>Woodworking</li>
+                        </ul>
+                    </li>
+                </ul>
+
+                <img src="malte.png" alt="Portrait of Malte"
+                    style="flex: 0 1 300px; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 80vh; object-fit: contain;">
+            </div>
+        </section>
+
+
+        <section data-title="My Diverse Career Snake">
+            <img src="full_career.png" alt="many jobs in a snake-like career path"
+                style="flex: 0 1 300px; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 80vh; object-fit: contain;">
+        </section>
+
+        <section data-title="My Diverse Career Snake - University Education">
+            <img src="education_career.png" alt="displaying when I persued my university degrees"
+                style="flex: 0 1 300px; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 80vh; object-fit: contain;">
+        </section>
+        <section data-title="My Diverse Career Snake - IT Focused">
+            <img src="career.png" alt="displaying when I pstarted with IT"
+                style="flex: 0 1 300px; max-width: 100%; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); max-height: 80vh; object-fit: contain;">
+        </section>
+
+        <section data-title="IT Freelancer (2016–2021)">
+            <ul>
+                <li>Web development for artists and small businesses</li>
+                <li>Web scraper & text classifier for job portal</li>
+                <li>Instagram bot service (until 2017)</li>
+                <li>Python courses at VHS Hannover</li>
+            </ul>
+            <div style="margin-top: 2rem; text-align: left;">
+                <img src="freelancer.png" alt="Freelancing landscape illustration" style=" height: 90px">
+            </div>
+        </section>
+
+        <section data-title="DKB Data Scientist (2021–2022)">
+            <div
+                style="max-width: 80vw; margin: 0 auto; display: flex; flex-wrap: wrap; align-items: flex-start; gap: 2rem;">
+                <ul style="flex: 1 1 300px; font-size: 1.1em; list-style-position: outside;">
+                    <li>Email and call classification & routing</li>
+                    <li>Email answer prediction</li>
+                    <li>Sustainable investment webscraping</li>
+                    <li>Phishing detector</li>
+                    <li>Parallelization of services</li>
+                    <li>Testing, Elasticsearch, AWS SQL Server</li>
+                    <li>100% AWS Cloud deployment</li>
+                </ul>
+
+                <img src="dkb.png" alt="DKB logo" style="flex: 0 0 auto; height: 100px; object-fit: contain;">
+            </div>
+        </section>
+
+
+        <section data-title="Pixida: Webapplication Development" style="background:#fdfdfd">
+            <div class="pixida-container">
+                <ul>
+                    <li>Backend Development</li>
+                    <li>Agile Coach</li>
+                </ul>
+                <div class="img-stack">
+                    <img src="img_stack0.png" class="stack-img" style="top: 0px; left: 25px; width: 300px; z-index: 1;">
+                    <img src="img_stack1.png" class="stack-img"
+                        style="top: 150px; left: 25px; width: 300px;  z-index: 2;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section data-title="Pixida: Database Work" style="background:#fdfdfd">
+            <div class="pixida-container">
+                <ul>
+                    <li>Backend Development</li>
+                    <li>Agile Coach</li>
+                    <li>SQL Database development</li>
+                    <li>Multi-user access enablement</li>
+                </ul>
+                <div class="img-stack">
+                    <img src="img_stack0.png" class="stack-img" style="top: 0px; left: 25px; width: 300px; z-index: 1;">
+                    <img src="img_stack1.png" class="stack-img"
+                        style="top: 150px; left: 25px; width: 300px;  z-index: 2;">
+                    <img src="img_stack2.png" class="stack-img"
+                        style="top: 80px; left: 35px; width: 300px; transform: rotate(7deg); z-index: 3;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 4 -->
+        <section data-title="Pixida: Code Quality" style="background:#fdfdfd">
+            <div class="pixida-container">
+                <ul>
+                    <li>Backend Development</li>
+                    <li>Agile Coach</li>
+                    <li>SQL Database development</li>
+                    <li>Multi-user access enablement</li>
+                    <li>Unit testing and in-depth reviews</li>
+                </ul>
+                <div class="img-stack">
+                    <<img src="img_stack0.png" class="stack-img"
+                        style="top: 0px; left: 25px; width: 300px; z-index: 1;">
+                        <img src="img_stack1.png" class="stack-img"
+                            style="top: 150px; left: 25px; width: 300px;  z-index: 2;">
+                        <img src="img_stack2.png" class="stack-img"
+                            style="top: 80px; left: 35px; width: 300px; transform: rotate(7deg); z-index: 3;">
+                        <img src="img_stack3.png" class="stack-img"
+                            style="top: 10px; left: -25px; width: 240px; transform: rotate(-3.5deg); z-index: 4;">
+                </div>
+            </div>
+        </section>
+
+        <!-- Section 5 -->
+        <section data-title="Pixida: Project & AI" style="background:#fdfdfd">
+            <div class="pixida-container">
+                <ul>
+                    <li>Backend Development</li>
+                    <li>Agile Coach</li>
+                    <li>SQL Database development</li>
+                    <li>Multi-user access enablement</li>
+                    <li>Unit testing and in-depth reviews</li>
+                    <li>Project management</li>
+                    <li>Traffic image recognition</li>
+                </ul>
+
+                <div class="img-stack">
+                    <<img src="img_stack0.png" class="stack-img"
+                        style="top: 0px; left: 25px; width: 300px; z-index: 1;">
+                        <img src="img_stack1.png" class="stack-img"
+                            style="top: 150px; left: 25px; width: 300px;  z-index: 2;">
+                        <img src="img_stack2.png" class="stack-img"
+                            style="top: 80px; left: 35px; width: 300px; transform: rotate(7deg); z-index: 3;">
+                        <img src="img_stack3.png" class="stack-img"
+                            style="top: 10px; left: -25px; width: 240px; transform: rotate(-3.5deg); z-index: 4;">
+                        <img src="img_stack4.png" class="stack-img"
+                            style="top: 100px; left: 15px; width: 190px; transform: rotate(-5deg); z-index: 5;">
+
+                </div>
+            </div>
+        </section>
+
+
+
+        <section data-title="Pixida + Zeiss (11.2022–01.2025)" style="position: relative; overflow: hidden;"
+            style="background:#e6f0ff">
+            <div style="max-width: 80vw; margin: 0 auto;">
+                <ul>
+                    <li>Providing Data-driven solutions for Halls 5.1 & 5.3:</p>
+                        <ul style="margin-left: 1.5rem; padding-left: 1rem; list-style-type: disc;">
+                            <li>Material Tracking Dashboards</li>
+                            <li>Workflow & Performance Analyses</li>
+                            <li>Coating Appointment Prediction</li>
+                            <li>SCADA Problem Identification</li>
+                            <li>Use of DHP and ELK Stack</li>
+                        </ul>
+                    </li>
+                    <li>I miss working at Zeiss.</li>
+            </div>
+
+            <img src="zeiss.png" alt="Zeiss Project Visual" style="
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            height: 400px;
+            object-fit: contain;
+            margin: 0;
+            padding: 0;
+            border: none;
+          ">
+        </section>
+
+
+        <section data-title="Questions" style="background:#fdfdfd">
+            <img src="question.png" alt="question mark"
+                style="width:250px; height: auto; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.1); object-fit: contain;">
+
+            <ul>
+                <li><strong>Possible Start Date</strong> 1.9.2025 (due to parental leave)</li>
+                <li><strong>Would I Move?</strong> Yes</li>
+            </ul>
+
+        </section>
+
+        <section data-title="Art">
+            <p>Examples of my art projects, including prints, installations, and experimental work.</p>
+            <div
+                style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem; padding-top: 1rem;">
+
+                <iframe src="https://www.instagram.com/p/Ba_r2ZTHnuc/embed" width="100%" height="600" frameborder="0"
+                    scrolling="no" allowtransparency="true"></iframe>
+                <iframe src="https://www.instagram.com/p/BikZjEwnwRK/embed" width="100%" height="600" frameborder="0"
+                    scrolling="no" allowtransparency="true"></iframe>
+                <iframe src="https://www.instagram.com/p/Bl2xpSjhajf/embed" width="100%" height="600" frameborder="0"
+                    scrolling="no" allowtransparency="true"></iframe>
+            </div>
+        </section>
+
+        <section data-title="Gardening">
+            <p>I love plants — cultivating them from seeds and cuttings brings me joy and tranquility.</p>
+            <p>I currently care for over <strong>50 plants</strong>, turning my home into a mini jungle.</p>
+            <p>From 2013 to 2016, I ran my own gardening business in Mainz before moving to Berlin leaving my company to
+                a friend — but not the passion.</p>
+            <p>My currently most thriving plant is <strong>Pothos</strong>.</p>
+
+            <div style="margin-top: 2rem; text-align: center;">
+                <img src="plants.png" alt="My plant collection"
+                    style="width:500px; height: auto; border-radius: 12px; box-shadow: 0 4px 16px rgba(0,0,0,0.1);">
+            </div>
+        </section>
+
+    </div>
+    <script>
+        const container = document.getElementById('scroll-container');
+        const titleBar = document.getElementById('title-bar');
+        const sections = Array.from(container.children);
+        let currentIndex = 0;
+
+        const updateTitle = (index) => {
+            const title = sections[index].dataset.title || `Slide ${index + 1}`;
+            titleBar.textContent = title;
+        };
+
+        const scrollToSection = (index) => {
+            if (index >= 0 && index < sections.length) {
+                sections[index].scrollIntoView({behavior: 'smooth'});
+                currentIndex = index;
+                updateTitle(index);
+            }
+        };
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowDown') {
+                scrollToSection(currentIndex + 1);
+            } else if (e.key === 'ArrowUp') {
+                scrollToSection(currentIndex - 1);
+            }
+        });
+
+        const observerOptions = {
+            root: container,
+            threshold: 0.6
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    const idx = sections.indexOf(entry.target);
+                    if (idx !== -1 && idx !== currentIndex) {
+                        currentIndex = idx;
+                        updateTitle(currentIndex);
+                    }
+                }
+            });
+        }, observerOptions);
+
+        sections.forEach(section => observer.observe(section));
+        updateTitle(0);
+    </script>
+</body>
+
+</html>
