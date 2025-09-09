@@ -95,5 +95,6 @@
   "apples":"https://shop.rewe.de/c/obst-gemuese/?search=apfel&sorting=PRICE_ASC",
   "banana":"https://shop.rewe.de/p/banane-ca-200g/455217",
   "breadroll":"https://shop.rewe.de/c/broetchen/?search=br%C3%B6tchen&sorting=PRICE_ASC",
-  "specials":"https://shop.rewe.de/angebote?attribute=discounted&objectsPerPage=250&sorting=PRICE_ASC"
+  "specials":"https://shop.rewe.de/angebote?attribute=discounted&objectsPerPage=250&sorting=PRICE_ASC",
+  "toasties":"https://www.rewe.de/shop/p/ja-mehrkorn-toastbroetchen-335g/8696982"
 }
