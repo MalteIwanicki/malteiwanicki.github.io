@@ -4,7 +4,7 @@
 // @version      2025-02-17
 // @description  Automatically add product to basket
 // @author       Malte Iwanicki
-// @match        *://shop.rewe.de/*
+// @match        *://www.rewe.de/shop/*
 // @icon         https://www.google.com/s2/favicons?sz=64&domain=rewe.de
 // @grant        none
 // ==/UserScript==
