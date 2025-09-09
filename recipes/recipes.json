@@ -297,7 +297,7 @@
       "meal": "Red Pepper Toast",
       "ingredients": [
         {
-          "food": "english muffins",
+          "food": "toasties",
           "amount": "4"
         },
         {
@@ -782,7 +782,7 @@
           "unit": "Tbsp"
         },
         {
-          "food": "toast or English muffins"
+          "food": "toasties"
         },
         {
           "food": "cheddar cheese",
@@ -1536,3 +1536,4 @@
     }
   ]
 }
+
