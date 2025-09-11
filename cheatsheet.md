@@ -24,8 +24,8 @@ poetry init
 poetry install
 ```
 
-# Regulations
-## How to add licences of dependencies
+## Regulations
+### How to add licences of dependencies
 https://pypi.org/project/pip-licenses/
 ```shell
 pip-licenses --format=markdown
@@ -35,14 +35,14 @@ the `LICENSE` file shall be in the codes ROOT folder.
 
 
 
-# Dynamic Class Instantiation with __new__
+## Dynamic Class Instantiation with __new__
 In Python, the __new__ method allows classes to control how and what instance gets created before initialization happens. This enables a design pattern where a parent class decides dynamically which subclass to instantiate, based on the constructor arguments.
 
 This approach is useful when you want to:
 - Simplify through single entry point.
 - Maintain flexibility while hiding subclass details from outside.
 
-## The Pattern
+### The Pattern
 ```python
 class Parent:
     def __new__(cls, class_a_value=None, *args, **kwargs):
@@ -67,7 +67,7 @@ class ChildB(Parent):
         # ChildB has no extra attributes
 ```
 
-# An Example
+### An Example
 ```python
 instance1 = Parent(class_a_value="foo")
 # > Creating an instance of ChildA
@@ -87,3 +87,7 @@ print(type(instance2))
 print(hasattr(instance2, "class_a_value"))
 # False
 ```
+
+
+## A nice tool to create file trees
+https://tree.nathanfriend.com

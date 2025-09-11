@@ -5,158 +5,153 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Malte Iwanicki</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500&family=Roboto:wght@400;500&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="index-style.css">
-    <script defer src="scripts.js"></script>
+    <link rel="stylesheet" href="https://latex.vercel.app/style.min.css" />
+    <style>
+        body {
+            max-width: 800pt;
+            margin-left: auto;
+        }
+
+        h3 {
+            font-size: 1.1em;
+            margin-top: 0;
+            margin-bottom: 0em;
+            line-height: 1
+        }
+
+    </style>
 </head>
 
 <body>
-    <div class="ascii-art" id="portrait">
-        <script>
-            fetch('portrait.txt')
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('portrait').textContent = data;
-                });
-        </script>
+    <div class="paper">
+        <header>
+            <h1>Malte Iwanicki</h1>
+            <p><em>Senior Software Engineer <a href="cheatsheet.html" aria-label="Developer Cheatsheet"
+                        style="text-decoration:none;">|</a> Berlin, Germany</em> </p>
+        </header>
+
+        <section>
+            <h2>Greetings</h2>
+            <p>
+                I am a senior software engineer with expertise in data processing, analysis, and exploration.
+                Combining a BSc in Informatics and an MFA in Arts, I aim to deliver minimalistic, elegant, and creative
+                solutions for complex problems. My work emphasizes problem solving, creativity, data analysis,
+                and visualization. Most of my experience is based on Python, JavaScript, and cloud services from
+                AWS and Azure, but I am also comfortable across other languages and technologies.
+                I love to learn and advance my skills while continuously optimizing my workflow.
+            </p>
+            </p>
+        </section>
+
+        <section>
+            <h2>Projects</h2>
+            <p>The following are selected projects from my career and personal endeavors, highlighting
+                my strengths in data science, engineering, backend development, and prototyping:</p>
+            <ol>
+                <li>
+                    <h3>Nanny Job Portal (2019)</h3>
+                    Platform connecting nannies and families, featuring web scraping, text classification,
+                    and backend development.
+                </li>
+                <li>
+                    <h3>Photovoltaic Efficiency Calculator (2019)</h3>
+                    Web app predicting solar panel efficiency based on location and weather data, showcasing
+                    data analysis and visualization.
+                </li>
+                <li>
+                    <h3>Instagram Bot Portal (2018–2020)</h3>
+                    Automation tool for Instagram interactions, focusing on prototyping and workflow optimization.
+                </li>
+                <li>
+                    <h3>AI Investment Scraper (2020–2022)</h3>
+                    AI-driven platform for sustainable investment analysis with data engineering and pipeline design.
+                </li>
+                <li>
+                    <h3>AI Text Classifier (2020–2022)</h3>
+                    Automated classifier identifying customer issues and matching to optimal responses, applying
+                    data science and NLP techniques.
+                </li>
+                <li>
+                    <h3>Cadastral-Data Platform (2022–2023)</h3>
+                    Extended web app for cadastral data to support multi-user ownership, async files, and API
+                    extensions, emphasizing backend engineering.
+                </li>
+                <li>
+                    <h3>Factory Performance Analysis (2022–2025)</h3>
+                    Analyzed factory performance using IoT sensor data and developed a real-time dashboard for material
+                    tracking, bottleneck detection, and production optimization. Applied large-scale time series
+                    analysis,
+                    visualization, and data engineering.
+                </li>
+                <li>
+                    <h3>Traffic Image Recognition (2025)</h3>
+                    Designed and deployed a CNN-based system for object detection, counting, and tracking of vehicles
+                    and pedestrians at U.S. street intersections. Built an interactive dashboard to visualize traffic
+                    statistics, leveraging a hybrid edge–cloud architecture for real-time processing and analysis.
+                    Applied data science, visualization, and backend development.
+                </li>
+            </ol>
+        </section>
+
+        <section>
+            <h2>Coaching & Leadership</h2>
+            <ul>
+                <li>
+                    <h3>Agile Coach</h3>
+                    Supported teams with agile practices, facilitating sprint planning,
+                    reviews, and retrospectives, while encouraging creative problem solving.
+                </li>
+                <li>
+                    <h3>Project Management</h3>
+                    Coordinated project timelines, stakeholder communication, and
+                    resource allocation to align business goals with technical execution,
+                    applying systematic problem solving.
+                </li>
+                <li>
+                    <h3>Mentorship</h3>
+                    Coached junior developers in software engineering best practices,
+                    data-driven thinking, backend development, and prototyping,
+                    fostering a culture of continuous learning.
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Other</h2>
+            <ul>
+                <li>
+                    <a href="availability_calculator/calculator.html" target="_blank">Availability Calculator ↗</a>
+                </li>
+                <li>
+                    <a href="https://github.com/MalteIwanicki/PersonalTelegramBot" target="_blank">Personal Telegram Bot
+                        ↗</a>
+                </li>
+                <li>
+                    <a href="https://github.com/MalteIwanicki/NutriScoreCalculator" target="_blank">Nutri-Score
+                        Calculator ↗</a>
+                </li>
+                <li>
+                    <a href="recipes/mealplan.html" target="_blank">Mealplan ↗</a>
+                </li>
+                <li>
+                    <a href="https://github.com/MalteIwanicki/FoodScanner" target="_blank">Food Scanner ↗</a>
+                </li>
+                <li>
+                    <a href="certified/how_I_get_certified.html" target="_blank">A presentation regarding Azure
+                        certification
+                        ↗</a>
+                </li>
+            </ul>
+        </section>
+        <section>
+            <h2>Contact</h2>
+            <p>Email: <a href="mailto:malte.iwa+github@gmail.com">malte.iwa@gmail.com</a></p>
+            <p>LinkedIn: <a href="https://www.linkedin.com/in/malteiwanicki"
+                    target="_blank">linkedin.com/in/malteiwanicki</a></p>
+            <p>Website: <a href="https://malteiwanicki.github.io/" target="_blank">malteiwanicki.github.io</a></p>
+        </section>
+
+
     </div>
-    <div class="container">
-        <h1>Malte Iwanicki</h1>
-        <p>Greetings from Berlin!</p>
-        <p>
-            I’m Malte Iwanicki, a senior software engineer with a focus on data processing, analyzing, and exploration.
-            <br> <span class="resume-hint">BSC in Informatics &amp; MFA in Fine Arts</span>
-        </p>
-        <p>
-            Drawing on both art and data, I strive for <span style="color:#43eaff;font-weight:500;">elegant</span> and
-            <span style="color:#a3ffb1;">creative</span> solutions.<br>
-            Board games, puzzles, and curiosity drive my relentless problem-solving mindset.
-        </p>
-
-        <h2>What I am good at</h2>
-        <ul class="skill-list">
-            <span class="skill-chip"><span class="icon">🧩</span>Problem Solving</span>
-            <span class="skill-chip"><span class="icon">🎨</span>Creativity</span>
-            <span class="skill-chip"><span class="icon">📊</span>Data Analysis</span>
-            <span class="skill-chip"><span class="icon">🧠</span>Data Science</span>
-            <span class="skill-chip"><span class="icon">🛠️</span>Data Engineering</span>
-            <span class="skill-chip"><span class="icon">📎</span>Data Prep</span>
-            <span class="skill-chip"><span class="icon">📈</span>Visualization</span>
-            <span class="skill-chip"><span class="icon">⚙️</span>Backend Dev</span>
-            <span class="skill-chip"><span class="icon">🚀</span>Prototyping</span>
-        </ul>
-
-        <h2>Projects</h2>
-        <p>These are projects I worked on during my career as a freelancer or in a company:</p>
-
-        <!-- Collapsible project list with consistent icons -->
-        <button class="collapsible">Nanny Job Portal <span class="icon" style="margin-left:0.7em;">👶🔎</span></button>
-        <div class="content">
-            <p>2019: Platform connecting nannies and families. Included webscraping and text classification.</p>
-        </div>
-        <button class="collapsible">Photovoltaic Efficiency Calculator <span class="icon"
-                style="margin-left:0.7em;">☀️📈</span></button>
-        <div class="content">
-            <p>2019: Webapp predicting solar panel efficiency based on PV-values, location, and weather data.</p>
-        </div>
-        <button class="collapsible">Instagram Bot Portal <span class="icon"
-                style="margin-left:0.7em;">🤖📸</span></button>
-        <div class="content">
-            <p>2018–2020: Webapp for automating Instagram interactions: scheduling, messaging, liking, following, more.
-            </p>
-        </div>
-        <button class="collapsible">AI Investment Scraper <span class="icon"
-                style="margin-left:0.7em;">💹🤖</span></button>
-        <div class="content">
-            <p>2020–2022: AI-driven platform searching for sustainable investments using scraping, feature extraction,
-                and
-                risk/value predictions.</p>
-        </div>
-        <button class="collapsible">AI Text Classifier <span class="icon"
-                style="margin-left:0.7em;">📝🤖</span></button>
-        <div class="content">
-            <p>2020–2022: Automated classifier identifying customer issues and matching to optimal responses.</p>
-        </div>
-        <button class="collapsible">Cadastral-Data Platform <span class="icon"
-                style="margin-left:0.7em;">🌆🗂️</span></button>
-        <div class="content">
-            <p>2022–2023: Extended webapp for cadastral data to support multi-user ownership, async files, API
-                extensions.</p>
-        </div>
-        <button class="collapsible">Factory Performance <span class="icon"
-                style="margin-left:0.7em;">🏭📊</span></button>
-        <div class="content">
-            <p>2022–2025: Real-time dashboard using factory logs for material tracking, bottleneck detection, and
-                production
-                suggestions.</p>
-        </div>
-        <button class="collapsible">Traffic Image Recognition <span class="icon"
-                style="margin-left:0.7em;">🚦🧍🚗</span></button>
-        <div class="content">
-            <p>2025: Recognizing vehicles and pedestrians in NYC via traffic cams to improve safety and inform light
-                control.
-            </p>
-        </div>
-        <button class="collapsible">And Others <span class="icon" style="margin-left:0.7em;">🔬🛠️</span></button>
-        <div class="content">
-            <p>Numerous short projects (1–14 days) for individuals, small orgs, and public institutions.</p>
-        </div>
-
-        <p>These are public projects I worked on during my free time:</p>
-
-        <a href="availability_calculator/calculator.html"><button class="collapsible">Availability Calculator <span
-                    class="icon" style="margin-left:0.7em;">📅</span></button></a>
-        <button class="collapsible">Personal Telegram Bot <span class="icon"
-                style="margin-left:0.7em;">🤖💬</span></button>
-        <div class="content">
-            <p>
-                <a href="https://github.com/MalteIwanicki/PersonalTelegramBot" target="_blank">View on GitHub ↗</a><br>
-                Modular Telegram bot for automation, reminders, and fun.
-            </p>
-        </div>
-        <button class="collapsible">Food Scanner <span class="icon" style="margin-left:0.7em;">🍎🔍</span></button>
-        <div class="content">
-            <p>
-                <a href="https://github.com/MalteIwanicki/FoodScanner" target="_blank">View on GitHub ↗</a><br>
-                Tool to scan and analyze food ingredient lists.
-            </p>
-        </div>
-        <button class="collapsible">Nutri-Score-Calculator <span class="icon"
-                style="margin-left:0.7em;">⚖️🥦</span></button>
-        <div class="content">
-            <p>
-                <a href="https://github.com/MalteIwanicki/NutriScoreCalculator" target="_blank">View on GitHub ↗</a><br>
-                Simple calculator for Nutri-Score based on nutrition tables.
-            </p>
-        </div>
-        <a href="recipes/mealplan.html">
-            <button class="collapsible">Mealplan <span class="icon"
-                    style="margin-left:0.7em;">🗒️🍽️</span></button></a>
-
-        <h2>Contact</h2>
-        <div class="contact-info">
-            <span class="icon">✉️</span>
-            <a href="mailto:malte.iwa+github@gmail.com">malte.iwa@gmail.com</a>
-        </div>
-        <div class="contact-info">
-            <span class="icon">🔗</span>
-            <a href="https://www.linkedin.com/in/malteiwanicki" target="_blank">linkedin.com/in/malteiwanicki</a>
-        </div>
-        <div class="contact-info">
-            <span class="icon">🌐</span>
-            <a href="https://malteiwanicki.github.io/" target="_blank">malteiwanicki.github.io</a>
-        </div>
-
-        <h2>Resume</h2>
-        <p>
-            You can get my full, up-to-date resume <a href="mailto:malte.iwa+resume@gmail.com">here</a>.<br>
-            I am available for new positions from <span id="start-date">{earliest start date}</span>.<br>
-            Curious about how I keep my skills sharp? <a href="certified/how_I_get_certified.html">Here’s how I get certified →</a>
-        </p>
-
-        <br><br>
-        <span style="opacity:0.2"><a href="cheatsheet.html" aria-label="Developer Cheatsheet">_</a></span>
 </body>
 
 </html>
