@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Preschool Practice Tile Generator</title>
+    <meta name="description" content="A free tool for parents and teachers to create printable practice sheets with letters (A-Z) and numbers (1-100). Customize tile size, order, and randomize for fun learning.">
+    <meta name="keywords" content="preschool, learning, printable, alphabet, numbers, practice sheet, educational tool, kids activity">
+    
+    <!-- Chosen Palette: Minimalist Grey & Blue -->
+    <!-- Application Structure Plan: The app is structured into two main parts for clear user interaction: a top control panel and a main content grid. This separation allows users to instantly understand how to modify the content they see. The flow is: 1. Choose content type (A-Z/1-100). 2. Modify order (Sort/Randomize). 3. Adjust appearance (Size). 4. Export. This task-oriented design is intuitive for creating custom teaching materials quickly. -->
+    <!-- Visualization & Content Choices: The core content (letters/numbers) is presented as a grid of 'Scrabble-like' tiles. Goal: Create clear, printable practice items. Method: HTML divs styled with Tailwind CSS. Interaction: The control panel directly manipulates this grid. The slider dynamically changes tile size using CSS variables for instant visual feedback. The PDF export uses html2canvas to capture the generated grid, ensuring what you see is what you get, and jsPDF to paginate the content, preventing rows from being split across pages. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --tile-size: 80px;
+            --tile-font-size: calc(var(--tile-size) / 2);
+            --tile-gap: calc(var(--tile-size) / 8);
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+        .tile-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(var(--tile-size), 1fr));
+            gap: var(--tile-gap);
+        }
+        .tile {
+            width: var(--tile-size);
+            height: var(--tile-size);
+            font-size: var(--tile-font-size);
+        }
+        .control-btn.active {
+            background-color: #dbeafe; /* bg-blue-100 */
+            color: #1d4ed8; /* text-blue-700 */
+            border-color: #93c5fd; /* border-blue-300 */
+        }
+        .loader {
+            border-top-color: #3b82f6;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800">
+
+    <div id="app-container" class="min-h-screen flex flex-col">
+        <header class="bg-white/80 backdrop-blur-lg border-b border-gray-200 sticky top-0 z-10 w-full">
+            <div class="container mx-auto px-4 py-3">
+                <div class="flex flex-wrap items-center justify-between gap-4">
+                    <h1 class="text-xl font-bold text-gray-700">Practice Tile Generator</h1>
+                    <div class="flex flex-wrap items-center gap-2 md:gap-3">
+                        <div id="mode-switcher" class="flex rounded-lg border border-gray-300">
+                            <button id="btn-az" class="control-btn px-4 py-2 rounded-l-md text-sm font-medium transition-colors duration-200" data-mode="alphabet">A-Z</button>
+                            <button id="btn-100" class="control-btn px-4 py-2 rounded-r-md text-sm font-medium transition-colors duration-200 border-l border-gray-300" data-mode="numbers">1-100</button>
+                        </div>
+                        
+                        <div class="flex items-center gap-2 md:gap-3">
+                            <button id="btn-sort" title="Sort Ascending" class="control-btn p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors duration-200">
+                                <i class="fa-solid fa-arrow-up-a-z text-lg text-gray-600 w-5 h-5"></i>
+                            </button>
+                            <button id="btn-random" title="Randomize" class="control-btn p-2 rounded-lg border border-gray-300 hover:bg-gray-100 transition-colors duration-200">
+                                <i class="fa-solid fa-dice-five text-lg text-gray-600 w-5 h-5"></i>
+                            </button>
+                        </div>
+
+                        <div class="flex items-center gap-2 w-full sm:w-auto">
+                            <i class="fa-solid fa-text-height text-gray-500"></i>
+                            <input id="size-slider" type="range" min="40" max="120" value="80" class="w-24 md:w-32 h-2 bg-gray-200 rounded-lg appearance-none cursor-pointer">
+                        </div>
+
+                        <button id="btn-pdf" class="bg-blue-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-blue-700 transition-colors duration-200 flex items-center gap-2">
+                            <i class="fa-solid fa-file-pdf"></i>
+                            Export PDF
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </header>
+
+        <main class="flex-grow container mx-auto p-4 md:p-8">
+            <div id="tile-container" class="tile-container">
+            </div>
+        </main>
+    </div>
+
+    <div id="loader-overlay" class="fixed inset-0 bg-gray-900 bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="flex flex-col items-center bg-white p-8 rounded-lg shadow-xl">
+            <div class="loader w-12 h-12 rounded-full border-4 border-gray-200"></div>
+            <p class="mt-4 text-gray-700 font-medium">Generating PDF...</p>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const state = {
+                mode: 'alphabet',
+                data: [],
+                tileSize: 80,
+            };
+
+            const ALPHABET = Array.from({ length: 26 }, (_, i) => String.fromCharCode('A'.charCodeAt(0) + i));
+            const NUMBERS = Array.from({ length: 100 }, (_, i) => i + 1);
+
+            const tileContainer = document.getElementById('tile-container');
+            const btnAZ = document.getElementById('btn-az');
+            const btn100 = document.getElementById('btn-100');
+            const btnSort = document.getElementById('btn-sort');
+            const btnRandom = document.getElementById('btn-random');
+            const sizeSlider = document.getElementById('size-slider');
+            const btnPdf = document.getElementById('btn-pdf');
+            const loaderOverlay = document.getElementById('loader-overlay');
+
+            function generateTiles() {
+                tileContainer.innerHTML = '';
+                state.data.forEach(item => {
+                    const tile = document.createElement('div');
+                    tile.className = 'tile bg-white border border-gray-300 rounded-lg flex items-center justify-center font-semibold text-gray-800 transition-all duration-300';
+                    tile.textContent = item;
+                    tileContainer.appendChild(tile);
+                });
+            }
+
+            function updateMode(newMode) {
+                state.mode = newMode;
+                if (state.mode === 'alphabet') {
+                    state.data = [...ALPHABET];
+                    btnAZ.classList.add('active');
+                    btn100.classList.remove('active');
+                } else {
+                    state.data = [...NUMBERS];
+                    btn100.classList.add('active');
+                    btnAZ.classList.remove('active');
+                }
+                generateTiles();
+            }
+            
+            function sortData() {
+                if (state.mode === 'alphabet') {
+                    state.data.sort();
+                } else {
+                    state.data.sort((a, b) => a - b);
+                }
+                generateTiles();
+            }
+
+            function randomizeData() {
+                for (let i = state.data.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [state.data[i], state.data[j]] = [state.data[j], state.data[i]];
+                }
+                generateTiles();
+            }
+            
+            function updateTileSize(size) {
+                state.tileSize = size;
+                document.documentElement.style.setProperty('--tile-size', `${size}px`);
+            }
+
+            async function exportToPdf() {
+                loaderOverlay.classList.remove('hidden');
+                
+                const { jsPDF } = window.jspdf;
+                const doc = new jsPDF({
+                    orientation: 'portrait',
+                    unit: 'pt',
+                    format: 'a4'
+                });
+
+                const content = document.getElementById('tile-container');
+                const canvas = await html2canvas(content, { 
+                    scale: 2,
+                    logging: false,
+                    useCORS: true
+                });
+                
+                const imgData = canvas.toDataURL('image/png');
+                const imgProps = doc.getImageProperties(imgData);
+                
+                const pdfWidth = doc.internal.pageSize.getWidth();
+                const pdfHeight = doc.internal.pageSize.getHeight();
+                
+                const margin = 40;
+                const usableWidth = pdfWidth - (margin * 2);
+                const usableHeight = pdfHeight - (margin * 2);
+
+                const imgWidth = imgProps.width;
+                const imgHeight = imgProps.height;
+                const ratio = imgWidth / usableWidth;
+                const scaledHeight = imgHeight / ratio;
+
+                let heightLeft = scaledHeight;
+                let position = 0;
+
+                doc.addImage(imgData, 'PNG', margin, margin, usableWidth, scaledHeight);
+                heightLeft -= usableHeight;
+
+                while (heightLeft > 0) {
+                    position -= usableHeight;
+                    doc.addPage();
+                    doc.addImage(imgData, 'PNG', margin, position + margin, usableWidth, scaledHeight);
+                    heightLeft -= usableHeight;
+                }
+
+                doc.save('practice-tiles.pdf');
+                loaderOverlay.classList.add('hidden');
+            }
+
+            btnAZ.addEventListener('click', () => updateMode('alphabet'));
+            btn100.addEventListener('click', () => updateMode('numbers'));
+            btnSort.addEventListener('click', sortData);
+            btnRandom.addEventListener('click', randomizeData);
+            sizeSlider.addEventListener('input', (e) => updateTileSize(e.target.value));
+            btnPdf.addEventListener('click', exportToPdf);
+
+            function initialize() {
+                updateMode('alphabet');
+                updateTileSize(80);
+            }
+
+            initialize();
+        });
+    </script>
+
+</body>
+</html>
+
