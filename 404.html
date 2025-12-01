@@ -1,0 +1,7 @@
+<!-- 404.html -->
+<script>
+    // Redirect to index.html while preserving path
+    var redirectTo = '/' + window.location.pathname;
+    sessionStorage.redirect = redirectTo;
+    window.location.href = '/';
+</script>
