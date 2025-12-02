@@ -158,118 +158,111 @@
         ul {
             list-style-type: none;
             padding-left: 0;
-            margin-left: 40px;
-            border-left: 1px solid #e0e0e0;
-            padding-left: 20px;
+            margin: 0;
         }
 
         ul.root {
-            margin-left: 0;
-            border-left: none;
-            padding-left: 0;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            font-size: 14px;
         }
 
         li {
-            margin: 2px 0;
+            margin: 0;
             cursor: default;
-            position: relative;
         }
 
-        .folder,
-        .file {
+        .tree-row-content {
             display: grid;
-            grid-template-columns: 24px 1px 1fr;
+            grid-template-columns: 50px 1fr;
+            gap: 10px;
+            padding: 0px 10px;
+            border-radius: 4px;
             align-items: center;
+            transition: background 0.15s ease;
+            width: 100%;
+        }
+
+        .tree-row-content:hover {
+            background: #f5f9ff;
+        }
+
+        .row-controls {
+            display: flex;
             gap: 6px;
-            padding: 2px 0;
-        }
-
-        .folder {
-            user-select: none;
-        }
-
-        .folder:hover,
-        .file:hover {
-            background: #f8f8f8;
-        }
-
-        .ignore-column {
-            display: flex;
-            justify-content: center;
             align-items: center;
+            flex-wrap: wrap;
+            width: 50px;
+            min-width: 50px;
         }
 
-        .column-divider {
-            width: 1px;
-            height: 20px;
-            background: #e0e0e0;
+        .row-label {
+            white-space: pre;
+            font-family: 'SFMono-Regular', Consolas, 'Liberation Mono', Menlo, monospace;
+            color: #333;
         }
 
-        .folder-content {
-            display: flex;
-            align-items: center;
+        .folder-row .row-label {
             cursor: pointer;
         }
 
-        .folder-icon {
-            color: #757575;
-            margin-right: 6px;
-        }
-
-        .folder.open .folder-icon {
-            color: #5c6bc0;
-        }
-
-        .file-content {
+        .ignore-btn,
+        .toggle-btn {
+            cursor: pointer;
+            background: #fff;
+            border: 1px solid #d0d7de;
             display: flex;
             align-items: center;
-        }
-
-        .file-content .file-icon {
-            margin-right: 6px;
-            color: #757575;
+            justify-content: center;
+            border-radius: 4px;
+            transition: all 0.2s;
+            color: #344054;
         }
 
         .ignore-btn {
-            cursor: pointer;
-            background: none;
-            border: none;
-            padding: 2px 4px;
-            font-size: 13px;
-            color: #ccc;
-            transition: all 0.2s;
+            width: 18px;
+            height: 18px;
+            max-height: 18px;
+            min-height: 18px;
+            padding: 0;
+            font-size: 11px;
             border-radius: 3px;
-            width: 20px;
-            height: 20px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
 
-        .ignore-btn:hover {
-            background: #ffebee;
-            color: #d32f2f;
+        .toggle-btn {
+            width: 17px;
+            height: 17px;
+            padding: 0;
+            font-size: 16px;
+            font-weight: 700;
+            line-height: 1;
+        }
+
+        .ignore-btn:hover,
+        .toggle-btn:hover {
+            background: #eef2ff;
+            border-color: #5c6bc0;
+            color: #283593;
         }
 
         .ignore-btn.active {
             color: #d32f2f;
+            border-color: #d32f2f;
             background: #ffebee;
         }
 
         .ignored {
             opacity: 0.4;
-            text-decoration: line-through;
-            color: #999;
         }
 
-        .ignored .folder-icon,
-        .ignored .file-icon {
-            opacity: 0.5;
+        .ignored .row-label {
+            color: #888;
+            text-decoration: line-through;
         }
 
         .nested {
             display: none;
-            padding-left: 20px;
+            padding-left: 0;
+            margin-left: 0;
         }
 
         .nested.active {
@@ -577,8 +570,9 @@
 
                 stats = {folders: 0, files: 0};
                 fileTreeData = await readDirectory(folderHandle);
+                ignoredItems = new Set();
 
-                folderNameElement.textContent = folderHandle.name;
+                folderNameElement.textContent = `${folderHandle.name}/`;
                 statsElement.textContent = `${stats.folders} folders, ${stats.files} files`;
 
                 renderTree(fileTreeData, fileTreeElement);
@@ -631,140 +625,127 @@
             });
         }
 
-        function renderTree(data, parentElement) {
+        function renderTree(data, parentElement, prefix = '') {
             parentElement.innerHTML = '';
 
-            data.forEach(item => {
+            data.forEach((item, index) => {
                 const li = document.createElement('li');
+                const isDirectory = item.type === 'directory';
                 const isIgnored = ignoredItems.has(item.path);
+                const isLastItem = index === data.length - 1;
 
-                if (item.type === 'directory') {
-                    const folder = document.createElement('div');
-                    folder.className = 'folder' + (isIgnored ? ' ignored' : '');
+                const row = document.createElement('div');
+                row.className = `tree-row-content ${isDirectory ? 'folder-row' : 'file-row'}` + (isIgnored ? ' ignored' : '');
+                row.dataset.path = item.path;
 
-                    const ignoreColumn = document.createElement('div');
-                    ignoreColumn.className = 'ignore-column';
+                const controls = document.createElement('div');
+                controls.className = 'row-controls';
 
-                    const ignoreBtn = document.createElement('button');
-                    ignoreBtn.className = 'ignore-btn' + (isIgnored ? ' active' : '');
-                    ignoreBtn.textContent = '×';
-                    ignoreBtn.title = isIgnored ? 'Include in tree' : 'Ignore in tree';
+                const ignoreBtn = document.createElement('button');
+                ignoreBtn.className = 'ignore-btn' + (isIgnored ? ' active' : '');
+                ignoreBtn.textContent = '×';
+                ignoreBtn.title = isIgnored ? 'Include in tree' : 'Ignore in tree';
+                controls.appendChild(ignoreBtn);
 
-                    ignoreBtn.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        toggleIgnore(item.path, folder, li);
-                    });
+                const label = document.createElement('div');
+                label.className = 'row-label';
+                const connector = prefix + (isLastItem ? '└── ' : '├── ');
+                const labelText = isDirectory ? `${item.name}/` : item.name;
+                label.textContent = connector + labelText;
 
-                    ignoreColumn.appendChild(ignoreBtn);
+                row.appendChild(controls);
+                row.appendChild(label);
+                li.appendChild(row);
 
-                    const divider = document.createElement('div');
-                    divider.className = 'column-divider';
+                let childrenContainer = null;
 
-                    const folderContent = document.createElement('div');
-                    folderContent.className = 'folder-content';
-                    folderContent.innerHTML = `<i class="fas fa-folder folder-icon"></i>${item.name}`;
+                if (isDirectory) {
+                    const toggleBtn = document.createElement('button');
+                    toggleBtn.className = 'toggle-btn';
+                    toggleBtn.textContent = '+';
+                    toggleBtn.title = 'Expand folder';
+                    controls.appendChild(toggleBtn);
 
-                    folder.appendChild(ignoreColumn);
-                    folder.appendChild(divider);
-                    folder.appendChild(folderContent);
-
-                    // Store path as data attribute for lookup
-                    folder.dataset.path = item.path;
-
-                    const ul = document.createElement('ul');
-                    ul.className = 'nested';
-
-                    folderContent.addEventListener('click', (e) => {
-                        e.stopPropagation();
-                        ul.classList.toggle('active');
-                        folder.classList.toggle('open');
-                    });
-
-                    li.appendChild(folder);
-                    li.appendChild(ul);
+                    childrenContainer = document.createElement('ul');
+                    childrenContainer.className = 'nested';
+                    li.appendChild(childrenContainer);
 
                     if (item.children && item.children.length > 0) {
-                        renderTree(item.children, ul);
+                        renderTree(item.children, childrenContainer, prefix + (isLastItem ? '    ' : '│   '));
                     }
 
-                    if (isIgnored) {
-                        ul.classList.add('ignored');
-                    }
-                } else {
-                    const fileDiv = document.createElement('div');
-                    fileDiv.className = 'file' + (isIgnored ? ' ignored' : '');
+                    const toggleState = (open) => setFolderState(row, childrenContainer, open);
 
-                    const ignoreColumn = document.createElement('div');
-                    ignoreColumn.className = 'ignore-column';
-
-                    const ignoreBtn = document.createElement('button');
-                    ignoreBtn.className = 'ignore-btn' + (isIgnored ? ' active' : '');
-                    ignoreBtn.textContent = '×';
-                    ignoreBtn.title = isIgnored ? 'Include in tree' : 'Ignore in tree';
-
-                    ignoreBtn.addEventListener('click', (e) => {
+                    toggleBtn.addEventListener('click', (e) => {
                         e.stopPropagation();
-                        toggleIgnore(item.path, fileDiv, li);
+                        toggleState(!row.classList.contains('open'));
                     });
 
-                    ignoreColumn.appendChild(ignoreBtn);
+                    label.addEventListener('click', () => {
+                        toggleState(!row.classList.contains('open'));
+                    });
 
-                    const divider = document.createElement('div');
-                    divider.className = 'column-divider';
+                    toggleState(false);
+                }
 
-                    const fileContent = document.createElement('div');
-                    fileContent.className = 'file-content';
-                    fileContent.innerHTML = `<i class="fas fa-file file-icon"></i>${item.name}`;
+                ignoreBtn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    toggleIgnore(item.path, row, childrenContainer, ignoreBtn);
+                });
 
-                    fileDiv.appendChild(ignoreColumn);
-                    fileDiv.appendChild(divider);
-                    fileDiv.appendChild(fileContent);
+                if (isDirectory && isIgnored && childrenContainer) {
+                    childrenContainer.classList.add('ignored');
+                }
 
-                    li.appendChild(fileDiv);
-                } parentElement.appendChild(li);
+                parentElement.appendChild(li);
             });
         }
 
-        function toggleIgnore(path, ...elements) {
+        function toggleIgnore(path, rowElement, nestedElement, buttonElement) {
             if (ignoredItems.has(path)) {
                 ignoredItems.delete(path);
-                elements.forEach(el => el.classList.remove('ignored'));
-                // Update ignore button
-                elements.forEach(el => {
-                    const btn = el.querySelector('.ignore-btn');
-                    if (btn) {
-                        btn.classList.remove('active');
-                        btn.title = 'Ignore in tree';
-                    }
-                });
+                rowElement.classList.remove('ignored');
+                if (nestedElement) {
+                    nestedElement.classList.remove('ignored');
+                }
+                if (buttonElement) {
+                    buttonElement.classList.remove('active');
+                    buttonElement.title = 'Ignore in tree';
+                }
             } else {
                 ignoredItems.add(path);
-                elements.forEach(el => el.classList.add('ignored'));
-                // Update ignore button
-                elements.forEach(el => {
-                    const btn = el.querySelector('.ignore-btn');
-                    if (btn) {
-                        btn.classList.add('active');
-                        btn.title = 'Include in tree';
-                    }
-                });
+                rowElement.classList.add('ignored');
+                if (nestedElement) {
+                    nestedElement.classList.add('ignored');
+                }
+                if (buttonElement) {
+                    buttonElement.classList.add('active');
+                    buttonElement.title = 'Include in tree';
+                }
             }
         }
 
         function expandAll() {
-            document.querySelectorAll('.nested').forEach(ul => ul.classList.add('active'));
-            document.querySelectorAll('.folder').forEach(folder => folder.classList.add('open'));
+            document.querySelectorAll('.folder-row').forEach(row => {
+                const nested = row.parentElement.querySelector('.nested');
+                if (nested) {
+                    setFolderState(row, nested, true);
+                }
+            });
         }
 
         function collapseAll() {
-            document.querySelectorAll('.nested').forEach(ul => ul.classList.remove('active'));
-            document.querySelectorAll('.folder').forEach(folder => folder.classList.remove('open'));
+            document.querySelectorAll('.folder-row').forEach(row => {
+                const nested = row.parentElement.querySelector('.nested');
+                if (nested) {
+                    setFolderState(row, nested, false);
+                }
+            });
         }
 
         function generateAsciiTree(data, prefix = '', isLast = true, onlyExpanded = false) {
             let result = '';
 
-            // Filter out ignored items first
             const filteredData = data.filter(item => !ignoredItems.has(item.path));
 
             filteredData.forEach((item, index) => {
@@ -772,13 +753,13 @@
                 const connector = isLastItem ? '└── ' : '├── ';
                 const newPrefix = prefix + (isLastItem ? '    ' : '│   ');
 
-                result += prefix + connector + item.name + '\n';
+                const label = item.type === 'directory' ? `${item.name}/` : item.name;
+                result += prefix + connector + label + '\n';
 
                 if (item.type === 'directory' && item.children && item.children.length > 0) {
-                    // If onlyExpanded is true, check if the folder is currently expanded
                     if (onlyExpanded) {
-                        const folderElement = document.querySelector(`[data-path="${item.path}"]`);
-                        if (folderElement && folderElement.classList.contains('open')) {
+                        const folderRow = getFolderRowByPath(item.path);
+                        if (folderRow && folderRow.classList.contains('open')) {
                             result += generateAsciiTree(item.children, newPrefix, isLastItem, onlyExpanded);
                         }
                     } else {
@@ -792,10 +773,14 @@
 
         async function copyToClipboard() {
             try {
-                const asciiTree = folderHandle.name + '\n' + generateAsciiTree(fileTreeData, '', true, true);
+                if (!folderHandle) {
+                    showStatus('error', 'Please select a folder first');
+                    return;
+                }
+
+                const asciiTree = `${folderHandle.name}/\n` + generateAsciiTree(fileTreeData, '', true, true);
                 await navigator.clipboard.writeText(asciiTree);
 
-                // Show the copied content in the notification
                 copyNotificationContent.textContent = asciiTree;
                 copyNotification.classList.add('show');
 
@@ -805,6 +790,33 @@
             } catch (error) {
                 showStatus('error', 'Failed to copy to clipboard');
             }
+        }
+
+        function setFolderState(rowElement, nestedElement, open) {
+            if (!rowElement || !nestedElement) return;
+
+            if (open) {
+                nestedElement.classList.add('active');
+                rowElement.classList.add('open');
+                const toggleBtn = rowElement.querySelector('.toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = '-';
+                    toggleBtn.title = 'Collapse folder';
+                }
+            } else {
+                nestedElement.classList.remove('active');
+                rowElement.classList.remove('open');
+                const toggleBtn = rowElement.querySelector('.toggle-btn');
+                if (toggleBtn) {
+                    toggleBtn.textContent = '+';
+                    toggleBtn.title = 'Expand folder';
+                }
+            }
+        }
+
+        function getFolderRowByPath(path) {
+            const selectorValue = (window.CSS && CSS.escape) ? CSS.escape(path) : path.replace(/"/g, '\\"');
+            return document.querySelector(`.folder-row[data-path="${selectorValue}"]`);
         }
 
         function showStatus(type, message) {
