@@ -1335,42 +1335,68 @@
       ]
     },
     {
-      "meal": "Allgäuer Käsespätzle",
+      "meal": "Spätzle in Raclette-Käse-Soße",
       "ingredients": [
         {
+          "food": "apple",
+          "amount": "1"
+        },
+        {
+          "food": "onions",
+          "amount": "2"
+        },
+        {
           "food": "butter",
-          "amount": "2",
-          "unit": "Tbsp"
-        },
-        {
-          "food": "shallots",
-          "amount": "3",
-          "how": "cut in rings"
-        },
-        {
-          "food": "spätzle",
-          "amount": "400",
+          "amount": "12",
           "unit": "g"
         },
         {
-          "food": "allgäuer bergkäse",
-          "amount": "300",
-          "unit": "g",
-          "how": "grated"
+          "food": "honey",
+          "amount": "1",
+          "unit": "tsp"
         },
         {
-          "food": "parsley"
+          "food": "balsamico essig",
+          "amount": "1",
+          "unit": "tsp"
         },
         {
-          "food": "vegetables"
+          "food": "petersilie",
+          "amount": "10",
+          "unit": "g"
+        },
+        {
+          "food": "oil",
+          "amount": "10",
+          "unit": "g"
+        },
+        {
+          "food": "porree",
+          "amount": "1",
+          "how": "big"
+        },
+        {
+          "food": "eierspätzle frisch",
+          "amount": "500",
+          "unit": "g"
+        },
+        {
+          "food": "hello muskat gewürz",
+          "amount": "5",
+          "unit": "g"
+        },
+        {
+          "food": "schlagsahne",
+          "amount": "200",
+          "unit": "g"
+        },
+        {
+          "food": "raclette käse",
+          "amount": "125",
+          "unit": "g"
         }
       ],
-      "instructions": [
-        "Heat butter in a pan and fry shallots",
-        "Cook spätzle if necessary",
-        "Mix cheese, shallots, and spätzle in an oven dish and bake at 175°C for 10 min",
-        "Serve with parsley and vegetables on the side"
-      ]
+      "instructions": []
     },
     {
       "meal": "Smashed potato, yoghurt/tzatziki, pesto and onion rings",
@@ -1536,4 +1562,3 @@
     }
   ]
 }
-
