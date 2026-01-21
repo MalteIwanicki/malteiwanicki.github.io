@@ -104,7 +104,7 @@ let foodLinks = {};
 let staples = []
 async function loadFoodLinks() {
     try {
-        const response = await fetch('https://malteiwanicki.github.io/recipes/food_links.json');
+        const response = await fetch('food_links.json');
         foodLinks = await response.json();
     } catch (error) {
         console.error('Error loading food links:', error);
@@ -113,7 +113,7 @@ async function loadFoodLinks() {
 
 async function loadStaples() {
   try {
-    const staplesResponse = await fetch('https://malteiwanicki.github.io/recipes/staples.json');
+    const staplesResponse = await fetch('staples.json');
     staples = await staplesResponse.json();
   } catch (error) {
     console.error('Error loading staples:', error);
@@ -306,7 +306,7 @@ async function buildRecipes() {
 
   const recipesContainer = document.getElementById('recipes-container');
   
-  fetch('https://malteiwanicki.github.io/recipes/recipes.json')
+  fetch('recipes.json')
     .then(response => response.json())
     .then(data => {
       const recipes = data.recipes;
