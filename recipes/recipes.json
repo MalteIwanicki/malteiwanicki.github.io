@@ -116,47 +116,48 @@
       "meal": "Quiche",
       "ingredients": [
         {
-          "food": "quiche pastry",
+          "food": "short/quiche pastry",
           "amount": "200",
           "unit": "g"
         },
         {
           "food": "butter",
-          "amount": "1",
+          "amount": "2",
           "unit": "Tbsp"
         },
         {
           "food": "Speckwürfel",
           "amount": "100",
-          "unit": "g"
+          "unit": "g",
+          "how": "low fat, or 3 rashers bacon chopped"
         },
         {
           "food": "onion",
-          "amount": "1",
+          "amount": "2",
           "how": "chopped"
         },
         {
           "food": "leek",
-          "amount": "1"
+          "amount": "2"
         },
         {
           "food": "flour",
-          "amount": "1",
+          "amount": "4",
           "unit": "Tbsp"
         },
         {
           "food": "milk",
-          "amount": "250",
+          "amount": "500",
           "unit": "ml"
         },
         {
           "food": "egg",
-          "amount": "2"
+          "amount": "4"
         },
         {
-          "food": "grated cheese",
-          "amount": "90",
-          "unit": "g"
+          "food": "grated tasty cheese",
+          "amount": "1",
+          "unit": "cup"
         }
       ],
       "instructions": [
@@ -167,77 +168,47 @@
       ]
     },
     {
-      "meal": "Chicken Fettuccine",
+      "meal": "Schnitzel",
       "ingredients": [
         {
-          "food": "fettuccine",
-          "amount": "250",
-          "unit": "g"
+          "food": "schnitzel"
         },
         {
-          "food": "oil",
-          "amount": "1",
-          "unit": "Tbsp"
+          "food": "green pepper (jar)"
         },
         {
-          "food": "garlic",
-          "amount": "1",
-          "how": "chopped"
+          "food": "Schalotten",
+          "amount": "2"
         },
         {
-          "food": "breadcrumbs",
-          "amount": "25",
-          "unit": "g"
-        },
-        {
-          "food": "parmesan cheese",
-          "amount": "20",
-          "unit": "g",
-          "how": "grated"
-        },
-        {
-          "food": "parmesan cheese",
-          "amount": "20",
-          "unit": "g",
-          "how": "grated"
-        },
-        {
-          "food": "chicken",
-          "amount": "250",
-          "unit": "g",
-          "how": "cut into 1 cm strips"
-        },
-        {
-          "food": "mushrooms",
-          "amount": "100",
-          "unit": "g",
-          "how": "cut into 1 cm strips"
-        },
-        {
-          "food": "cream",
+          "food": "KOCHsahne",
           "amount": "200",
           "unit": "ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "1",
-          "unit": "tsp"
+          "amount": "200",
+          "unit": "ml"
         },
         {
-          "food": "parsley",
-          "amount": "10",
-          "unit": "g",
-          "how": "chopped"
+          "food": "butter",
+          "amount": "2",
+          "unit": "Tbsp"
+        },
+        {
+          "food": "mushrooms"
+        },
+        {
+          "food": "frozen mixed vegetables"
+        },
+        {
+          "food": "oven potatoes / chips"
+        },
+        {
+          "food": "salt and pepper"
         }
       ],
-      "instructions": [
-        "Cook fettuccine",
-        "Garlic Crumb: Heat oil in a pan, add 20g garlic, breadcrumbs and parmesan and fry for 1-2 minutes while stirring. Take out of the pan and put aside",
-        "Fettuccine: In the same pan, heat oil and fry chicken and mushrooms until chicken is lightly browned on a high heat",
-        "Add cream, stock and the other garlic clove to the pan and simmer until the sauce thickens. Add the rest of the parmesan and season with pepper",
-        "Add the fettuccine and parsley",
-        "Serve and top with the garlic crumb"
-      ]
+      "instructions": ["Follow cook it recipe"]
     },
     {
       "meal": "Leek, Pea and Pepper Risotto",
@@ -332,34 +303,39 @@
       "ingredients": [
         {
           "food": "pasta",
-          "amount": "250",
+          "amount": "500",
           "unit": "g"
         },
         {
           "food": "cherry tomatoes",
-          "amount": "200",
+          "amount": "400",
           "unit": "g",
           "how": "halved"
         },
         {
           "food": "spinach",
-          "amount": "200",
+          "amount": "400",
           "unit": "g"
         },
         {
           "food": "mini mozzarella",
-          "amount": "1",
+          "amount": "2",
           "unit": "pack"
         },
         {
-          "food": "cream",
-          "amount": "200",
+          "food": "KOCHsahne",
+          "amount": "400",
+          "unit": "ml"
+        },
+        {
+          "food": "water",
+          "amount": "500",
           "unit": "ml"
         },
         {
           "food": "vegetable stock",
-          "amount": "500",
-          "unit": "ml"
+          "amount": "4",
+          "unit": "tsp"
         }
       ],
       "instructions": [
@@ -767,18 +743,18 @@
       "ingredients": [
         {
           "food": "tuna",
-          "amount": "1",
-          "unit": "can"
+          "amount": "2",
+          "unit": "cans"
         },
         {
           "food": "spring onions",
-          "amount": "1",
-          "unit": "bunch",
+          "amount": "2",
+          "unit": "bunches",
           "how": "chopped"
         },
         {
           "food": "mayonnaise",
-          "amount": "4",
+          "amount": "8",
           "unit": "Tbsp"
         },
         {
@@ -790,8 +766,8 @@
         },
         {
           "food": "paprika",
-          "amount": "1",
-          "unit": "pinch"
+          "amount": "2",
+          "unit": "pinches"
         }
       ],
       "instructions": [
@@ -1127,22 +1103,24 @@
       "meal": "Eggs Benedict",
       "ingredients": [
         {
-          "food": "eggs"
+          "food": "english muffins",
+          "amount": "4"
+        },
+        {
+          "food": "bacon",
+          "amount": "1",
+          "unit": "pack"
+        },
+        {
+          "food": "hash browns",
+          "amount": "8"
+        },
+        {
+          "food": "eggs",
+          "amount": "4"
         },
         {
           "food": "hollandaise sauce"
-        },
-        {
-          "food": "english muffins"
-        },
-        {
-          "food": "bacon"
-        },
-        {
-          "food": "hash browns"
-        },
-        {
-          "food": "spinach"
         }
       ],
       "instructions": []
@@ -1559,6 +1537,181 @@
         "Steam vegetables",
         "Pour sauce over cooked pasta, sprinkle parmesan/remaining cheese on top and grill until golden"
       ]
+    },
+    {
+      "meal": "Diavolo Flammkuchen + Salad",
+      "ingredients": [
+        {
+          "food": "red onions",
+          "amount": "2"
+        },
+        {
+          "food": "Flammkuchenteig (ready-made)",
+          "amount": "2"
+        },
+        {
+          "food": "rote Spitzpaprika",
+          "amount": "2"
+        },
+        {
+          "food": "chorizo",
+          "amount": "100",
+          "unit": "g"
+        },
+        {
+          "food": "grated Gouda",
+          "amount": "100",
+          "unit": "g"
+        },
+        {
+          "food": "pasta sauce",
+          "amount": "400",
+          "unit": "g"
+        },
+        {
+          "food": "chilli"
+        },
+        {
+          "food": "Romana salad",
+          "amount": "300",
+          "unit": "g"
+        },
+        {
+          "food": "Mittelscharfer Senf",
+          "amount": "2",
+          "unit": "tsp"
+        },
+        {
+          "food": "Weißweinessig / Condimento Italiano Blanco",
+          "amount": "2",
+          "unit": "tsp"
+        },
+        {
+          "food": "olive oil",
+          "amount": "2",
+          "unit": "Tbsp"
+        },
+        {
+          "food": "sugar",
+          "amount": "1",
+          "unit": "pinch"
+        }
+      ],
+      "instructions": [
+        "Cut the onions in half and then in fine stripes",
+        "Cut the Spitzpaprika in fine rings",
+        "Cut the chorizo in strips or 0.5cm cubes",
+        "Heat the oven to 200°C",
+        "Spread the Teig on 2 oven trays",
+        "Spread the pasta sauce on the Teig",
+        "Grind some chili and spread the cheese on top",
+        "Spread the onion, paprika and chorizo",
+        "Bake for 18-22 min",
+        "Meanwhile, wash the salad and prepare the salad dressing",
+        "Mix 2 tsp Senf, 2 Tbsp Olive oil, 2 tsp Essig, salt, pepper and a pinch of sugar",
+        "Cut the Romana into 2cm strips and mix into the dressing"
+      ]
+    },
+    {
+      "meal": "Raclette Spätzle",
+      "ingredients": [
+        {
+          "food": "Apfel",
+          "amount": "1"
+        },
+        {
+          "food": "Zwiebeln",
+          "amount": "2"
+        },
+        {
+          "food": "butter",
+          "amount": "12",
+          "unit": "g"
+        },
+        {
+          "food": "Honig",
+          "amount": "1",
+          "unit": "tsp"
+        },
+        {
+          "food": "Balsamico Essig",
+          "amount": "1",
+          "unit": "tsp"
+        },
+        {
+          "food": "Öl",
+          "amount": "10",
+          "unit": "g"
+        },
+        {
+          "food": "Porree",
+          "amount": "1",
+          "how": "big"
+        },
+        {
+          "food": "frische Eierspätzle",
+          "amount": "500",
+          "unit": "g"
+        },
+        {
+          "food": "nutmeg",
+          "amount": "1",
+          "unit": "pinch"
+        },
+        {
+          "food": "turmeric",
+          "amount": "1",
+          "unit": "pinch"
+        },
+        {
+          "food": "KOCHsahne leicht",
+          "amount": "200",
+          "unit": "g"
+        },
+        {
+          "food": "Raclette Käse",
+          "amount": "125",
+          "unit": "g"
+        }
+      ],
+      "instructions": ["Follow cook it recipe"]
+    },
+    {
+      "meal": "Leek + Potato Soup",
+      "ingredients": [
+        {
+          "food": "potatoes",
+          "amount": "2"
+        },
+        {
+          "food": "leek",
+          "amount": "1"
+        },
+        {
+          "food": "garlic",
+          "amount": "1",
+          "how": "clove"
+        },
+        {
+          "food": "water",
+          "amount": "350",
+          "unit": "ml"
+        },
+        {
+          "food": "vegetable stock",
+          "amount": "1.5",
+          "unit": "tsp"
+        },
+        {
+          "food": "cream",
+          "amount": "50",
+          "unit": "g"
+        },
+        {
+          "food": "pepper"
+        }
+      ],
+      "instructions": ["Follow cook it recipe"]
     }
   ]
 }
