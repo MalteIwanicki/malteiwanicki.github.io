@@ -1,21 +1,29 @@
 # **Cheatsheet**
 
 ## Setup Environment
+
 ### Venv
+
 within powershell:
+
 ```powershell
 python -m venv .venv
 Set-Alias activate ./.venv/scripts/activate; Add-Content -Path $PROFILE -Value "`nSet-Alias activate ./.venv/scripts/activate\n"; activate
 ```
+
 In the future actiavte your venv with:
+
 ```powershell
 activate
 ```
+
 to activate the local repository.
 
- ### poetry
- with the venv activated:
- ```powershell
+### poetry
+
+with the venv activated:
+
+```powershell
 pip install poetry
 poetry config virtualenvs.in-project true
 // for a new porject
@@ -25,24 +33,28 @@ poetry install
 ```
 
 ## Regulations
+
 ### How to add licences of dependencies
+
 https://pypi.org/project/pip-licenses/
+
 ```shell
 pip-licenses --format=markdown
 ```
 
 the `LICENSE` file shall be in the codes ROOT folder.
 
+## Dynamic Class Instantiation with **new**
 
-
-## Dynamic Class Instantiation with __new__
-In Python, the __new__ method allows classes to control how and what instance gets created before initialization happens. This enables a design pattern where a parent class decides dynamically which subclass to instantiate, based on the constructor arguments.
+In Python, the **new** method allows classes to control how and what instance gets created before initialization happens. This enables a design pattern where a parent class decides dynamically which subclass to instantiate, based on the constructor arguments.
 
 This approach is useful when you want to:
+
 - Simplify through single entry point.
 - Maintain flexibility while hiding subclass details from outside.
 
 ### The Pattern
+
 ```python
 class Parent:
     def __new__(cls, class_a_value=None, *args, **kwargs):
@@ -68,6 +80,7 @@ class ChildB(Parent):
 ```
 
 ### An Example
+
 ```python
 instance1 = Parent(class_a_value="foo")
 # > Creating an instance of ChildA
@@ -88,8 +101,16 @@ print(hasattr(instance2, "class_a_value"))
 # False
 ```
 
-
 ## Create Ssh Connection Oneliner
+
 ```
 echo "Enter Host Address:" && read HOST_ADDRESS && echo "Enter Host Alias:" && read HOST_ALIAS && cho "Enter Email Address:" && read EMAIL && SSH_DIR="$HOME/.ssh" && echo "enter usename:" && read USER && KEY_FILE="${SSH_DIR}/${HOST_ADDRESS}_rsa" && cd "$SSH_DIR" && ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$KEY_FILE" -N "" && echo -e "\nHost $HOST_ALIAS\n    HostName $HOST_ADDRESS\n    User $USER\n    IdentityFile $KEY_FILE\n" >> "${SSH_DIR}/config" && ssh-copy-id -i "${KEY_FILE}.pub" "$USER@$HOST_ADDRESS" && ssh "$USER@$HOST_ADDRESS"
+```
+
+## create a password hash
+
+this creates a password
+
+```bash
+openssl passwd -apr1 'mein-passwort123'
 ```
