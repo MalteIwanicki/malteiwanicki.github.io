@@ -104,7 +104,7 @@ print(hasattr(instance2, "class_a_value"))
 ## Create Ssh Connection Oneliner
 
 ```
-echo "Enter Host Address:" && read HOST_ADDRESS && echo "Enter Host Alias:" && read HOST_ALIAS && cho "Enter Email Address:" && read EMAIL && SSH_DIR="$HOME/.ssh" && echo "enter usename:" && read USER && KEY_FILE="${SSH_DIR}/${HOST_ADDRESS}_rsa" && cd "$SSH_DIR" && ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$KEY_FILE" -N "" && echo -e "\nHost $HOST_ALIAS\n    HostName $HOST_ADDRESS\n    User $USER\n    IdentityFile $KEY_FILE\n" >> "${SSH_DIR}/config" && ssh-copy-id -i "${KEY_FILE}.pub" "$USER@$HOST_ADDRESS" && ssh "$USER@$HOST_ADDRESS"
+echo "Enter Host Address:" && read HOST_ADDRESS && echo "Enter Host Alias:" && read HOST_ALIAS && echo "Enter Email Address:" && read EMAIL && SSH_DIR="$HOME/.ssh" && echo "enter usename:" && read USER && KEY_FILE="${SSH_DIR}/${HOST_ADDRESS}_rsa" && cd "$SSH_DIR" && ssh-keygen -t rsa -b 4096 -C "$EMAIL" -f "$KEY_FILE" -N "" && echo -e "\nHost $HOST_ALIAS\n    HostName $HOST_ADDRESS\n    User $USER\n    IdentityFile $KEY_FILE\n" >> "${SSH_DIR}/config" && ssh-copy-id -i "${KEY_FILE}.pub" "$USER@$HOST_ADDRESS" && ssh "$USER@$HOST_ADDRESS"
 ```
 
 ## create a password hash
