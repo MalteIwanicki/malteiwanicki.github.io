@@ -114,3 +114,58 @@ this creates a password
 ```bash
 openssl passwd -apr1 'mein-passwort123'
 ```
+
+
+## .zshrc config für ssh autocompletion
+```
+# ==== Enable completion (if not already enabled) ====
+autoload -U compinit
+# Only run compinit if it hasn't been run yet
+if ! whence -w _complete &>/dev/null; then
+  compinit
+fi
+
+# ==== SSH host completion from ~/.ssh/config (zsh) ====
+_ssh_hosts_from_config_zsh() {
+  local -a hosts
+  local config_file="$HOME/.ssh/config"
+
+  # If the config file exists and is readable, extract Host entries
+  if [[ -r $config_file ]]; then
+    hosts=(${(f)"$(
+      awk '
+        $1 == "Host" {
+          for (i = 2; i <= NF; i++) {
+            # Skip wildcard patterns like "*", "*foo", "bar?"
+            if ($i ~ /[*?]/) {
+              continue
+            }
+            print $i
+          }
+        }
+      ' "$config_file" 2>/dev/null
+    )"})
+  else
+    hosts=()
+  fi
+
+  # Offer these hosts as completion candidates
+  compadd -- $hosts
+}
+
+# Attach this completion function to the ssh command
+compdef _ssh_hosts_from_config_zsh ssh
+# =====================================================
+
+# Custom ssh wrapper (optional)
+ssh() {
+  # Example: simple logging (customize/remove as you like)
+  # print -r -- "[$(date +'%Y-%m-%d %H:%M:%S')] ssh $*" >> "$HOME/.ssh/ssh-log"
+
+  # Call the real system ssh
+  command ssh "$@"
+}
+
+# Make sure completion for this ssh function is still our custom one
+compdef _ssh_hosts_from_config_zsh ssh
+```
