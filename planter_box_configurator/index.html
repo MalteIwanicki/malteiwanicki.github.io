@@ -1,0 +1,1411 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Planter Box Configurator</title>
+    <style>
+      :root {
+        --bg: #fff;
+        --fg: #000;
+        --acc: #f0f0f0;
+      }
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+        font-family: monospace;
+      }
+      body {
+        background: var(--bg);
+        color: var(--fg);
+        display: flex;
+        height: 100vh;
+        overflow: hidden;
+      }
+      button {
+        background: var(--fg);
+        color: var(--bg);
+        border: 1px solid var(--fg);
+        padding: 8px 12px;
+        cursor: pointer;
+        text-transform: uppercase;
+        font-weight: bold;
+      }
+      button:hover {
+        background: var(--bg);
+        color: var(--fg);
+      }
+      button.active {
+        background: var(--acc);
+        color: var(--fg);
+        border-bottom: 2px solid var(--fg);
+      }
+      input {
+        border: 1px solid var(--fg);
+        padding: 6px;
+        width: 80px;
+        text-align: right;
+      }
+
+      ::-webkit-scrollbar {
+        width: 8px;
+        height: 8px;
+      }
+      ::-webkit-scrollbar-track {
+        background: var(--bg);
+        border-left: 1px solid var(--fg);
+      }
+      ::-webkit-scrollbar-thumb {
+        background: var(--fg);
+      }
+
+      .sidebar {
+        width: 360px;
+        border-right: 2px solid var(--fg);
+        display: flex;
+        flex-direction: column;
+        flex-shrink: 0;
+        background: var(--bg);
+        z-index: 10;
+      }
+      .global-controls {
+        padding: 16px;
+        border-bottom: 2px solid var(--fg);
+        display: flex;
+        gap: 8px;
+        flex-wrap: wrap;
+        flex-shrink: 0;
+      }
+      .box-selector {
+        display: flex;
+        gap: 4px;
+        padding: 12px 16px;
+        border-bottom: 2px solid var(--fg);
+        overflow-x: auto;
+        flex-shrink: 0;
+      }
+      .box-selector button {
+        padding: 6px 10px;
+        font-size: 0.85em;
+        flex-shrink: 0;
+      }
+
+      .forms-container {
+        flex-shrink: 0;
+        border-bottom: 2px solid var(--fg);
+      }
+      .bom-panel {
+        padding: 16px;
+        flex-grow: 1;
+        overflow-y: auto;
+        font-size: 0.9em;
+        white-space: pre-wrap;
+      }
+      .bom-panel a {
+        color: var(--fg);
+        text-decoration: underline;
+        font-weight: bold;
+      }
+      .bom-panel a:hover {
+        background: var(--fg);
+        color: var(--bg);
+        text-decoration: none;
+      }
+
+      .main {
+        flex-grow: 1;
+        overflow-y: auto;
+        padding: 24px;
+        display: flex;
+        flex-direction: column;
+        background: #fafafa;
+      }
+
+      .box-form {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+        padding: 16px;
+      }
+      .form-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        flex-shrink: 0;
+      }
+
+      .box-viz {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+        width: 100%;
+        height: 100%;
+        min-height: 600px;
+      }
+      .tabs {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 4px;
+        border-bottom: 2px solid var(--fg);
+        padding-bottom: 8px;
+        flex-shrink: 0;
+      }
+      .tab-btn {
+        padding: 4px 8px;
+        font-size: 0.85em;
+        background: transparent;
+        color: var(--fg);
+      }
+      .tab-btn.active {
+        background: var(--fg);
+        color: var(--bg);
+      }
+
+      .canvas-container {
+        position: relative;
+        flex-grow: 1;
+        width: 100%;
+        border: 1px solid #ccc;
+        background: #fff;
+        overflow: hidden;
+        box-shadow: 4px 4px 0 var(--fg);
+      }
+      canvas {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        display: block;
+      }
+
+      .cut-plan-overlay {
+        position: absolute;
+        top: 180px;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        background: rgba(255, 255, 255, 0.96);
+        padding: 16px;
+        overflow-y: auto;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        border-top: 2px dashed var(--fg);
+      }
+      .board-row {
+        display: flex;
+        height: 40px;
+        min-height: 40px;
+        border: 1px solid var(--fg);
+        background: var(--acc);
+        position: relative;
+        flex-shrink: 0;
+      }
+      .cut-segment {
+        border-right: 1px solid var(--fg);
+        border-left: 1px solid var(--fg);
+        margin-left: -1px;
+        background: #fff;
+        position: relative;
+        font-size: 0.7em;
+        overflow: hidden;
+      }
+      .cut-content {
+        position: relative;
+        z-index: 1;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100%;
+        line-height: 1.2;
+        text-align: center;
+        padding: 2px;
+      }
+      .cut-text-bg {
+        background: rgba(255, 255, 255, 0.85);
+        padding: 1px 4px;
+        border-radius: 4px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+      }
+      .rip-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        border-bottom: 2px dashed var(--fg);
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 4px,
+          var(--fg) 4px,
+          var(--fg) 5px
+        );
+      }
+      .offcut {
+        background: repeating-linear-gradient(
+          45deg,
+          transparent,
+          transparent 5px,
+          var(--fg) 5px,
+          var(--fg) 6px
+        );
+        flex-grow: 1;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="sidebar">
+      <div class="global-controls">
+        <button id="add-box-btn">Add New Box</button>
+        <button id="clear-all-btn">Clear All</button>
+      </div>
+      <div class="box-selector" id="box-selector"></div>
+      <div class="forms-container" id="forms-container"></div>
+      <div class="bom-panel" id="bom-display"></div>
+    </div>
+    <div class="main" id="boxes-container"></div>
+
+    <script>
+      const MAT = {
+        board: {
+          w: 14.5,
+          t: 2.8,
+          url: "https://www.bauhaus.info/holz-terrassendielen/terrassendiele/p/16231471",
+          stock: [
+            { l: 400, p: 19.96 },
+            { l: 300, p: 14.97 },
+            { l: 200, p: 9.98 },
+          ],
+        },
+        post: {
+          w: 7,
+          d: 4.5,
+          url: "https://www.bauhaus.info/unterkonstruktionen/konstruktionsholz/p/16231581",
+          stock: [
+            { l: 400, p: 19.8 },
+            { l: 300, p: 14.85 },
+            { l: 200, p: 9.9 },
+          ],
+        },
+        foil: {
+          l: 650,
+          p: 19.59,
+          url: "https://www.bauhaus.info/hochbeetzubehoer/gardol-hochbeet-noppenfolie/p/26391746",
+        },
+        band: {
+          l: 300,
+          p: 3.9,
+          url: "https://www.bauhaus.info/lochbaender/stabilit-montageband/p/10673413",
+          stock: [{ l: 300, p: 3.9 }],
+        },
+        soil: {
+          top: {
+            v: 40,
+            p: 8.89,
+            url: "https://www.bauhaus.info/hochbeeterde/floragard-bio-hochbeeterde/p/22654650",
+          },
+          mid: {
+            v: 40,
+            p: 10.99,
+            url: "https://www.bauhaus.info/hochbeeterde/floragard-hochbeet-kompost/p/25107685",
+          },
+          bot: {
+            v: 60,
+            p: 12.49,
+            url: "https://www.bauhaus.info/hochbeeterde/floragard-hochbeet-grundfuellung/p/25107676",
+          },
+        },
+        screws: {
+          rate: 25,
+          price: 25,
+          url: "https://www.bauhaus.info/holzschrauben/c/10000000",
+        },
+      };
+
+      let state = JSON.parse(localStorage.getItem("pb_state")) || [];
+      let activeBoxIdx = 0;
+
+      function save() {
+        localStorage.setItem("pb_state", JSON.stringify(state));
+        render();
+      }
+
+      function pack1D(cuts, stockOptions) {
+        cuts.sort((a, b) => b.l - a.l);
+        let bins = [];
+        cuts.forEach((cut) => {
+          let placed = false;
+          for (let bin of bins) {
+            if (bin.rem >= cut.l) {
+              bin.cuts.push(cut);
+              bin.rem -= cut.l;
+              placed = true;
+              break;
+            }
+          }
+          if (!placed) {
+            let optimalStock = stockOptions[0];
+            for (let s of stockOptions) if (s.l >= cut.l) optimalStock = s;
+            bins.push({
+              stock: optimalStock,
+              cuts: [cut],
+              rem: optimalStock.l - cut.l,
+            });
+          }
+        });
+        bins.forEach((bin) => {
+          let totalUsed = bin.stock.l - bin.rem;
+          let best = stockOptions[0];
+          stockOptions.forEach((s) => {
+            if (s.l >= totalUsed && s.p < best.p) best = s;
+          });
+          bin.stock = best;
+          bin.rem = best.l - totalUsed;
+        });
+        return bins;
+      }
+
+      function computeGlobal() {
+        let boardCuts = [],
+          postCuts = [],
+          bandCuts = [];
+        let peri = 0,
+          soilV = 0,
+          band = 0,
+          cleatTotal = 0;
+
+        state.forEach((box, i) => {
+          const rows = Math.ceil(box.h / MAT.board.w);
+          const innerSpanL = box.l - 2 * MAT.board.t;
+          const numPostsL = Math.max(
+            0,
+            Math.ceil((innerSpanL - 2 * MAT.post.w) / 60) - 1,
+          );
+          const postLen = box.h + box.fc;
+
+          const addB = (l, ripW, cut, lbl) =>
+            boardCuts.push({ l, ripW, cut, label: `B${i + 1} ${lbl}` });
+          const addP = (l, cut, lbl) =>
+            postCuts.push({ l, ripW: null, cut, label: `B${i + 1} ${lbl}` });
+
+          if (box.trimW > 0) {
+            let rip = box.trimW < MAT.board.w ? box.trimW : null;
+            addB(box.l, rip, "45°", "Top Trim");
+            addB(box.l, rip, "45°", "Top Trim");
+            addB(box.d, rip, "45°", "Top Trim");
+            addB(box.d, rip, "45°", "Top Trim");
+          }
+
+          let ripW = Math.round((box.h - (rows - 1) * MAT.board.w) * 10) / 10;
+          let hasRip = ripW > 0 && ripW < MAT.board.w - 0.1;
+
+          for (let r = 0; r < rows; r++) {
+            let isR =
+              hasRip && ((rows >= 3 && r === 1) || (rows <= 2 && r === 0));
+            addB(box.l, isR ? ripW : null, "45°", "Wall");
+            addB(box.l, isR ? ripW : null, "45°", "Wall");
+            addB(box.d, isR ? ripW : null, "45°", "Wall");
+            addB(box.d, isR ? ripW : null, "45°", "Wall");
+          }
+
+          if (box.fc > 0) {
+            const floorSpan = box.d - 2 * MAT.board.t - 2 * MAT.post.d;
+            const floorRows = Math.ceil(floorSpan / MAT.board.w);
+            const floorRipW =
+              Math.round((floorSpan - (floorRows - 1) * MAT.board.w) * 10) / 10;
+            const hasFloorRip = floorRipW > 0 && floorRipW < MAT.board.w - 0.1;
+
+            for (let j = 0; j < floorRows; j++) {
+              let isR = hasFloorRip && j === floorRows - 1;
+              addB(
+                box.l - 2 * MAT.board.t,
+                isR ? floorRipW : null,
+                "90°",
+                "Floorbd",
+              );
+            }
+
+            let slatLen = Math.round((box.d - 2 * MAT.board.t) * 10) / 10;
+            for (let j = 0; j < 2 + numPostsL; j++)
+              addP(slatLen, "90°", "Flr Slat");
+            cleatTotal += slatLen * (2 + numPostsL);
+          }
+
+          for (let j = 0; j < 4 + numPostsL * 2; j++)
+            addP(postLen, "90°", "Post");
+
+          if (numPostsL > 0) {
+            let bandLen = Math.round((box.d - 2 * MAT.board.t) * 10) / 10;
+            for (let k = 0; k < numPostsL; k++) {
+              bandCuts.push({
+                l: bandLen,
+                cut: "90°",
+                label: `B${i + 1} Band`,
+                ripW: null,
+              });
+            }
+            band += numPostsL * bandLen;
+          }
+
+          peri += box.l * 2 + box.d * 2;
+          soilV +=
+            ((((((box.l - 2 * MAT.board.t) / 100) * (box.d - 2 * MAT.board.t)) /
+              100) *
+              box.h) /
+              100) *
+            1000;
+        });
+
+        let bBins = pack1D(boardCuts, MAT.board.stock);
+        let pBins = pack1D(postCuts, MAT.post.stock);
+        let bandBins = pack1D(bandCuts, MAT.band.stock);
+
+        return { bBins, pBins, bandBins, peri, soilV, band, cleatTotal };
+      }
+
+      function computeBox(box) {
+        const innerSpanL = box.l - 2 * MAT.board.t;
+        const numPostsL = Math.max(
+          0,
+          Math.ceil((innerSpanL - 2 * MAT.post.w) / 60) - 1,
+        );
+        const spacingL = (innerSpanL - 2 * MAT.post.w) / (numPostsL + 1);
+        return {
+          rows: Math.ceil(box.h / MAT.board.w),
+          actH: box.h,
+          numPostsL,
+          spacingL,
+          innerSpanL,
+        };
+      }
+
+      function updateBOM(g) {
+        if (state.length === 0) {
+          document.getElementById("bom-display").innerText =
+            "No boxes configured.";
+          return;
+        }
+
+        let cost = 0;
+        let summary = { boards: {}, posts: {}, bands: {} };
+
+        g.bBins.forEach((b) => {
+          if (!summary.boards[b.stock.l])
+            summary.boards[b.stock.l] = { count: 0, price: b.stock.p };
+          summary.boards[b.stock.l].count++;
+          cost += b.stock.p;
+        });
+        g.pBins.forEach((p) => {
+          if (!summary.posts[p.stock.l])
+            summary.posts[p.stock.l] = { count: 0, price: p.stock.p };
+          summary.posts[p.stock.l].count++;
+          cost += p.stock.p;
+        });
+        g.bandBins.forEach((b) => {
+          if (!summary.bands[b.stock.l])
+            summary.bands[b.stock.l] = { count: 0, price: b.stock.p };
+          summary.bands[b.stock.l].count++;
+          cost += b.stock.p;
+        });
+
+        let foilRolls = Math.ceil(g.peri / MAT.foil.l);
+        let foilCost = foilRolls * MAT.foil.p;
+        cost += foilCost;
+
+        let screwCost = (g.peri / 1000) * MAT.screws.price;
+        cost += screwCost;
+
+        let soilTopBags = Math.ceil((g.soilV * 0.3) / MAT.soil.top.v);
+        let soilTopCost = soilTopBags * MAT.soil.top.p;
+        let soilMidBags = Math.ceil((g.soilV * 0.3) / MAT.soil.mid.v);
+        let soilMidCost = soilMidBags * MAT.soil.mid.p;
+        let soilBotBags = Math.ceil((g.soilV * 0.4) / MAT.soil.bot.v);
+        let soilBotCost = soilBotBags * MAT.soil.bot.p;
+        cost += soilTopCost + soilMidCost + soilBotCost;
+
+        let html = `GLOBAL BILL OF MATERIALS\n\n`;
+        html += `TOTAL COST: €${cost.toFixed(2)}\n\n`;
+
+        html += `BOARDS:\n`;
+        for (let l in summary.boards) {
+          let item = summary.boards[l];
+          let lineCost = item.count * item.price;
+          html += `- <a href="${MAT.board.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
+        }
+
+        html += `\nPOSTS:\n`;
+        for (let l in summary.posts) {
+          let item = summary.posts[l];
+          let lineCost = item.count * item.price;
+          html += `- <a href="${MAT.post.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
+        }
+
+        html += `\nCONSUMABLES:\n`;
+        html += `- Foil: <a href="${MAT.foil.url}" target="_blank">${foilRolls} roll(s)</a> (€${MAT.foil.p.toFixed(2)}/ea) = €${foilCost.toFixed(2)}\n`;
+        for (let l in summary.bands) {
+          let item = summary.bands[l];
+          let lineCost = item.count * item.price;
+          html += `- Metal bands: <a href="${MAT.band.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
+        }
+        html += `- Screws: <a href="${MAT.screws.url}" target="_blank">~${Math.ceil((g.peri / 1000) * MAT.screws.rate)} pcs</a> = €${screwCost.toFixed(2)}\n`;
+        if (g.cleatTotal > 0)
+          html += `- Floor Slats: ${(g.cleatTotal / 100).toFixed(1)}m (From Posts)\n`;
+
+        html += `\nSOIL (${Math.round(g.soilV)}L):\n`;
+        html += `- Top: <a href="${MAT.soil.top.url}" target="_blank">${soilTopBags} bags</a> (€${MAT.soil.top.p.toFixed(2)}/ea) = €${soilTopCost.toFixed(2)}\n`;
+        html += `- Mid: <a href="${MAT.soil.mid.url}" target="_blank">${soilMidBags} bags</a> (€${MAT.soil.mid.p.toFixed(2)}/ea) = €${soilMidCost.toFixed(2)}\n`;
+        html += `- Bot: <a href="${MAT.soil.bot.url}" target="_blank">${soilBotBags} bags</a> (€${MAT.soil.bot.p.toFixed(2)}/ea) = €${soilBotCost.toFixed(2)}`;
+
+        document.getElementById("bom-display").innerHTML = html;
+      }
+
+      function project(x, y, z, cx, cy, scale) {
+        return {
+          u: cx + (x - y) * Math.cos(Math.PI / 6) * scale,
+          v: cy - (x + y) * Math.sin(Math.PI / 6) * scale - z * scale,
+        };
+      }
+
+      function render3D(canvasId, box, calc) {
+        const canvas = document.getElementById(canvasId);
+        if (!canvas) return;
+        const ctx = canvas.getContext("2d");
+
+        const rect = canvas.parentElement.getBoundingClientRect();
+        if (rect.width === 0 || rect.height === 0) return;
+
+        const logW = rect.width;
+        const logH = rect.height;
+        const dpr = window.devicePixelRatio || 1;
+
+        canvas.width = logW * dpr;
+        canvas.height = logH * dpr;
+        ctx.scale(dpr, dpr);
+
+        ctx.clearRect(0, 0, logW, logH);
+
+        const { l: L, d: D, fc: FC, tab } = box;
+        const H = calc.actH,
+          t = MAT.board.t,
+          pw = MAT.post.w,
+          pd = MAT.post.d;
+
+        const cos30 = Math.cos(Math.PI / 6);
+        const sin30 = Math.sin(Math.PI / 6);
+        const totalH = H + FC + MAT.board.t + 60;
+
+        const projW = (L + D) * cos30;
+        const projH = (L + D) * sin30 + totalH;
+
+        const scale = Math.min((logW * 0.9) / projW, (logH * 0.9) / projH);
+        const cx = logW / 2 - (((L - D) * cos30) / 2) * scale;
+        const cy = logH / 2 + (projH / 2) * scale;
+
+        const face = (pts3d, fill = "#fff", stroke = "#000") => {
+          let pts = pts3d.map((p) => project(p[0], p[1], p[2], cx, cy, scale));
+          ctx.beginPath();
+          ctx.moveTo(pts[0].u, pts[0].v);
+          for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i].u, pts[i].v);
+          ctx.closePath();
+          ctx.fillStyle = fill;
+          ctx.fill();
+          ctx.strokeStyle = stroke;
+          ctx.lineWidth = 1.2;
+          ctx.stroke();
+        };
+
+        const seam = (p1, p2, startZ, endZ) => {
+          ctx.strokeStyle = "#000";
+          ctx.lineWidth = 1.0;
+          let currentZ = startZ;
+          let ripW =
+            Math.round((box.h - (calc.rows - 1) * MAT.board.w) * 10) / 10;
+          let hasRip = ripW > 0 && ripW < MAT.board.w - 0.1;
+
+          for (let r = 0; r < calc.rows - 1; r++) {
+            let bh = MAT.board.w;
+            if (hasRip) {
+              if (calc.rows >= 3 && r === 1) bh = ripW;
+              else if (calc.rows <= 2 && r === 0) bh = ripW;
+            }
+            currentZ += bh;
+            if (currentZ < endZ - 0.1) {
+              let pr1 = project(p1[0], p1[1], currentZ, cx, cy, scale);
+              let pr2 = project(p2[0], p2[1], currentZ, cx, cy, scale);
+              ctx.beginPath();
+              ctx.moveTo(pr1.u, pr1.v);
+              ctx.lineTo(pr2.u, pr2.v);
+              ctx.stroke();
+            }
+          }
+        };
+
+        const drawMiteredBlock = (
+          side,
+          bwL,
+          bwD,
+          bt,
+          bz,
+          bh,
+          fill,
+          addSeams,
+          offset = 0,
+        ) => {
+          let Z = bz,
+            ZH = bz + bh;
+          if (side === "back") {
+            let y = bwD - bt + offset;
+            face(
+              [
+                [0, y + bt, Z],
+                [bwL, y + bt, Z],
+                [bwL, y + bt, ZH],
+                [0, y + bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([0, y + bt], [bwL, y + bt], Z, ZH);
+            face(
+              [
+                [bt, y, Z],
+                [0, y + bt, Z],
+                [0, y + bt, ZH],
+                [bt, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([bt, y], [0, y + bt], Z, ZH);
+            face(
+              [
+                [bwL - bt, y, Z],
+                [bwL, y + bt, Z],
+                [bwL, y + bt, ZH],
+                [bwL - bt, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([bwL - bt, y], [bwL, y + bt], Z, ZH);
+            face(
+              [
+                [bt, y, Z],
+                [bwL - bt, y, Z],
+                [bwL - bt, y, ZH],
+                [bt, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([bt, y], [bwL - bt, y], Z, ZH);
+            face(
+              [
+                [0, y + bt, ZH],
+                [bwL, y + bt, ZH],
+                [bwL - bt, y, ZH],
+                [bt, y, ZH],
+              ],
+              fill,
+            );
+          } else if (side === "right") {
+            let x = bwL - bt + offset;
+            face(
+              [
+                [x + bt, 0, Z],
+                [x + bt, bwD, Z],
+                [x + bt, bwD, ZH],
+                [x + bt, 0, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x + bt, 0], [x + bt, bwD], Z, ZH);
+            face(
+              [
+                [x, bt, Z],
+                [x + bt, 0, Z],
+                [x + bt, 0, ZH],
+                [x, bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, bt], [x + bt, 0], Z, ZH);
+            face(
+              [
+                [x, bwD - bt, Z],
+                [x + bt, bwD, Z],
+                [x + bt, bwD, ZH],
+                [x, bwD - bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, bwD - bt], [x + bt, bwD], Z, ZH);
+            face(
+              [
+                [x, bt, Z],
+                [x, bwD - bt, Z],
+                [x, bwD - bt, ZH],
+                [x, bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, bt], [x, bwD - bt], Z, ZH);
+            face(
+              [
+                [x + bt, 0, ZH],
+                [x + bt, bwD, ZH],
+                [x, bwD - bt, ZH],
+                [x, bt, ZH],
+              ],
+              fill,
+            );
+          } else if (side === "left") {
+            let x = 0 - offset;
+            face(
+              [
+                [x + bt, bt, Z],
+                [x + bt, bwD - bt, Z],
+                [x + bt, bwD - bt, ZH],
+                [x + bt, bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x + bt, bt], [x + bt, bwD - bt], Z, ZH);
+            face(
+              [
+                [x, 0, Z],
+                [x + bt, bt, Z],
+                [x + bt, bt, ZH],
+                [x, 0, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, 0], [x + bt, bt], Z, ZH);
+            face(
+              [
+                [x, bwD, Z],
+                [x + bt, bwD - bt, Z],
+                [x + bt, bwD - bt, ZH],
+                [x, bwD, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, bwD], [x + bt, bwD - bt], Z, ZH);
+            face(
+              [
+                [x, 0, Z],
+                [x, bwD, Z],
+                [x, bwD, ZH],
+                [x, 0, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([x, 0], [x, bwD], Z, ZH);
+            face(
+              [
+                [x, 0, ZH],
+                [x, bwD, ZH],
+                [x + bt, bwD - bt, ZH],
+                [x + bt, bt, ZH],
+              ],
+              fill,
+            );
+          } else if (side === "front") {
+            let y = 0 - offset;
+            face(
+              [
+                [bt, y + bt, Z],
+                [bwL - bt, y + bt, Z],
+                [bwL - bt, y + bt, ZH],
+                [bt, y + bt, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([bt, y + bt], [bwL - bt, y + bt], Z, ZH);
+            face(
+              [
+                [0, y, Z],
+                [bt, y + bt, Z],
+                [bt, y + bt, ZH],
+                [0, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([0, y], [bt, y + bt], Z, ZH);
+            face(
+              [
+                [bwL, y, Z],
+                [bwL - bt, y + bt, Z],
+                [bwL - bt, y + bt, ZH],
+                [bwL, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([bwL, y], [bwL - bt, y + bt], Z, ZH);
+            face(
+              [
+                [0, y, Z],
+                [bwL, y, Z],
+                [bwL, y, ZH],
+                [0, y, ZH],
+              ],
+              fill,
+            );
+            if (addSeams) seam([0, y], [bwL, y], Z, ZH);
+            face(
+              [
+                [0, y, ZH],
+                [bwL, y, ZH],
+                [bwL - bt, y + bt, ZH],
+                [bt, y + bt, ZH],
+              ],
+              fill,
+            );
+          }
+        };
+
+        const drawPost = (px, py, pz, w, d, h, fill = "#fff") => {
+          face(
+            [
+              [px, py + d, pz],
+              [px + w, py + d, pz],
+              [px + w, py + d, pz + h],
+              [px, py + d, pz + h],
+            ],
+            fill,
+          );
+          face(
+            [
+              [px + w, py, pz],
+              [px + w, py + d, pz],
+              [px + w, py + d, pz + h],
+              [px + w, py, pz + h],
+            ],
+            fill,
+          );
+          face(
+            [
+              [px, py, pz],
+              [px, py + d, pz],
+              [px, py + d, pz + h],
+              [px, py, pz + h],
+            ],
+            fill,
+          );
+          face(
+            [
+              [px, py, pz],
+              [px + w, py, pz],
+              [px + w, py, pz + h],
+              [px, py, pz + h],
+            ],
+            fill,
+          );
+          face(
+            [
+              [px, py, pz + h],
+              [px + w, py, pz + h],
+              [px + w, py + d, pz + h],
+              [px, py + d, pz + h],
+            ],
+            fill,
+          );
+        };
+
+        let OFF = tab === 2 ? 30 : 0;
+
+        // 1. Lawn (Step 8+)
+        if (tab >= 8) {
+          ctx.fillStyle = "#81c784";
+          ctx.fillRect(0, 0, logW, logH);
+        }
+
+        // 2. Back Wall
+        if (tab >= 2)
+          drawMiteredBlock("back", L, D, t, FC, H, "#fff", true, OFF);
+
+        // 3. Right Wall
+        if (tab >= 3)
+          drawMiteredBlock("right", L, D, t, FC, H, "#fff", true, 0);
+
+        // 4. Back Posts & Depth Cleats (Painter's Algorithm: Right to Left)
+        if (tab >= 2) {
+          let clY = t;
+          let clD = D - 2 * t;
+          let pY = D - t - pd + OFF;
+
+          // 1. Right Post (Drawn first, farthest Right/Z)
+          drawPost(L - t - pw, pY, 0, pw, pd, FC + H);
+
+          // 2. Right Cleat (Left side of right post, drawn after to paint over post's left face)
+          if (box.fc > 0) drawPost(L - t - pw - 3, clY, FC, 3, clD, 3);
+
+          // 3. Mid Cleats & Posts (Right to Left sweep)
+          for (let i = calc.numPostsL; i >= 1; i--) {
+            let postX = t + pw + i * calc.spacingL;
+
+            // Cleat is on Right side of the Post, drawn FIRST
+            if (box.fc > 0) drawPost(postX + pw, clY, FC, 3, clD, 3);
+
+            // Post drawn AFTER, painting over the left connection of the cleat
+            drawPost(postX, pY, 0, pw, pd, FC + H);
+          }
+
+          // 4. Left Cleat (Right side of left post, drawn FIRST)
+          if (box.fc > 0) drawPost(t + pw, clY, FC, 3, clD, 3);
+
+          // 5. Left Post (Drawn AFTER, painting over cleat's left connection)
+          drawPost(t, pY, 0, pw, pd, FC + H);
+        }
+
+        // 5. Right Foil
+        if (tab >= 5)
+          face(
+            [
+              [L - t - 0.2, D - t - 0.2, FC],
+              [L - t - 0.2, t + 0.2, FC],
+              [L - t - 0.2, t + 0.2, FC + H - 2],
+              [L - t - 0.2, D - t - 0.2, FC + H - 2],
+            ],
+            "rgba(136,170,255,0.7)",
+            "transparent",
+          );
+
+        // 6. Floor (Spans Left-to-Right, tiled Front-to-Back)
+        if (tab >= 4 && box.fc > 0) {
+          let boards = [];
+          let floorSpan = D - 2 * t - 2 * pd;
+          let cyF = t + pd;
+
+          while (cyF + 0.1 < t + pd + floorSpan) {
+            let bw = MAT.board.w;
+            if (cyF + bw > t + pd + floorSpan) bw = t + pd + floorSpan - cyF;
+            boards.push({ y: cyF, w: bw });
+            cyF += MAT.board.w;
+          }
+
+          let zBot = FC + 3;
+          let zTop = zBot + MAT.board.t;
+          let bL = t;
+          let bR = L - t;
+
+          for (let i = boards.length - 1; i >= 0; i--) {
+            let by = boards[i].y;
+            let bB = by + boards[i].w;
+
+            face(
+              [
+                [bL, bB, zBot],
+                [bL, by, zBot],
+                [bL, by, zTop],
+                [bL, bB, zTop],
+              ],
+              "#cbb18a",
+            ); // Left Face
+            face(
+              [
+                [bL, by, zBot],
+                [bR, by, zBot],
+                [bR, by, zTop],
+                [bL, by, zTop],
+              ],
+              "#cbb18a",
+            ); // Front Face
+            face(
+              [
+                [bL, bB, zTop],
+                [bR, bB, zTop],
+                [bR, by, zTop],
+                [bL, by, zTop],
+              ],
+              "#e6cda3",
+            ); // Top Face
+          }
+        }
+
+        // 7. Back Foil
+        if (tab >= 5)
+          face(
+            [
+              [t + 0.2, D - t - 0.2, FC],
+              [L - t - 0.2, D - t - 0.2, FC],
+              [L - t - 0.2, D - t - 0.2, FC + H - 2],
+              [t + 0.2, D - t - 0.2, FC + H - 2],
+            ],
+            "rgba(136,170,255,0.7)",
+            "transparent",
+          );
+
+        // 7.5 Floor Foil
+        if (tab >= 5 && box.fc > 0)
+          face(
+            [
+              [t + 0.2, D - t - 0.2, FC],
+              [L - t + 6, D - t + 2.2, FC],
+              [L - t + 6, t + 4.2, FC],
+              [t + 0.2, t + 4.2, FC],
+            ],
+            "rgba(136,170,255,0.7)",
+            "transparent",
+          );
+
+        if (tab >= 2) {
+          drawPost(t, t - OFF, 0, pw, pd, FC + H);
+          drawPost(L - t - pw, t - OFF, 0, pw, pd, FC + H);
+          for (let i = 1; i <= calc.numPostsL; i++)
+            drawPost(t + pw + i * calc.spacingL, t - OFF, 0, pw, pd, FC + H);
+
+          if (box.fc > 0 && OFF === 0) {
+            drawPost(L - t - pw - 3, t, FC, 3, pd, 3);
+          }
+        }
+
+        // 8.5 Metal Bands (Before soil to be covered by it)
+        if (tab >= 6 && calc.numPostsL > 0) {
+          for (let i = 1; i <= calc.numPostsL; i++) {
+            let px = t + pw + i * calc.spacingL - 1.5;
+            let pz = FC + H / 2;
+            drawPost(px, t, pz, 1.5, D - 2 * t, 2, "#999");
+          }
+        }
+
+        // 9. Soil
+        if (tab >= 9)
+          face(
+            [
+              [t, D - t, FC + H - 5],
+              [L - t, D - t, FC + H - 5],
+              [L - t, t, FC + H - 5],
+              [t, t, FC + H - 5],
+            ],
+            "#4a3b32",
+          );
+
+        // 11. Left Foil
+        if (tab >= 5)
+          face(
+            [
+              [t + 0.2, t + 0.2, FC],
+              [t + 0.2, D - t - 0.2, FC],
+              [t + 0.2, D - t - 0.2, FC + H - 2],
+              [t + 0.2, t + 0.2, FC + H - 2],
+            ],
+            "rgba(136,170,255,0.7)",
+            "transparent",
+          );
+
+        // 12. Left Wall
+        if (tab >= 3) drawMiteredBlock("left", L, D, t, FC, H, "#fff", true, 0);
+
+        // 13. Front Foil
+        if (tab >= 5 && (tab < 4 || tab >= 7))
+          face(
+            [
+              [L - t - 0.2, t + 0.2, FC],
+              [t + 0.2, t + 0.2, FC],
+              [t + 0.2, t + 0.2, FC + H - 2],
+              [L - t - 0.2, t + 0.2, FC + H - 2],
+            ],
+            "rgba(136,170,255,0.7)",
+            "transparent",
+          );
+
+        // 14. Front Wall
+        if (tab >= 2 && (tab < 4 || tab >= 7))
+          drawMiteredBlock("front", L, D, t, FC, H, "#fff", true, OFF);
+
+        // 15. Top Trim
+        if (tab >= 7 && box.trimW > 0) {
+          let tw = box.trimW;
+          drawMiteredBlock("back", L, D, tw, FC + H, t, "#fff", false);
+          drawMiteredBlock("right", L, D, tw, FC + H, t, "#fff", false);
+          drawMiteredBlock("left", L, D, tw, FC + H, t, "#fff", false);
+          drawMiteredBlock("front", L, D, tw, FC + H, t, "#fff", false);
+        }
+
+        // 16. Plants
+        if (tab >= 10) {
+          let pZ = FC + H - 5;
+          let margin = 10 + (box.trimW > 0 ? box.trimW : 0);
+          let availL = L - 2 * margin;
+
+          if (availL >= 0) {
+            let count = Math.floor(availL / 30) + 1;
+            if (count > 0) {
+              let spacing = count > 1 ? availL / (count - 1) : 0;
+              for (let i = 0; i < count; i++) {
+                let px = margin + i * spacing;
+                if (count === 1) px = L / 2;
+                let py = D / 2;
+                let pr = project(px, py, pZ, cx, cy, scale);
+                ctx.beginPath();
+                ctx.moveTo(pr.u, pr.v);
+                ctx.lineTo(pr.u - 10 * scale, pr.v - 25 * scale);
+                ctx.lineTo(pr.u - 5 * scale, pr.v - 30 * scale);
+                ctx.lineTo(pr.u, pr.v - 15 * scale);
+                ctx.lineTo(pr.u + 5 * scale, pr.v - 30 * scale);
+                ctx.lineTo(pr.u + 10 * scale, pr.v - 25 * scale);
+                ctx.closePath();
+                ctx.fillStyle = "#4caf50";
+                ctx.fill();
+                ctx.strokeStyle = "#000";
+                ctx.stroke();
+              }
+            }
+          }
+        }
+
+        const instructions = {
+          1: [
+            "STEP 1: CUT MATERIALS",
+            "1.1 Cut vertical posts",
+            "1.2 Cut horizontal boards (45° edge)",
+            "1.3 Cut top trim (45° angle)",
+            "1.4 Cut metal bands to box depth",
+          ],
+          2: [
+            "STEP 2: BUILD FRONT & BACK",
+            "2.1 Lie long boards on ground, screw",
+            "    on vertical posts aligned at top",
+          ],
+          3: [
+            "STEP 3: ADD SIDES",
+            "3.1 Screw in siding between back and front",
+          ],
+          4: ["STEP 4: ADD FLOOR", "4.1 Screw floor boards on top of slats"],
+          5: [
+            "STEP 5: ADD PROTECTIVE PLASTIC SHEET",
+            "5.1 Add sheet cut to size",
+            "5.2 Staple on",
+          ],
+          6: [
+            "STEP 6: ADD METAL BANDS",
+            "6.1 Connect metal bands to sides of",
+            "    support beams from front and back",
+          ],
+          7: ["STEP 7: ADD TOP TRIM", "7.1 Attach mitered top trim"],
+          8: [
+            "STEP 8: BRING TO FINAL POSITION",
+            "8.1 Relocate box to final site",
+          ],
+          9: ["STEP 9: ADD SOIL", "9.1 Fill with soil"],
+          10: ["STEP 10: ADD PLANTS", "10.1 Insert plants"],
+        };
+
+        if (box.fc > 0) {
+          instructions[1].push(
+            "IF CLEARANCE:",
+            "1.5 Cut depth floor slats",
+            "1.6 Cut horizontal floor boards",
+          );
+          instructions[2].push("2.2 Screw on depth floor slats to posts");
+        } else if (tab === 4) {
+          instructions[4] = [
+            "STEP 4: ADD FLOOR",
+            "4.1 (Skipped - No clearance)",
+          ];
+        }
+
+        const lines = instructions[tab];
+        ctx.fillStyle = "rgba(255,255,255,0.95)";
+        ctx.fillRect(16, 16, 360, 24 + lines.length * 16);
+        ctx.fillStyle = "#000";
+        ctx.textBaseline = "top";
+        let textY = 24;
+        lines.forEach((line, idx) => {
+          ctx.font = idx === 0 ? "bold 13px monospace" : "12px monospace";
+          ctx.fillText(line, 24, textY);
+          textY += 16;
+        });
+      }
+
+      function redrawActiveCanvas() {
+        if (state.length > 0) {
+          if (activeBoxIdx >= state.length) activeBoxIdx = 0;
+          render3D(
+            "canvas-active",
+            state[activeBoxIdx],
+            computeBox(state[activeBoxIdx]),
+          );
+        }
+      }
+
+      function render() {
+        const formsContainer = document.getElementById("forms-container");
+        const boxesContainer = document.getElementById("boxes-container");
+        const boxSelector = document.getElementById("box-selector");
+
+        if (activeBoxIdx >= state.length && state.length > 0) {
+          activeBoxIdx = Math.max(0, state.length - 1);
+        }
+
+        boxSelector.innerHTML = state
+          .map(
+            (b, i) =>
+              `<button class="tab-btn ${i === activeBoxIdx ? "active" : ""}" data-action="select-box" data-idx="${i}">Box ${i + 1}</button>`,
+          )
+          .join("");
+
+        formsContainer.innerHTML = "";
+        boxesContainer.innerHTML = "";
+
+        if (state.length === 0) {
+          boxesContainer.innerHTML = `<div style="padding: 24px;">No boxes configured. Click "Add New Box" to start.</div>`;
+          updateBOM(computeGlobal());
+          return;
+        }
+
+        const box = state[activeBoxIdx];
+        if (box.trimW === undefined) box.trimW = 10;
+        if (box.tab === undefined) box.tab = 10;
+
+        const calc = computeBox(box);
+        const global = computeGlobal();
+
+        formsContainer.innerHTML = `
+    <div class="box-form">
+      <h3>Configuration</h3>
+      <div class="form-row"><label>Length (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="l" value="${box.l}" min="50" max="400"></div>
+      <div class="form-row"><label>Depth (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="d" value="${box.d}" min="25" max="400"></div>
+      <div class="form-row"><label>Height (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="h" value="${box.h}" min="14.5"></div>
+      <div class="form-row"><label>Clearance (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="fc" value="${box.fc}" min="0"></div>
+      <div class="form-row" title="0 = Off, Min 6, Max 10"><label>Top Trim (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="trimW" value="${box.trimW}" min="0" max="10" step="0.5"></div>
+      <button class="remove-btn" data-idx="${activeBoxIdx}">Remove Box</button>
+    </div>
+  `;
+
+        let planHTML = "";
+        const buildGroup = (bins, label) => {
+          if (bins.length === 0) return;
+          let groups = {};
+          bins.forEach((b) => {
+            if (!groups[b.stock.l]) groups[b.stock.l] = [];
+            groups[b.stock.l].push(b);
+          });
+
+          Object.keys(groups)
+            .sort((a, b) => b - a)
+            .forEach((l) => {
+              planHTML += `<h5 style="margin-top: 8px; margin-bottom: 2px;">${groups[l].length}x ${label} (${l}cm)</h5>`;
+              planHTML += groups[l]
+                .map((bin) => {
+                  let cutsHTML = bin.cuts
+                    .map((c) => {
+                      let is45 = c.cut === "45°";
+                      let isTrim = c.label.includes("Top Trim");
+                      let hasMask = is45 && isTrim;
+
+                      let leftMask = hasMask
+                        ? `<div style="position:absolute; top:-5px; left:-10px; width:20px; bottom:-5px; background:var(--acc); border-right:1px solid var(--fg); transform:skewX(-20deg); z-index:2;"></div>`
+                        : "";
+                      let rightMask = hasMask
+                        ? `<div style="position:absolute; top:-5px; right:-10px; width:20px; bottom:-5px; background:var(--acc); border-left:1px solid var(--fg); transform:skewX(20deg); z-index:2;"></div>`
+                        : "";
+                      let leftAng = `<div style="position:absolute; left:${hasMask ? "12px" : "2px"}; bottom:2px; font-size:0.8em; font-weight:bold; color:#555; z-index:3;">${c.cut}</div>`;
+                      let rightAng = `<div style="position:absolute; right:${hasMask ? "12px" : "2px"}; bottom:2px; font-size:0.8em; font-weight:bold; color:#555; z-index:3;">${c.cut}</div>`;
+
+                      let ripVisual = c.ripW
+                        ? `<div class="rip-overlay" style="height: ${(1 - c.ripW / MAT.board.w) * 100}%"></div>`
+                        : "";
+                      let ripText = c.ripW ? `<br>(rip ${c.ripW})` : "";
+                      return `<div class="cut-segment" style="width:${(c.l / bin.stock.l) * 100}%" title="${c.label}">${leftMask}${rightMask}${leftAng}${rightAng}${ripVisual}<div class="cut-content"><div class="cut-text-bg"><b>${c.l}cm</b><span>${c.label}${ripText}</span></div></div></div>`;
+                    })
+                    .join("");
+                  let offcutHTML =
+                    bin.rem > 0 ? `<div class="offcut"></div>` : "";
+                  return `<div class="board-row">${cutsHTML}${offcutHTML}</div>`;
+                })
+                .join("");
+            });
+        };
+
+        buildGroup(global.bBins, "Boards");
+        buildGroup(global.pBins, "Posts");
+        buildGroup(global.bandBins, "Metal Bands");
+
+        boxesContainer.innerHTML = `
+    <div class="box-viz">
+      <div class="tabs">
+        ${[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((t) => `<button class="tab-btn ${box.tab === t ? "active" : ""}" data-action="select-tab" data-tab="${t}">${t}</button>`).join("")}
+      </div>
+      <div class="canvas-container">
+        <canvas id="canvas-active"></canvas>
+        <div class="cut-plan-overlay" style="display: ${box.tab === 1 ? "flex" : "none"};">
+            <h4>Global Board Plan</h4>
+            ${planHTML}
+        </div>
+      </div>
+    </div>
+  `;
+
+        updateBOM(global);
+        redrawActiveCanvas();
+      }
+
+      document.addEventListener("change", (e) => {
+        if (e.target.tagName === "INPUT") {
+          let val = parseFloat(e.target.value) || 0;
+          const idx = e.target.dataset.idx;
+          const key = e.target.dataset.key;
+
+          if (key === "l") {
+            if (val > 400) val = 400;
+            if (val < 50) val = 50;
+            e.target.value = val;
+          }
+          if (key === "d") {
+            if (val > 400) val = 400;
+            if (val < 25) val = 25;
+            e.target.value = val;
+          }
+
+          if (key === "trimW") {
+            let prevVal = state[idx].trimW || 0;
+            if (val > 0 && val < 6) {
+              val = val > prevVal ? 6 : 0;
+            }
+            if (val > 10) val = 10;
+            e.target.value = val;
+          }
+          state[idx][key] = val;
+          save();
+        }
+      });
+
+      document.addEventListener("click", (e) => {
+        if (e.target.id === "add-box-btn") {
+          state.push({ l: 200, d: 80, h: 60, fc: 5, trimW: 10, tab: 10 });
+          activeBoxIdx = state.length - 1;
+          save();
+        }
+        if (e.target.id === "clear-all-btn") {
+          state = [];
+          activeBoxIdx = 0;
+          save();
+        }
+        if (e.target.classList.contains("remove-btn")) {
+          const idx = parseInt(e.target.dataset.idx);
+          state.splice(idx, 1);
+          if (activeBoxIdx >= state.length)
+            activeBoxIdx = Math.max(0, state.length - 1);
+          save();
+        }
+        if (e.target.dataset.action === "select-box") {
+          activeBoxIdx = parseInt(e.target.dataset.idx);
+          render();
+        }
+        if (e.target.dataset.action === "select-tab") {
+          state[activeBoxIdx].tab = parseInt(e.target.dataset.tab);
+          save();
+        }
+      });
+
+      window.addEventListener("resize", redrawActiveCanvas);
+
+      if (state.length === 0) {
+        state.push({ l: 200, d: 80, h: 60, fc: 5, trimW: 10, tab: 10 });
+      }
+      render();
+    </script>
+  </body>
+</html>
