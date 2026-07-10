@@ -715,7 +715,7 @@
           html += `- Metal bands: <a href="${MAT.band.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
         }
         html += `- Screws: <a href="${MAT.screws.url}" target="_blank">${g.exactScrews} pcs</a> (${screwPacks} pack(s) of ${MAT.screws.pack}) = €${screwCost.toFixed(2)}\n`;
-        if (g.cleatTotal > 0) html += `\nSOIL (${Math.round(g.soilV)}L):\n`;
+        html += `\nSOIL (${Math.round(g.soilV)}L):\n`;
         html += `- Top: <a href="${MAT.soil.top.url}" target="_blank">${soilTopBags} bags</a> (€${MAT.soil.top.p.toFixed(2)}/ea) = €${soilTopCost.toFixed(2)}\n`;
         html += `- Mid: <a href="${MAT.soil.mid.url}" target="_blank">${soilMidBags} bags</a> (€${MAT.soil.mid.p.toFixed(2)}/ea) = €${soilMidCost.toFixed(2)}\n`;
         html += `- Bot: <a href="${MAT.soil.bot.url}" target="_blank">${soilBotBags} bags</a> (€${MAT.soil.bot.p.toFixed(2)}/ea) = €${soilBotCost.toFixed(2)}`;
