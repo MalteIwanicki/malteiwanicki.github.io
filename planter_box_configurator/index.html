@@ -4,6 +4,48 @@
     <meta charset="UTF-8" />
     <title>Planter Box Configurator</title>
     <style>
+      .hide-labels .cut-text-bg {
+        display: none !important;
+      }
+      .switch {
+        position: relative;
+        display: inline-block;
+        width: 40px;
+        height: 20px;
+      }
+      .switch input {
+        opacity: 0;
+        width: 0;
+        height: 0;
+      }
+      .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        transition: 0.4s;
+        border-radius: 20px;
+      }
+      .slider:before {
+        position: absolute;
+        content: "";
+        height: 14px;
+        width: 14px;
+        left: 3px;
+        bottom: 3px;
+        background-color: white;
+        transition: 0.4s;
+        border-radius: 50%;
+      }
+      input:checked + .slider {
+        background-color: var(--fg);
+      }
+      input:checked + .slider:before {
+        transform: translateX(20px);
+      }
       :root {
         --bg: #fff;
         --fg: #000;
@@ -201,8 +243,10 @@
         background: var(--acc);
         position: relative;
         flex-shrink: 0;
+        margin-bottom: 2px;
       }
       .cut-segment {
+        height: 40px;
         border-right: 1px solid var(--fg);
         border-left: 1px solid var(--fg);
         margin-left: -1px;
@@ -213,7 +257,6 @@
       }
       .cut-content {
         position: relative;
-        z-index: 1;
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -231,29 +274,31 @@
         flex-direction: column;
         align-items: center;
       }
-      .rip-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        right: 0;
-        border-bottom: 2px dashed var(--fg);
-        background: repeating-linear-gradient(
-          45deg,
-          transparent,
-          transparent 4px,
-          var(--fg) 4px,
-          var(--fg) 5px
-        );
-      }
       .offcut {
         background: repeating-linear-gradient(
           45deg,
-          transparent,
-          transparent 5px,
+          white,
+          white 5px,
           var(--fg) 5px,
           var(--fg) 6px
         );
         flex-grow: 1;
+      }
+      .piece-area {
+        position: absolute;
+        left: 0;
+        right: 0;
+        z-index: 2;
+      }
+      .pos-label {
+        position: absolute;
+        font-size: 0.6em;
+        color: #333;
+        font-weight: bold;
+        transform: rotate(-90deg);
+        transform-origin: left bottom;
+        white-space: nowrap;
+        z-index: 5;
       }
     </style>
   </head>
@@ -320,8 +365,8 @@
           },
         },
         screws: {
-          rate: 25,
-          price: 25,
+          pack: 200,
+          price: 15.0,
           url: "https://www.bauhaus.info/holzschrauben/c/10000000",
         },
       };
@@ -331,7 +376,13 @@
 
       function save() {
         localStorage.setItem("pb_state", JSON.stringify(state));
+        const overlay = document.querySelector(".cut-plan-overlay");
+        const scrollPos = overlay ? overlay.scrollTop : 0;
         render();
+        requestAnimationFrame(() => {
+          const newOverlay = document.querySelector(".cut-plan-overlay");
+          if (newOverlay) newOverlay.scrollTop = scrollPos;
+        });
       }
 
       function pack1D(cuts, stockOptions) {
@@ -376,7 +427,69 @@
         let peri = 0,
           soilV = 0,
           band = 0,
-          cleatTotal = 0;
+          cleatTotal = 0,
+          exactScrews = 0;
+
+        function getScrewsForCut(c) {
+          let holes = 0;
+          let isTrim = c.label.includes("Top Trim");
+          let isWall = c.label.includes("Wall");
+          let isFloorbd = c.label.includes("Floorbd");
+          let isFlrSlat = c.label.includes("Flr Slat");
+          let isBand = c.label.includes("Band");
+          let isDualPiece = c.dualPiece || false;
+
+          if (isWall || isTrim) {
+            if (isTrim) {
+              holes += 4;
+              if (isDualPiece) holes += 4;
+              const innerSpan = c.boardLen - 2 * MAT.board.t;
+              const numMidPosts = Math.max(
+                0,
+                Math.ceil((innerSpan - 2 * MAT.post.w) / 60) - 1,
+              );
+              if (numMidPosts > 0 && c.isLengthSide) {
+                const spacing =
+                  (innerSpan - 2 * MAT.post.w) / (numMidPosts + 1);
+                for (let i = 1; i <= numMidPosts; i++) {
+                  const posCm =
+                    MAT.board.t + MAT.post.w + i * spacing + MAT.post.w / 2;
+                  if (posCm >= 5 && posCm <= c.l - 5) {
+                    holes += 1;
+                    if (isDualPiece) holes += 1;
+                  }
+                }
+              }
+            } else {
+              holes += 4;
+              if (isDualPiece) holes += 4;
+              const innerSpan = c.boardLen - 2 * MAT.board.t;
+              const numMidPosts = Math.max(
+                0,
+                Math.ceil((innerSpan - 2 * MAT.post.w) / 60) - 1,
+              );
+              if (numMidPosts > 0 && c.isLengthSide) {
+                holes += numMidPosts * 2;
+                if (isDualPiece) holes += numMidPosts * 2;
+              }
+            }
+          } else if (isFloorbd) {
+            holes += 4;
+            const innerSpan = c.boardLen;
+            const numMidPosts = Math.max(
+              0,
+              Math.ceil((innerSpan - 2 * MAT.post.w) / 60) - 1,
+            );
+            if (numMidPosts > 0) {
+              holes += numMidPosts * 2;
+            }
+          } else if (isFlrSlat) {
+            holes += 4;
+          } else if (isBand) {
+            holes += 2;
+          }
+          return holes;
+        }
 
         state.forEach((box, i) => {
           const rows = Math.ceil(box.h / MAT.board.w);
@@ -387,17 +500,44 @@
           );
           const postLen = box.h + box.fc;
 
-          const addB = (l, ripW, cut, lbl) =>
-            boardCuts.push({ l, ripW, cut, label: `B${i + 1} ${lbl}` });
-          const addP = (l, cut, lbl) =>
-            postCuts.push({ l, ripW: null, cut, label: `B${i + 1} ${lbl}` });
+          const addB = (l, ripW, cut, lbl, dualPiece = false, isL = false) => {
+            let c = {
+              l,
+              ripW,
+              cut,
+              label: `B${i + 1} ${lbl}`,
+              boxIdx: i,
+              boardLen: l,
+              isLengthSide: isL,
+              dualPiece,
+            };
+            boardCuts.push(c);
+            exactScrews += getScrewsForCut(c);
+          };
+
+          const addP = (l, cut, lbl) => {
+            let c = {
+              l,
+              ripW: null,
+              cut,
+              label: `B${i + 1} ${lbl}`,
+              boxIdx: i,
+            };
+            postCuts.push(c);
+            exactScrews += getScrewsForCut(c);
+          };
 
           if (box.trimW > 0) {
-            let rip = box.trimW < MAT.board.w ? box.trimW : null;
-            addB(box.l, rip, "45°", "Top Trim");
-            addB(box.l, rip, "45°", "Top Trim");
-            addB(box.d, rip, "45°", "Top Trim");
-            addB(box.d, rip, "45°", "Top Trim");
+            if (box.trimW < 7.5) {
+              addB(box.l, box.trimW, "45°", "Top Trim", true, true);
+              addB(box.d, box.trimW, "45°", "Top Trim", true, false);
+            } else {
+              let rip = box.trimW < MAT.board.w ? box.trimW : null;
+              addB(box.l, rip, "45°", "Top Trim", false, true);
+              addB(box.l, rip, "45°", "Top Trim", false, true);
+              addB(box.d, rip, "45°", "Top Trim", false, false);
+              addB(box.d, rip, "45°", "Top Trim", false, false);
+            }
           }
 
           let ripW = Math.round((box.h - (rows - 1) * MAT.board.w) * 10) / 10;
@@ -406,10 +546,17 @@
           for (let r = 0; r < rows; r++) {
             let isR =
               hasRip && ((rows >= 3 && r === 1) || (rows <= 2 && r === 0));
-            addB(box.l, isR ? ripW : null, "45°", "Wall");
-            addB(box.l, isR ? ripW : null, "45°", "Wall");
-            addB(box.d, isR ? ripW : null, "45°", "Wall");
-            addB(box.d, isR ? ripW : null, "45°", "Wall");
+            let boardHeight = isR ? ripW : MAT.board.w;
+
+            if (boardHeight < 7.25) {
+              addB(box.l, isR ? ripW : null, "45°", "Wall", true, true);
+              addB(box.d, isR ? ripW : null, "45°", "Wall", true, false);
+            } else {
+              addB(box.l, isR ? ripW : null, "45°", "Wall", false, true);
+              addB(box.l, isR ? ripW : null, "45°", "Wall", false, true);
+              addB(box.d, isR ? ripW : null, "45°", "Wall", false, false);
+              addB(box.d, isR ? ripW : null, "45°", "Wall", false, false);
+            }
           }
 
           if (box.fc > 0) {
@@ -426,6 +573,8 @@
                 isR ? floorRipW : null,
                 "90°",
                 "Floorbd",
+                false,
+                true,
               );
             }
 
@@ -441,12 +590,15 @@
           if (numPostsL > 0) {
             let bandLen = Math.round((box.d - 2 * MAT.board.t) * 10) / 10;
             for (let k = 0; k < numPostsL; k++) {
-              bandCuts.push({
+              let c = {
                 l: bandLen,
                 cut: "90°",
                 label: `B${i + 1} Band`,
                 ripW: null,
-              });
+                boxIdx: i,
+              };
+              bandCuts.push(c);
+              exactScrews += getScrewsForCut(c);
             }
             band += numPostsL * bandLen;
           }
@@ -464,7 +616,16 @@
         let pBins = pack1D(postCuts, MAT.post.stock);
         let bandBins = pack1D(bandCuts, MAT.band.stock);
 
-        return { bBins, pBins, bandBins, peri, soilV, band, cleatTotal };
+        return {
+          bBins,
+          pBins,
+          bandBins,
+          peri,
+          soilV,
+          band,
+          cleatTotal,
+          exactScrews,
+        };
       }
 
       function computeBox(box) {
@@ -516,7 +677,8 @@
         let foilCost = foilRolls * MAT.foil.p;
         cost += foilCost;
 
-        let screwCost = (g.peri / 1000) * MAT.screws.price;
+        let screwPacks = Math.ceil(g.exactScrews / MAT.screws.pack);
+        let screwCost = screwPacks * MAT.screws.price;
         cost += screwCost;
 
         let soilTopBags = Math.ceil((g.soilV * 0.3) / MAT.soil.top.v);
@@ -542,6 +704,7 @@
           let item = summary.posts[l];
           let lineCost = item.count * item.price;
           html += `- <a href="${MAT.post.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
+          html += `- Floor Slats: ${(g.cleatTotal / 100).toFixed(1)}m (From Posts)\n`;
         }
 
         html += `\nCONSUMABLES:\n`;
@@ -551,11 +714,8 @@
           let lineCost = item.count * item.price;
           html += `- Metal bands: <a href="${MAT.band.url}" target="_blank">${item.count}x ${l}cm</a> (€${item.price.toFixed(2)}/ea) = €${lineCost.toFixed(2)}\n`;
         }
-        html += `- Screws: <a href="${MAT.screws.url}" target="_blank">~${Math.ceil((g.peri / 1000) * MAT.screws.rate)} pcs</a> = €${screwCost.toFixed(2)}\n`;
-        if (g.cleatTotal > 0)
-          html += `- Floor Slats: ${(g.cleatTotal / 100).toFixed(1)}m (From Posts)\n`;
-
-        html += `\nSOIL (${Math.round(g.soilV)}L):\n`;
+        html += `- Screws: <a href="${MAT.screws.url}" target="_blank">${g.exactScrews} pcs</a> (${screwPacks} pack(s) of ${MAT.screws.pack}) = €${screwCost.toFixed(2)}\n`;
+        if (g.cleatTotal > 0) html += `\nSOIL (${Math.round(g.soilV)}L):\n`;
         html += `- Top: <a href="${MAT.soil.top.url}" target="_blank">${soilTopBags} bags</a> (€${MAT.soil.top.p.toFixed(2)}/ea) = €${soilTopCost.toFixed(2)}\n`;
         html += `- Mid: <a href="${MAT.soil.mid.url}" target="_blank">${soilMidBags} bags</a> (€${MAT.soil.mid.p.toFixed(2)}/ea) = €${soilMidCost.toFixed(2)}\n`;
         html += `- Bot: <a href="${MAT.soil.bot.url}" target="_blank">${soilBotBags} bags</a> (€${MAT.soil.bot.p.toFixed(2)}/ea) = €${soilBotCost.toFixed(2)}`;
@@ -914,51 +1074,40 @@
 
         let OFF = tab === 2 ? 30 : 0;
 
-        // 1. Lawn (Step 8+)
         if (tab >= 8) {
           ctx.fillStyle = "#81c784";
           ctx.fillRect(0, 0, logW, logH);
         }
 
-        // 2. Back Wall
         if (tab >= 2)
-          drawMiteredBlock("back", L, D, t, FC, H, "#fff", true, OFF);
+          drawMiteredBlock("back", L, D, t, FC, H, "#e8f4f8", true, OFF);
 
-        // 3. Right Wall
         if (tab >= 3)
-          drawMiteredBlock("right", L, D, t, FC, H, "#fff", true, 0);
+          drawMiteredBlock("right", L, D, t, FC, H, "#e8f4f8", true, 0);
 
-        // 4. Back Posts & Depth Cleats (Painter's Algorithm: Right to Left)
         if (tab >= 2) {
           let clY = t;
           let clD = D - 2 * t;
           let pY = D - t - pd + OFF;
 
-          // 1. Right Post (Drawn first, farthest Right/Z)
-          drawPost(L - t - pw, pY, 0, pw, pd, FC + H);
+          drawPost(L - t - pw, pY, 0, pw, pd, FC + H, "#f4e8f0");
 
-          // 2. Right Cleat (Left side of right post, drawn after to paint over post's left face)
-          if (box.fc > 0) drawPost(L - t - pw - 3, clY, FC, 3, clD, 3);
+          if (box.fc > 0)
+            drawPost(L - t - pw - 3, clY, FC, 3, clD, 3, "#ffe8cc");
 
-          // 3. Mid Cleats & Posts (Right to Left sweep)
           for (let i = calc.numPostsL; i >= 1; i--) {
             let postX = t + pw + i * calc.spacingL;
 
-            // Cleat is on Right side of the Post, drawn FIRST
-            if (box.fc > 0) drawPost(postX + pw, clY, FC, 3, clD, 3);
+            if (box.fc > 0) drawPost(postX + pw, clY, FC, 3, clD, 3, "#ffe8cc");
 
-            // Post drawn AFTER, painting over the left connection of the cleat
-            drawPost(postX, pY, 0, pw, pd, FC + H);
+            drawPost(postX, pY, 0, pw, pd, FC + H, "#f4e8f0");
           }
 
-          // 4. Left Cleat (Right side of left post, drawn FIRST)
-          if (box.fc > 0) drawPost(t + pw, clY, FC, 3, clD, 3);
+          if (box.fc > 0) drawPost(t + pw, clY, FC, 3, clD, 3, "#ffe8cc");
 
-          // 5. Left Post (Drawn AFTER, painting over cleat's left connection)
-          drawPost(t, pY, 0, pw, pd, FC + H);
+          drawPost(t, pY, 0, pw, pd, FC + H, "#f4e8f0");
         }
 
-        // 5. Right Foil
         if (tab >= 5)
           face(
             [
@@ -971,7 +1120,6 @@
             "transparent",
           );
 
-        // 6. Floor (Spans Left-to-Right, tiled Front-to-Back)
         if (tab >= 4 && box.fc > 0) {
           let boards = [];
           let floorSpan = D - 2 * t - 2 * pd;
@@ -1000,8 +1148,8 @@
                 [bL, by, zTop],
                 [bL, bB, zTop],
               ],
-              "#cbb18a",
-            ); // Left Face
+              "#d4e8d4",
+            );
             face(
               [
                 [bL, by, zBot],
@@ -1009,8 +1157,8 @@
                 [bR, by, zTop],
                 [bL, by, zTop],
               ],
-              "#cbb18a",
-            ); // Front Face
+              "#d4e8d4",
+            );
             face(
               [
                 [bL, bB, zTop],
@@ -1018,12 +1166,11 @@
                 [bR, by, zTop],
                 [bL, by, zTop],
               ],
-              "#e6cda3",
-            ); // Top Face
+              "#d4e8d4",
+            );
           }
         }
 
-        // 7. Back Foil
         if (tab >= 5)
           face(
             [
@@ -1036,7 +1183,6 @@
             "transparent",
           );
 
-        // 7.5 Floor Foil
         if (tab >= 5 && box.fc > 0)
           face(
             [
@@ -1050,26 +1196,32 @@
           );
 
         if (tab >= 2) {
-          drawPost(t, t - OFF, 0, pw, pd, FC + H);
-          drawPost(L - t - pw, t - OFF, 0, pw, pd, FC + H);
+          drawPost(t, t - OFF, 0, pw, pd, FC + H, "#f4e8f0");
+          drawPost(L - t - pw, t - OFF, 0, pw, pd, FC + H, "#f4e8f0");
           for (let i = 1; i <= calc.numPostsL; i++)
-            drawPost(t + pw + i * calc.spacingL, t - OFF, 0, pw, pd, FC + H);
+            drawPost(
+              t + pw + i * calc.spacingL,
+              t - OFF,
+              0,
+              pw,
+              pd,
+              FC + H,
+              "#f4e8f0",
+            );
 
           if (box.fc > 0 && OFF === 0) {
-            drawPost(L - t - pw - 3, t, FC, 3, pd, 3);
+            drawPost(L - t - pw - 3, t, FC, 3, pd, 3, "#ffe8cc");
           }
         }
 
-        // 8.5 Metal Bands (Before soil to be covered by it)
         if (tab >= 6 && calc.numPostsL > 0) {
           for (let i = 1; i <= calc.numPostsL; i++) {
             let px = t + pw + i * calc.spacingL - 1.5;
             let pz = FC + H / 2;
-            drawPost(px, t, pz, 1.5, D - 2 * t, 2, "#999");
+            drawPost(px, t, pz, 1.5, D - 2 * t, 2, "#e0e0e0");
           }
         }
 
-        // 9. Soil
         if (tab >= 9)
           face(
             [
@@ -1081,7 +1233,6 @@
             "#4a3b32",
           );
 
-        // 11. Left Foil
         if (tab >= 5)
           face(
             [
@@ -1094,10 +1245,9 @@
             "transparent",
           );
 
-        // 12. Left Wall
-        if (tab >= 3) drawMiteredBlock("left", L, D, t, FC, H, "#fff", true, 0);
+        if (tab >= 3)
+          drawMiteredBlock("left", L, D, t, FC, H, "#e8f4f8", true, 0);
 
-        // 13. Front Foil
         if (tab >= 5 && (tab < 4 || tab >= 7))
           face(
             [
@@ -1110,20 +1260,17 @@
             "transparent",
           );
 
-        // 14. Front Wall
         if (tab >= 2 && (tab < 4 || tab >= 7))
-          drawMiteredBlock("front", L, D, t, FC, H, "#fff", true, OFF);
+          drawMiteredBlock("front", L, D, t, FC, H, "#e8f4f8", true, OFF);
 
-        // 15. Top Trim
         if (tab >= 7 && box.trimW > 0) {
           let tw = box.trimW;
-          drawMiteredBlock("back", L, D, tw, FC + H, t, "#fff", false);
-          drawMiteredBlock("right", L, D, tw, FC + H, t, "#fff", false);
-          drawMiteredBlock("left", L, D, tw, FC + H, t, "#fff", false);
-          drawMiteredBlock("front", L, D, tw, FC + H, t, "#fff", false);
+          drawMiteredBlock("back", L, D, tw, FC + H, t, "#f0e5d8", false);
+          drawMiteredBlock("right", L, D, tw, FC + H, t, "#f0e5d8", false);
+          drawMiteredBlock("left", L, D, tw, FC + H, t, "#f0e5d8", false);
+          drawMiteredBlock("front", L, D, tw, FC + H, t, "#f0e5d8", false);
         }
 
-        // 16. Plants
         if (tab >= 10) {
           let pZ = FC + H - 5;
           let margin = 10 + (box.trimW > 0 ? box.trimW : 0);
@@ -1269,7 +1416,7 @@
       <div class="form-row"><label>Depth (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="d" value="${box.d}" min="25" max="400"></div>
       <div class="form-row"><label>Height (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="h" value="${box.h}" min="14.5"></div>
       <div class="form-row"><label>Clearance (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="fc" value="${box.fc}" min="0"></div>
-      <div class="form-row" title="0 = Off, Min 6, Max 10"><label>Top Trim (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="trimW" value="${box.trimW}" min="0" max="10" step="0.5"></div>
+      <div class="form-row" title="0 = Off, Min 6, Max 14.5"><label>Top Trim (cm)</label><input type="number" data-idx="${activeBoxIdx}" data-key="trimW" value="${box.trimW}" min="0" max="14.5" step="0.5"></div>
       <button class="remove-btn" data-idx="${activeBoxIdx}">Remove Box</button>
     </div>
   `;
@@ -1283,42 +1430,292 @@
             groups[b.stock.l].push(b);
           });
 
+          const getUsedArea = (cut) => {
+            let usedHeightStart, usedHeightEnd;
+            if (cut.ripW) {
+              let ripOverlayHeight = (1 - cut.ripW / MAT.board.w) * 100;
+              usedHeightStart = ripOverlayHeight;
+              usedHeightEnd = 100;
+            } else {
+              usedHeightStart = 0;
+              usedHeightEnd = 100;
+            }
+            return { start: usedHeightStart, end: usedHeightEnd };
+          };
+
+          const getPostPositions = (cut) => {
+            if (cut.boxIdx === undefined) return [];
+            const boxData = state[cut.boxIdx];
+            if (!boxData) return [];
+            const innerSpan = cut.boardLen - 2 * MAT.board.t;
+            const numMidPosts = Math.max(
+              0,
+              Math.ceil((innerSpan - 2 * MAT.post.w) / 60) - 1,
+            );
+            if (numMidPosts === 0 || !cut.isLengthSide) return [];
+
+            const spacing = (innerSpan - 2 * MAT.post.w) / (numMidPosts + 1);
+            const positions = [];
+            for (let i = 1; i <= numMidPosts; i++) {
+              const postCenter =
+                MAT.board.t + MAT.post.w + i * spacing + MAT.post.w / 2;
+              positions.push((postCenter / cut.boardLen) * 100);
+            }
+            return positions;
+          };
+
+          const getSlatPositions = (cut) => {
+            if (cut.boxIdx === undefined) return [];
+            const boxData = state[cut.boxIdx];
+            if (!boxData) return [];
+            const boardLen = cut.boardLen + 2 * MAT.board.t;
+            const innerSpan = boardLen - 2 * MAT.board.t;
+            const numMidPosts = Math.max(
+              0,
+              Math.ceil((innerSpan - 2 * MAT.post.w) / 60) - 1,
+            );
+            if (numMidPosts === 0) return [];
+
+            const spacing = (innerSpan - 2 * MAT.post.w) / (numMidPosts + 1);
+            const positions = [];
+            for (let i = 1; i <= numMidPosts; i++) {
+              const slatCenterGlobal =
+                MAT.board.t + MAT.post.w + i * spacing + MAT.post.w / 2;
+              const slatCenterLocal = slatCenterGlobal - MAT.board.t;
+              positions.push((slatCenterLocal / cut.boardLen) * 100);
+            }
+            return positions;
+          };
+
           Object.keys(groups)
             .sort((a, b) => b - a)
             .forEach((l) => {
               planHTML += `<h5 style="margin-top: 8px; margin-bottom: 2px;">${groups[l].length}x ${label} (${l}cm)</h5>`;
               planHTML += groups[l]
                 .map((bin) => {
+                  let offcutHTML = `<div class="offcut" style="position:absolute; top:0; left:0; width:100%; height:100%; z-index:0;"></div>`;
+
                   let cutsHTML = bin.cuts
                     .map((c) => {
                       let is45 = c.cut === "45°";
                       let isTrim = c.label.includes("Top Trim");
+                      let isWall = c.label.includes("Wall");
+                      let isFloorbd = c.label.includes("Floorbd");
+                      let isFlrSlat = c.label.includes("Flr Slat");
+                      let isPost = c.label.includes("Post") && !isFlrSlat;
+                      let isBand = c.label.includes("Band");
                       let hasMask = is45 && isTrim;
+                      let isDualPiece = c.dualPiece || false;
+                      let bgColor = "#fff";
+                      if (isTrim) bgColor = "#f0e5d8";
+                      else if (isWall) bgColor = "#e8f4f8";
+                      else if (isFloorbd) bgColor = "#d4e8d4";
+                      else if (isFlrSlat) bgColor = "#ffe8cc";
+                      else if (isPost) bgColor = "#f4e8f0";
+                      else if (isBand) bgColor = "#e0e0e0";
 
-                      let leftMask = hasMask
-                        ? `<div style="position:absolute; top:-5px; left:-10px; width:20px; bottom:-5px; background:var(--acc); border-right:1px solid var(--fg); transform:skewX(-20deg); z-index:2;"></div>`
+                      let pieceHeight = c.ripW
+                        ? (c.ripW / MAT.board.w) * 100
+                        : 100;
+                      let borderStyle = hasMask
+                        ? "box-sizing: border-box;"
+                        : "border: 1px solid #000; box-sizing: border-box;";
+                      let clipBottom = hasMask
+                        ? "clip-path: polygon(12px 0, calc(100% - 12px) 0, 100% 100%, 0 100%);"
                         : "";
-                      let rightMask = hasMask
-                        ? `<div style="position:absolute; top:-5px; right:-10px; width:20px; bottom:-5px; background:var(--acc); border-left:1px solid var(--fg); transform:skewX(20deg); z-index:2;"></div>`
+                      let clipTop = hasMask
+                        ? "clip-path: polygon(0 0, 100% 0, calc(100% - 12px) 100%, 12px 100%);"
                         : "";
+
+                      let dropShadowWrapStart = hasMask
+                        ? `<div style="position:absolute; width:100%; height:100%; left:0; top:0; z-index:2; filter: drop-shadow(1px 0 0 #000) drop-shadow(-1px 0 0 #000) drop-shadow(0 1px 0 #000) drop-shadow(0 -1px 0 #000);">`
+                        : "";
+                      let dropShadowWrapEnd = hasMask ? `</div>` : "";
+
+                      let coloredAreas = "";
+
+                      if (isDualPiece) {
+                        coloredAreas = `
+                          ${dropShadowWrapStart}
+                          <div class="piece-area" style="bottom:0; height:${pieceHeight}%; background:${bgColor}; ${borderStyle} ${clipBottom}"></div>
+                          <div class="piece-area" style="top:0; height:${pieceHeight}%; background:${bgColor}; ${borderStyle} ${clipTop}"></div>
+                          ${dropShadowWrapEnd}
+                        `;
+                      } else {
+                        coloredAreas = `
+                          ${dropShadowWrapStart}
+                          <div class="piece-area" style="bottom:0; height:${pieceHeight}%; background:${bgColor}; ${borderStyle} ${clipBottom}"></div>
+                          ${dropShadowWrapEnd}
+                        `;
+                      }
+
+                      let leftMask = "";
+                      let rightMask = "";
+
                       let leftAng = `<div style="position:absolute; left:${hasMask ? "12px" : "2px"}; bottom:2px; font-size:0.8em; font-weight:bold; color:#555; z-index:3;">${c.cut}</div>`;
                       let rightAng = `<div style="position:absolute; right:${hasMask ? "12px" : "2px"}; bottom:2px; font-size:0.8em; font-weight:bold; color:#555; z-index:3;">${c.cut}</div>`;
 
-                      let ripVisual = c.ripW
-                        ? `<div class="rip-overlay" style="height: ${(1 - c.ripW / MAT.board.w) * 100}%"></div>`
-                        : "";
                       let ripText = c.ripW ? `<br>(rip ${c.ripW})` : "";
-                      return `<div class="cut-segment" style="width:${(c.l / bin.stock.l) * 100}%" title="${c.label}">${leftMask}${rightMask}${leftAng}${rightAng}${ripVisual}<div class="cut-content"><div class="cut-text-bg"><b>${c.l}cm</b><span>${c.label}${ripText}</span></div></div></div>`;
+
+                      let dualPieceVisual = "";
+                      if (isDualPiece) {
+                        dualPieceVisual = `<div style="position:absolute; top:${pieceHeight}%; left:0; right:0; height:2px; background:#000; z-index:3;"></div>`;
+                      }
+
+                      let drillHoles = "";
+                      let edgeDist = 1.4;
+                      let edgePercent = (edgeDist / c.l) * 100;
+
+                      if (isWall || isTrim) {
+                        const usedArea = getUsedArea(c);
+                        const usedRange = usedArea.end - usedArea.start;
+
+                        if (isTrim) {
+                          let cornerDist = 2.0;
+                          let innerDist = 5.0;
+                          let cornerPercent = (cornerDist / c.l) * 100;
+                          let innerPercent = (innerDist / c.l) * 100;
+
+                          let holeInnerTop = usedArea.start + usedRange * 0.2;
+                          let holeCornerTop = usedArea.start + usedRange * 0.7;
+
+                          drillHoles = `
+    <div style="position:absolute; left:${innerPercent}%; top:${holeInnerTop}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+    <div class="pos-label" style="left:${innerPercent}%; top:${holeInnerTop}%; margin-left:10px; transform:translateY(-50%); z-index:10;">${innerDist.toFixed(1)}</div>
+    <div style="position:absolute; left:${cornerPercent}%; top:${holeCornerTop}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+    <div class="pos-label" style="left:${cornerPercent}%; top:${holeCornerTop}%; margin-left:10px; transform:translateY(-50%); z-index:10;">${cornerDist.toFixed(1)}</div>
+    <div style="position:absolute; right:${innerPercent}%; top:${holeInnerTop}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+    <div class="pos-label" style="right:${innerPercent}%; top:${holeInnerTop}%; margin-right:10px; transform:translateY(-50%) rotate(-90deg); transform-origin:right center; z-index:10;">${(c.l - innerDist).toFixed(1)}</div>
+    <div style="position:absolute; right:${cornerPercent}%; top:${holeCornerTop}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+    <div class="pos-label" style="right:${cornerPercent}%; top:${holeCornerTop}%; margin-right:10px; transform:translateY(-50%) rotate(-90deg); transform-origin:right center; z-index:10;">${(c.l - cornerDist).toFixed(1)}</div>
+  `;
+
+                          if (isDualPiece) {
+                            let secTrimHoleInner = pieceHeight * 0.2;
+                            let secTrimHoleCorner = pieceHeight * 0.7;
+                            drillHoles += `
+                              <div style="position:absolute; left:${innerPercent}%; top:${secTrimHoleInner}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; left:${cornerPercent}%; top:${secTrimHoleCorner}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; right:${innerPercent}%; top:${secTrimHoleInner}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; right:${cornerPercent}%; top:${secTrimHoleCorner}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            `;
+                          }
+
+                          let trimMidY1 = usedArea.start + usedRange * 0.5;
+                          let trimMidY2 = pieceHeight * 0.5;
+
+                          const midPostPositions = getPostPositions(c);
+                          midPostPositions.forEach((pos) => {
+                            let posCm = (pos * c.l) / 100;
+                            if (posCm >= 5 && posCm <= c.l - 5) {
+                              drillHoles += `
+        <div style="position:absolute; left:${pos}%; top:${trimMidY1}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4; transform:translate(-50%, -50%);"></div>
+        <div class="pos-label" style="left:${pos}%; top:${trimMidY1}%; margin-left:8px; transform:translateY(-50%); z-index:10;">${posCm.toFixed(1)}</div>
+      `;
+                              if (isDualPiece) {
+                                drillHoles += `
+          <div style="position:absolute; left:${pos}%; top:${trimMidY2}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4; transform:translate(-50%, -50%);"></div>
+        `;
+                              }
+                            }
+                          });
+                        } else {
+                          let wallEdgeDist = 5.0;
+                          let wallEdgePercent = (wallEdgeDist / c.l) * 100;
+
+                          let hole1Top = usedArea.start + usedRange * 0.25;
+                          let hole2Top = usedArea.start + usedRange * 0.65;
+
+                          drillHoles = `
+                            <div style="position:absolute; left:${wallEdgePercent}%; top:${hole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            <div class="pos-label" style="left:${wallEdgePercent}%; top:${hole1Top}%; margin-left:10px; transform:translateY(-50%); z-index:10;">${wallEdgeDist.toFixed(1)}</div>
+                            <div style="position:absolute; left:${wallEdgePercent}%; top:${hole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            <div style="position:absolute; right:${wallEdgePercent}%; top:${hole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            <div class="pos-label" style="right:${wallEdgePercent}%; top:${hole1Top}%; margin-right:10px; transform:translateY(-50%) rotate(-90deg); transform-origin:right center; z-index:10;">${(c.l - wallEdgeDist).toFixed(1)}</div>
+                            <div style="position:absolute; right:${wallEdgePercent}%; top:${hole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          `;
+
+                          if (isDualPiece) {
+                            let secondPieceHole1 = pieceHeight * 0.25;
+                            let secondPieceHole2 = pieceHeight * 0.65;
+                            drillHoles += `
+                              <div style="position:absolute; left:${wallEdgePercent}%; top:${secondPieceHole1}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; left:${wallEdgePercent}%; top:${secondPieceHole2}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; right:${wallEdgePercent}%; top:${secondPieceHole1}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div style="position:absolute; right:${wallEdgePercent}%; top:${secondPieceHole2}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            `;
+                          }
+
+                          const midPostPositions = getPostPositions(c);
+                          let midHole1Top = usedArea.start + usedRange * 0.3;
+                          let midHole2Top = usedArea.start + usedRange * 0.7;
+                          midPostPositions.forEach((pos) => {
+                            let posCm = (pos * c.l) / 100;
+                            drillHoles += `
+                              <div style="position:absolute; left:${pos}%; top:${midHole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              <div class="pos-label" style="left:${pos}%; top:${midHole1Top}%; margin-left:8px; transform:translateY(-50%); z-index:10;">${posCm.toFixed(1)}</div>
+                              <div style="position:absolute; left:${pos}%; top:${midHole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            `;
+
+                            if (isDualPiece) {
+                              drillHoles += `
+                                <div style="position:absolute; left:${pos}%; top:${pieceHeight * 0.3}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                                <div style="position:absolute; left:${pos}%; top:${pieceHeight * 0.7}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                              `;
+                            }
+                          });
+                        }
+                      } else if (isFloorbd) {
+                        const floorUsedArea = getUsedArea(c);
+                        const floorUsedRange =
+                          floorUsedArea.end - floorUsedArea.start;
+                        let floorHole1Top =
+                          floorUsedArea.start + floorUsedRange * 0.3;
+                        let floorHole2Top =
+                          floorUsedArea.start + floorUsedRange * 0.65;
+
+                        drillHoles = `
+                          <div style="position:absolute; left:${edgePercent}%; top:${floorHole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; left:${edgePercent}%; top:${floorHole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; right:${edgePercent}%; top:${floorHole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; right:${edgePercent}%; top:${floorHole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                        `;
+
+                        const midSlatPositions = getSlatPositions(c);
+                        midSlatPositions.forEach((pos) => {
+                          let posCm = (pos * c.l) / 100;
+                          drillHoles += `
+                            <div style="position:absolute; left:${pos}%; top:${floorHole1Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                            <div class="pos-label" style="left:${pos}%; top:${floorHole1Top}%; margin-left:8px; transform:translateY(-50%); z-index:10;">${posCm.toFixed(1)}</div>
+                            <div style="position:absolute; left:${pos}%; top:${floorHole2Top}%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          `;
+                        });
+                      } else if (isFlrSlat) {
+                        drillHoles = `
+                          <div style="position:absolute; left:${edgePercent}%; top:20%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; left:${edgePercent}%; bottom:20%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; right:${edgePercent}%; top:20%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                          <div style="position:absolute; right:${edgePercent}%; bottom:20%; width:4px; height:4px; background:#d32f2f; border-radius:50%; z-index:4;"></div>
+                        `;
+                      } else if (isBand) {
+                        let edgeHoleDist = 1.5;
+                        let edgeHolePercent = (edgeHoleDist / c.l) * 100;
+                        drillHoles = `
+                          <div style="position:absolute; left:${edgeHolePercent}%; top:50%; transform:translateY(-50%); width:3px; height:3px; background:#666; border-radius:50%; z-index:4; border:1px solid #999;"></div>
+                          <div style="position:absolute; right:${edgeHolePercent}%; top:50%; transform:translateY(-50%); width:3px; height:3px; background:#666; border-radius:50%; z-index:4; border:1px solid #999;"></div>
+                        `;
+                      }
+
+                      return `<div class="cut-segment" style="position:relative; z-index:1; width:${(c.l / bin.stock.l) * 100}%; background:transparent;" title="${c.label}">${coloredAreas}${leftMask}${rightMask}${leftAng}${rightAng}${dualPieceVisual}${drillHoles}<div class="cut-content" style="z-index: 10;"><div class="cut-text-bg"><b>${c.l}cm</b><span>${c.label}${ripText}</span></div></div></div>`;
                     })
                     .join("");
-                  let offcutHTML =
-                    bin.rem > 0 ? `<div class="offcut"></div>` : "";
-                  return `<div class="board-row">${cutsHTML}${offcutHTML}</div>`;
+                  let edgeLabels = `<div class="pos-label" style="right:0; top:50%; margin-right:2px; transform:translateY(-50%) rotate(-90deg); transform-origin:right center; z-index:5;">${bin.stock.l}</div>`;
+
+                  return `<div class="board-row">${offcutHTML}${cutsHTML}${edgeLabels}</div>`;
                 })
                 .join("");
             });
         };
-
         buildGroup(global.bBins, "Boards");
         buildGroup(global.pBins, "Posts");
         buildGroup(global.bandBins, "Metal Bands");
@@ -1332,6 +1729,23 @@
         <canvas id="canvas-active"></canvas>
         <div class="cut-plan-overlay" style="display: ${box.tab === 1 ? "flex" : "none"};">
             <h4>Global Board Plan</h4>
+                    <div style="display: flex; align-items: center; gap: 8px;">
+  <label class="switch" style="display: flex; align-items: center;">
+    <input type="checkbox" id="toggle-labels-btn" checked>
+    <span class="slider"></span>
+  </label>
+  <span>Show Labels</span>
+</div>
+
+            <div style="display:flex; gap:8px; flex-wrap:wrap; font-size:0.75em; padding:4px 0 8px 0; border-bottom:1px solid #ccc; margin-bottom:4px;">
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#e8f4f8; border:1px solid #666;"></div>Wall</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#f0e5d8; border:1px solid #666;"></div>Trim</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#d4e8d4; border:1px solid #666;"></div>Floor</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#ffe8cc; border:1px solid #666;"></div>Slat</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#f4e8f0; border:1px solid #666;"></div>Post</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:16px; height:16px; background:#e0e0e0; border:1px solid #666;"></div>Band</span>
+              <span style="display:flex; align-items:center; gap:4px;"><div style="width:6px; height:6px; background:#d32f2f; border-radius:50%;"></div>Drill (5cm wall, 1.4cm floor, diagonal trim)</span>
+            </div>
             ${planHTML}
         </div>
       </div>
@@ -1364,7 +1778,7 @@
             if (val > 0 && val < 6) {
               val = val > prevVal ? 6 : 0;
             }
-            if (val > 10) val = 10;
+            if (val > 14.5) val = 14.5;
             e.target.value = val;
           }
           state[idx][key] = val;
@@ -1406,6 +1820,16 @@
         state.push({ l: 200, d: 80, h: 60, fc: 5, trimW: 10, tab: 10 });
       }
       render();
+      document
+        .getElementById("toggle-labels-btn")
+        .addEventListener("change", (e) => {
+          const overlay = document.querySelector(".cut-plan-overlay");
+          if (e.target.checked) {
+            overlay.classList.remove("hide-labels");
+          } else {
+            overlay.classList.add("hide-labels");
+          }
+        });
     </script>
   </body>
 </html>
