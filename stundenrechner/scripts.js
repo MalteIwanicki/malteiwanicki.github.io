@@ -134,7 +134,8 @@
       const h = Math.floor(dayTotalMin / 60);
       const m = dayTotalMin % 60;
       const minutes = m < 10 ? '0' + m : m;
-      header.textContent = `${name} ${h}:${minutes}`;
+      const totalHours = (dayTotalMin / 60).toFixed(1).replace('.', ',');
+      header.textContent = `${name} ${totalHours}`;
     });
   };
 
