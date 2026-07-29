@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Home/Office Weekly Planner</title>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="controls">
+      <label
+        >Contract hours:
+        <input type="number" id="contractHours" value="40" min="0"
+      /></label>
+      <span id="homeOfficeTotal" style="margin-left: 1rem"></span>
+      <span id="totals"></span>
+      <button id="shareBtn">Copy &amp; Share</button>
+    </div>
+    <div id="headerRow">
+      <div class="time-header"></div>
+      <div class="day-header" data-day="0">Mon</div>
+      <div class="day-header" data-day="1">Tue</div>
+      <div class="day-header" data-day="2">Wed</div>
+      <div class="day-header" data-day="3">Thu</div>
+      <div class="day-header" data-day="4">Fri</div>
+    </div>
+    <div id="planner">
+      <div class="time-axis" id="timeAxis"></div>
+      <div class="day-column" data-day="0"></div>
+      <div class="day-column" data-day="1"></div>
+      <div class="day-column" data-day="2"></div>
+      <div class="day-column" data-day="3"></div>
+      <div class="day-column" data-day="4"></div>
+    </div>
+
+    <template id="eventTemplate">
+      <div class="event home" data-type="home">
+        <span class="label">Home</span>
+        <span class="time"></span>
+        <div class="type-btn" title="Change type">&#x21bb;</div>
+        <div class="close-btn" title="Delete">&times;</div>
+        <div class="drag-handle top"></div>
+        <div class="drag-handle bottom"></div>
+      </div>
+    </template>
+
+    <script src="scripts.js"></script>
+  </body>
+</html>
