@@ -351,7 +351,8 @@
         { "food": "onion", "amount": "2" },
         { "food": "garlic", "amount": "2" },
         { "food": "vegetable stock", "amount": "3", "unit": "tsp" },
-        { "food": "cream", "amount": "100", "unit": "ml" }
+        { "food": "cream", "amount": "100", "unit": "ml" },
+        { "food": "garlic bread", "amount": "1" }
       ],
       "instructions": ["follow cookit recipe"]
     },
@@ -685,8 +686,7 @@
         {
           "food": "chopped tomatoes",
           "amount": "1",
-          "unit": "can",
-          "how": "quartered or canned"
+          "unit": "can"
         },
         {
           "food": "onion",
@@ -1202,9 +1202,8 @@
           "how": "diced"
         },
         {
-          "food": "red pepper",
-          "amount": "1",
-          "how": "diced"
+          "food": "sour cream",
+          "amount": "1"
         },
         {
           "food": "nachos"
@@ -1230,13 +1229,13 @@
           "how": "chopped"
         },
         {
-          "food": "mayonnaise",
+          "food": "remoulade",
           "amount": "8",
           "unit": "Tbsp"
         },
         {
-          "food": "toasties",
-          "amount": "10"
+          "food": "toastbrötchen",
+          "amount": "8"
         },
         {
           "food": "cheddar cheese",
@@ -1500,8 +1499,7 @@
         },
         {
           "food": "courgettes",
-          "amount": "300",
-          "unit": "g",
+          "amount": "2",
           "how": "quartered and sliced"
         },
         {
