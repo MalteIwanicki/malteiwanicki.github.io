@@ -89,7 +89,9 @@
     }
   };
 
-  const renderEvents = () => {
+  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+
+const renderEvents = () => {
     // clear existing events
     const dayCols = planner.querySelectorAll('.day-column');
     dayCols.forEach(col => {
@@ -115,26 +117,96 @@
       el.dataset.idx = schedule.indexOf(ev);
       col.appendChild(el);
     });
+    // render automatic pause events (immutable)
+    dayNames.forEach((_, day) => {
+      const col = planner.querySelector(`.day-column[data-day="${day}"]`);
+      if (!col) return;
+      const pauses = getPauseEvents(day);
+      pauses.forEach(pause => {
+        const el = eventTemplate.content.firstElementChild.cloneNode(true);
+        el.dataset.type = pause.type;
+        el.classList.remove('office', 'home', 'pause');
+        el.classList.add(pause.type);
+        el.querySelector('.label').textContent = 'Pause';
+        const startLabel = minutesToLabel(pause.start);
+        const endLabel = minutesToLabel(pause.end);
+        el.querySelector('.time').textContent = `${startLabel} – ${endLabel}`;
+        const top = pause.start * rowHeightPx;
+        const height = (pause.end - pause.start) * rowHeightPx;
+        el.style.top = top + 'px';
+        el.style.height = height + 'px';
+        // no idx for immutable pauses
+        col.appendChild(el);
+      });
+    });
   };
 
-  const dayNames = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri'];
+  // dayNames defined earlier
+  // Automatic immutable pause events (9:00-9:15 and 12:00-12:45)
+  const getPauseEvents = (day) => {
+    const pauses = [];
+    // Determine schedule for the day (excluding existing pauses)
+    const dayEvents = schedule.filter(ev => ev.day === day && ev.type !== 'pause');
+    if (dayEvents.length === 0) return pauses;
+    const dayStart = Math.min(...dayEvents.map(ev => ev.start));
+    const dayEnd = Math.max(...dayEvents.map(ev => ev.end));
+    const totalWork = dayEvents.reduce((sum, ev) => sum + (ev.end - ev.start), 0);
+    const BREAKFAST_START = 4 * 60 + 15; // 9:15
+    const LUNCH_START = 7 * 60; // 12:00
+    const FOURTEEN = 9 * 60; // 14:00
+    if (dayStart < BREAKFAST_START && dayEnd <= FOURTEEN) {
+      // before 9:15 start, end before 14:00
+      if (totalWork < 6 * 60) {
+        // less than 6h → 15 min break
+        pauses.push({ day, start: BREAKFAST_START, end: BREAKFAST_START + 15, type: 'pause' });
+      } else {
+        // more than 6h → 30 min break
+        pauses.push({ day, start: BREAKFAST_START, end: BREAKFAST_START + 30, type: 'pause' });
+      }
+    } else if (dayStart < BREAKFAST_START && dayEnd > FOURTEEN) {
+      // start before 9:15, end after 14:00 → breakfast break always, add lunch break if work exceeds 6h
+      // breakfast break (15 min)
+      pauses.push({ day, start: BREAKFAST_START, end: BREAKFAST_START + 15, type: 'pause' });
+      // add lunch break (45 min) only if total work exceeds 6 hours
+      if (totalWork > 6 * 60) {
+        pauses.push({ day, start: LUNCH_START, end: LUNCH_START + 45, type: 'pause' });
+      }
+    } else if (dayStart >= BREAKFAST_START && dayEnd >= FOURTEEN) {
+      // start after 9:15, end after 14:00 → 45 min lunch break
+      pauses.push({ day, start: LUNCH_START, end: LUNCH_START + 45, type: 'pause' });
+    }
+    return pauses;
+  };
+
+  // helper to compute effective duration excluding pause overlaps
+  const getEffectiveDuration = (ev) => {
+    if (ev.type === 'pause') return 0;
+    let dur = ev.end - ev.start;
+    const pauses = getPauseEvents(ev.day);
+    pauses.forEach(p => {
+      const overlapStart = Math.max(ev.start, p.start);
+      const overlapEnd = Math.min(ev.end, p.end);
+      if (overlapEnd > overlapStart) {
+        dur -= (overlapEnd - overlapStart);
+      }
+    });
+    return dur;
+  };
+
   const updateDayHeaders = () => {
+    // existing code continues
+
     dayNames.forEach((name, i) => {
       const header = document.querySelector(`.day-header[data-day="${i}"]`);
       if (!header) return;
-      // sum office and home minutes for this day
+      // sum office and home minutes for this day, deducting pauses
       const dayTotalMin = schedule
         .filter(ev => ev.day === i)
-        .reduce((sum, ev) => {
-          if (ev.type === 'office' || ev.type === 'home') {
-            return sum + (ev.end - ev.start);
-          }
-          return sum;
-        }, 0);
+        .reduce((sum, ev) => sum + getEffectiveDuration(ev), 0);
       const h = Math.floor(dayTotalMin / 60);
       const m = dayTotalMin % 60;
       const minutes = m < 10 ? '0' + m : m;
-      const totalHours = (dayTotalMin / 60).toFixed(1).replace('.', ',');
+      const totalHours = (dayTotalMin / 60).toFixed(2).replace('.', ',');
       header.textContent = `${name} ${totalHours}`;
     });
   };
@@ -142,7 +214,8 @@
   const updateTotals = () => {
     const totals = { office: 0, home: 0, pause: 0 };
     schedule.forEach(ev => {
-      const dur = ev.end - ev.start; // minutes
+      if (ev.type === 'pause') return; // ignore immutable pauses
+      const dur = getEffectiveDuration(ev);
       totals[ev.type] += dur;
     });
     const contract = parseFloat(contractInput.value) || 0;
@@ -159,7 +232,7 @@
     // total home + office minutes
     const totalMin = schedule.reduce((sum, ev) => {
       if (ev.type === 'office' || ev.type === 'home') {
-        return sum + (ev.end - ev.start);
+        return sum + getEffectiveDuration(ev);
       }
       return sum;
     }, 0);
@@ -252,8 +325,13 @@
       saveToHash();
       e.stopPropagation();
     } else if (e.target.classList.contains('type-btn')) {
-      // cycle type
-      const order = ['office', 'home', 'pause'];
+      // cycle type, but pause events are immutable
+      if (ev.type === 'pause') {
+        // do nothing for immutable pause
+        e.stopPropagation();
+        return;
+      }
+      const order = ['office', 'home'];
       const curIdx = order.indexOf(ev.type);
       const next = order[(curIdx + 1) % order.length];
       ev.type = next;

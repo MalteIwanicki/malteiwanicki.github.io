@@ -124,6 +124,12 @@ body {
     opacity: 1;
 }
 
+/* Hide controls for immutable pause events */
+.event.pause:hover .close-btn,
+.event.pause:hover .type-btn {
+    opacity: 0;
+}
+
 .event .close-btn {
     right: 2px;
 }
