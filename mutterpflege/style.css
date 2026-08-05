@@ -426,6 +426,12 @@ p {
   gap: clamp(28px, 6vw, 70px);
 }
 
+@media (min-width: 981px) {
+  #area .split {
+    grid-template-columns: minmax(0, 1.28fr) minmax(280px, 0.72fr);
+  }
+}
+
 .text-stack {
   display: grid;
   gap: 20px;
@@ -554,75 +560,19 @@ p {
 }
 
 .map-card {
-  position: relative;
-  min-height: 390px;
   overflow: hidden;
   border: 1px solid rgba(57, 87, 70, 0.14);
   border-radius: var(--radius);
-  background:
-    linear-gradient(135deg,
-      rgba(127, 152, 132, 0.18),
-      rgba(215, 143, 136, 0.16)),
-    rgba(255, 250, 244, 0.84);
+  background: rgba(255, 250, 244, 0.84);
   box-shadow: var(--shadow);
 }
 
-.map-shape {
-  position: absolute;
-  inset: 36px 38px 70px;
-  border: 2px solid rgba(57, 87, 70, 0.42);
-  border-radius: 48% 36% 44% 38%;
-  transform: rotate(-6deg);
-  background: rgba(255, 250, 244, 0.55);
-}
-
-.map-pin {
-  position: absolute;
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  border: 1px solid rgba(57, 87, 70, 0.14);
-  border-radius: 999px;
-  padding: 8px 11px;
-  color: var(--sage-deep);
-  background: rgba(255, 250, 244, 0.92);
-  font-size: 0.88rem;
-  font-weight: 900;
-  box-shadow: 0 10px 24px rgba(57, 87, 70, 0.12);
-}
-
-.map-pin::before {
-  width: 8px;
-  height: 8px;
-  border-radius: 999px;
-  content: "";
-  background: var(--rose);
-}
-
-.map-pin.center {
-  top: 42%;
-  left: 42%;
-}
-
-.map-pin.north {
-  top: 24%;
-  right: 18%;
-}
-
-.map-pin.south {
-  bottom: 24%;
-  left: 18%;
-}
-
-.map-caption {
-  position: absolute;
-  right: 20px;
-  bottom: 20px;
-  left: 20px;
-  border-radius: var(--radius);
-  padding: 16px;
-  color: var(--sage-deep);
-  background: rgba(255, 250, 244, 0.9);
+.service-map-image {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
 }
 
 .testimonial-shell {
@@ -897,18 +847,6 @@ details.faq-card {
     right: 16px;
     bottom: 16px;
     left: 16px;
-  }
-
-  .map-card {
-    min-height: 340px;
-  }
-
-  .map-pin.north {
-    right: 10%;
-  }
-
-  .map-pin.south {
-    left: 10%;
   }
 
   .footer-inner {
