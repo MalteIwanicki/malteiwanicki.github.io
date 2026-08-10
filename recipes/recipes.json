@@ -211,60 +211,6 @@
       "instructions": ["Follow cook it recipe"]
     },
     {
-      "meal": "Leek, Pea and Pepper Risotto",
-      "ingredients": [
-        {
-          "food": "vegetable stock",
-          "amount": "1¼",
-          "unit": "L"
-        },
-        {
-          "food": "olive oil",
-          "amount": "1",
-          "unit": "Tbsp"
-        },
-        {
-          "food": "red pepper",
-          "amount": "2",
-          "how": "sliced"
-        },
-        {
-          "food": "leek",
-          "amount": "1",
-          "how": "chopped"
-        },
-        {
-          "food": "risotto rice",
-          "amount": "300",
-          "unit": "g"
-        },
-        {
-          "food": "frozen peas",
-          "amount": "150",
-          "unit": "g"
-        },
-        {
-          "food": "parmesan cheese",
-          "amount": "50",
-          "unit": "g",
-          "how": "grated"
-        },
-        {
-          "food": "chives",
-          "amount": "1",
-          "unit": "bunch",
-          "how": "chopped"
-        }
-      ],
-      "instructions": [
-        "Heat oil and fry the red pepper and leek until softened",
-        "Add rice and cook for 1 minute",
-        "Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
-        "Stir in peas to heat through",
-        "Season, then stir through most of the parmesan and chives, saving a little of each to scatter over before serving"
-      ]
-    },
-    {
       "meal": "Red Pepper Toast",
       "ingredients": [
         {
@@ -298,6 +244,7 @@
         "Fry the eggs, season with salt and pepper and put ½ an egg on top of each slice"
       ]
     },
+
     {
       "meal": "Spinach Pasta bake",
       "ingredients": [
@@ -470,90 +417,21 @@
         "Cut the Romana into 2cm strips and mix into the dressing"
       ]
     },
+
     {
-      "meal": "Mustard Meatballs & Veggie Rice",
+      "meal": "Köttbullar & Mash potatoe",
       "ingredients": [
         {
-          "food": "carrot",
-          "amount": "1",
-          "how": "grated"
+          "food": "Köttbullar"
         },
         {
-          "food": "leek",
-          "amount": "1",
-          "how": "halved lengthways and chopped"
+          "food": "cream sauce (fix)"
         },
-        {
-          "food": "rice",
-          "amount": "150",
-          "unit": "g"
-        },
-        {
-          "food": "cream",
-          "amount": "200",
-          "unit": "ml"
-        },
-        {
-          "food": "stock powder",
-          "amount": "1",
-          "unit": "tsp"
-        },
-        {
-          "food": "mustard",
-          "amount": "2",
-          "unit": "Tbsp"
-        },
-        {
-          "food": "mustard",
-          "amount": "1",
-          "unit": "Tbsp"
-        },
-        {
-          "food": "honey",
-          "amount": "1",
-          "unit": "tsp"
-        },
-        {
-          "food": "parsley",
-          "amount": "5",
-          "unit": "g",
-          "how": "chopped"
-        },
-        {
-          "food": "chives",
-          "amount": "5",
-          "unit": "g",
-          "how": "chopped"
-        },
-        {
-          "food": "onion",
-          "amount": "1",
-          "how": "chopped"
-        },
-        {
-          "food": "breadcrumbs",
-          "amount": "25",
-          "unit": "g"
-        },
-        {
-          "food": "mince",
-          "amount": "250",
-          "unit": "g"
-        },
-        {
-          "food": "oil",
-          "amount": "1",
-          "unit": "Tbsp"
-        }
+        { "food": "cranberry jam" },
+        { "food": "peas" },
+        { "food": "potato", "amount": "8" }
       ],
-      "instructions": [
-        "Boil 300ml water with a bit of salt. Boil carrot, leek and rice covered at a low temperature for ~10 min. Take off the heat and leave the lid on for 10 min",
-        "Mix 50ml water, cream, stock, 1 Tbsp mustard and honey until there are no clumps",
-        "Mix parsley, onion, breadcrumbs, mince, 2 tsp mustard, salt and pepper and form ~12 meatballs",
-        "Heat oil at a high heat and fry meatballs for 2-3 min. Take the meatballs out of the pan and drain the fat",
-        "Wipe the pan and boil the sauce mix gently. Season with salt and pepper. Add meatballs, reduce heat and simmer for 5-8 min. Add water if the sauce gets too thick",
-        "Serve and garnish with chives"
-      ]
+      "instructions": ["make it like Ikea"]
     },
     {
       "meal": "Thai Basil Noodles",
@@ -634,6 +512,60 @@
       ]
     },
     {
+      "meal": "Leek, Pea and Pepper Risotto",
+      "ingredients": [
+        {
+          "food": "vegetable stock",
+          "amount": "1¼",
+          "unit": "L"
+        },
+        {
+          "food": "olive oil",
+          "amount": "1",
+          "unit": "Tbsp"
+        },
+        {
+          "food": "red pepper",
+          "amount": "2",
+          "how": "sliced"
+        },
+        {
+          "food": "leek",
+          "amount": "1",
+          "how": "chopped"
+        },
+        {
+          "food": "risotto rice",
+          "amount": "300",
+          "unit": "g"
+        },
+        {
+          "food": "frozen peas",
+          "amount": "150",
+          "unit": "g"
+        },
+        {
+          "food": "parmesan cheese",
+          "amount": "50",
+          "unit": "g",
+          "how": "grated"
+        },
+        {
+          "food": "chives",
+          "amount": "1",
+          "unit": "bunch",
+          "how": "chopped"
+        }
+      ],
+      "instructions": [
+        "Heat oil and fry the red pepper and leek until softened",
+        "Add rice and cook for 1 minute",
+        "Add the stock, one ladle at a time, stirring and waiting for the rice to absorb the liquid before adding more. Continue until the rice is just cooked and the risotto has a creamy consistency",
+        "Stir in peas to heat through",
+        "Season, then stir through most of the parmesan and chives, saving a little of each to scatter over before serving"
+      ]
+    },
+    {
       "meal": "Maultaschen",
       "ingredients": [
         {
@@ -657,18 +589,6 @@
         "Cook Maultaschen in olive oil until crispy",
         "Add onion rings at the end and cook until clear"
       ]
-    },
-    {
-      "meal": "Vegetable Soup",
-      "ingredients": [
-        {
-          "food": "soup vege mix"
-        },
-        {
-          "food": "garlic bread"
-        }
-      ],
-      "instructions": []
     },
     {
       "meal": "One-Pot Pasta",
@@ -974,6 +894,32 @@
       ]
     },
     {
+      "meal": "Eggs Benedict",
+      "ingredients": [
+        {
+          "food": "english muffins",
+          "amount": "4"
+        },
+        {
+          "food": "bacon",
+          "amount": "1",
+          "unit": "pack"
+        },
+        {
+          "food": "hash browns",
+          "amount": "8"
+        },
+        {
+          "food": "eggs",
+          "amount": "4"
+        },
+        {
+          "food": "hollandaise sauce"
+        }
+      ],
+      "instructions": []
+    },
+    {
       "meal": "Tortellini Pikante",
       "ingredients": [
         {
@@ -1144,32 +1090,6 @@
     },
 
     {
-      "meal": "Eggs Benedict",
-      "ingredients": [
-        {
-          "food": "english muffins",
-          "amount": "4"
-        },
-        {
-          "food": "bacon",
-          "amount": "1",
-          "unit": "pack"
-        },
-        {
-          "food": "hash browns",
-          "amount": "8"
-        },
-        {
-          "food": "eggs",
-          "amount": "4"
-        },
-        {
-          "food": "hollandaise sauce"
-        }
-      ],
-      "instructions": []
-    },
-    {
       "meal": "Mexican Beef Nachos",
       "ingredients": [
         {
@@ -1207,7 +1127,9 @@
         },
         {
           "food": "nachos"
-        }
+        },
+        { "food": "avocado" },
+        { "food": "tomato" }
       ],
       "instructions": [
         "Fry beef and onion",
@@ -1454,6 +1376,18 @@
           "food": "raclette käse",
           "amount": "125",
           "unit": "g"
+        }
+      ],
+      "instructions": []
+    },
+    {
+      "meal": "Vegetable Soup",
+      "ingredients": [
+        {
+          "food": "soup vege mix"
+        },
+        {
+          "food": "garlic bread"
         }
       ],
       "instructions": []
