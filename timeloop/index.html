@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link
+      rel="icon"
+      type="image/svg+xml"
+      href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🕐</text></svg>"
+    />
+    <title>Timer</title>
+    <style>
+      :root {
+        color-scheme: light dark;
+      }
+      body {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        margin: 0;
+        font-family: system-ui, sans-serif;
+        background: #fff;
+        color: #000;
+        transition:
+          background 0.3s,
+          color 0.3s;
+        user-select: none;
+      }
+      @media (prefers-color-scheme: dark) {
+        body {
+          background: #111;
+          color: #eee;
+        }
+      }
+      #timerDisplay {
+        font-size: 20vw;
+        margin: 1vw;
+        font-variant-numeric: tabular-nums;
+        line-height: 1;
+      }
+      input {
+        width: 34vw;
+        font-size: 6vw;
+        text-align: center;
+        font-family: inherit;
+        border: 2px solid rgba(128, 128, 128, 0.4);
+        border-radius: 8px;
+        padding: 0.3em 0.5em;
+        background: transparent;
+        color: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+      }
+      input:focus {
+        border-color: rgba(128, 128, 128, 0.8);
+      }
+      #rangeInput {
+        width: 34vw;
+        font-size: 6vw;
+        text-align: center;
+        font-family: inherit;
+        border: 2px solid rgba(128, 128, 128, 0.4);
+        border-radius: 8px;
+        padding: 0.3em 0.5em;
+        background: transparent;
+        color: inherit;
+        outline: none;
+        transition: border-color 0.2s;
+        visibility: hidden;
+        opacity: 0;
+        max-height: 0;
+        margin: 0;
+        overflow: hidden;
+      }
+      #rangeInput:focus {
+        border-color: rgba(128, 128, 128, 0.8);
+      }
+      #rangeInput.visible {
+        visibility: visible;
+        opacity: 1;
+        max-height: 5em;
+        margin-top: 1vw;
+        transition:
+          visibility 0s,
+          opacity 0.25s ease,
+          max-height 0.3s ease,
+          margin 0.3s ease;
+      }
+      #rangeToggle {
+        font-size: 6vw;
+        width: 6vw;
+        height: 6vw;
+        cursor: pointer;
+        background: none;
+        border: 2px solid rgba(128, 128, 128, 0.4);
+        border-radius: 8px;
+        color: inherit;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition:
+          background-color 0.15s,
+          border-color 0.15s,
+          transform 0.1s;
+      }
+      #rangeToggle:hover {
+        background-color: rgba(128, 128, 128, 0.1);
+        border-color: rgba(128, 128, 128, 0.7);
+      }
+      #rangeToggle:active {
+        transform: scale(0.92);
+      }
+    </style>
+  </head>
+  <body>
+    <div style="display: flex; flex-direction: column; gap: 1vw">
+      <div style="display: flex; align-items: center; gap: 1vw">
+        <input
+          type="number"
+          id="secondsInput"
+          min="1"
+          placeholder="seconds"
+          autocomplete="off"
+        />
+        <button id="rangeToggle" title="Toggle random range">±</button>
+      </div>
+      <input
+        type="number"
+        id="rangeInput"
+        min="0"
+        placeholder="± range"
+        autocomplete="off"
+      />
+    </div>
+    <div id="timerDisplay">0</div>
+    <script>
+      let intervalId = null;
+      let blinkCount = 0;
+      let blinkInterval = null;
+      let randomMode = false;
+      const input = document.getElementById("secondsInput");
+      const rangeInput = document.getElementById("rangeInput");
+      const rangeToggle = document.getElementById("rangeToggle");
+      const display = document.getElementById("timerDisplay");
+
+      rangeToggle.addEventListener("click", () => {
+        randomMode = !randomMode;
+        rangeInput.classList.toggle("visible", randomMode);
+        if (randomMode) {
+          rangeInput.focus();
+        }
+      });
+
+      function getRandomTime(base, range) {
+        const min = Math.max(1, base - range);
+        const max = base + range;
+        return Math.floor(Math.random() * (max - min + 1)) + min;
+      }
+
+      function startTimer(seconds) {
+        clearInterval(intervalId);
+        clearInterval(blinkInterval);
+        document.body.style.background = "";
+        blinkCount = 0;
+        let remaining = seconds;
+        updateDisplay(remaining);
+        intervalId = setInterval(() => {
+          remaining--;
+          if (remaining <= 0) {
+            clearInterval(intervalId);
+            startBlink();
+          } else {
+            updateDisplay(remaining);
+          }
+        }, 1000);
+      }
+      function updateDisplay(sec) {
+        display.textContent = sec;
+        document.title = `${sec}`;
+      }
+      function startBlink() {
+        const blinkColor = window.matchMedia("(prefers-color-scheme: dark)")
+          .matches
+          ? "white"
+          : "black";
+        blinkInterval = setInterval(() => {
+          document.body.style.background =
+            blinkCount % 2 === 0 ? blinkColor : "";
+          blinkCount++;
+          if (blinkCount >= 4) {
+            clearInterval(blinkInterval);
+            document.body.style.background = "";
+            const val = parseInt(input.value, 10);
+            if (val > 0) {
+              const range = randomMode
+                ? parseInt(rangeInput.value, 10) || 0
+                : 0;
+              const seconds = range > 0 ? getRandomTime(val, range) : val;
+              startTimer(seconds);
+            }
+          }
+        }, 250);
+      }
+      input.addEventListener("change", () => {
+        const val = parseInt(input.value, 10);
+        if (val > 0) {
+          const range = randomMode ? parseInt(rangeInput.value, 10) || 0 : 0;
+          const seconds = range > 0 ? getRandomTime(val, range) : val;
+          startTimer(seconds);
+        }
+      });
+
+      rangeInput.addEventListener("change", () => {
+        const val = parseInt(input.value, 10);
+        if (val > 0 && randomMode) {
+          const range = parseInt(rangeInput.value, 10) || 0;
+          const seconds = range > 0 ? getRandomTime(val, range) : val;
+          startTimer(seconds);
+        }
+      });
+    </script>
+  </body>
+</html>
