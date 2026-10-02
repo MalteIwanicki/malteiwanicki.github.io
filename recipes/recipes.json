@@ -685,22 +685,12 @@
         },
         {
           "food": "spinach",
-          "amount": "100",
-          "unit": "g"
-        },
-        {
-          "food": "spinach",
-          "amount": "100",
+          "amount": "200",
           "unit": "g"
         },
         {
           "food": "cream cheese",
-          "amount": "50",
-          "unit": "g"
-        },
-        {
-          "food": "cream cheese",
-          "amount": "20",
+          "amount": "70",
           "unit": "g"
         },
         {

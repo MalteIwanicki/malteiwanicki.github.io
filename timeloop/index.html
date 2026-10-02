@@ -180,17 +180,22 @@
         document.title = `${sec}`;
       }
       function startBlink() {
+        const originalTitle = document.title;
         const blinkColor = window.matchMedia("(prefers-color-scheme: dark)")
           .matches
           ? "white"
           : "black";
         blinkInterval = setInterval(() => {
+          // toggle background
           document.body.style.background =
             blinkCount % 2 === 0 ? blinkColor : "";
+          // toggle title
+          document.title = blinkCount % 2 === 0 ? "███████████" : originalTitle;
           blinkCount++;
           if (blinkCount >= 4) {
             clearInterval(blinkInterval);
             document.body.style.background = "";
+            document.title = originalTitle;
             const val = parseInt(input.value, 10);
             if (val > 0) {
               const range = randomMode
