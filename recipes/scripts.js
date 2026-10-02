@@ -18,6 +18,47 @@ function getCookie(name) {
     return null;
 }
 
+// Canonical names for ingredients that are written differently across recipes,
+// so that the same ingredient is grouped together in the summary.
+const ingredientAliases = {
+  "potatoes": "potato",
+  "onions": "onion",
+  "red onions": "onion",
+  "egg": "eggs",
+  "courgette": "courgettes",
+  "spring onion": "spring onions",
+  "parmesan": "parmesan cheese",
+  "mixed vegetables": "frozen mixed veggies",
+  "frozen mixed vegetables": "frozen mixed veggies",
+  "vegetables": "frozen mixed veggies",
+  "porree": "leek",
+  "schalotten": "schallots",
+  "kochsahne": "cream",
+  "chili": "chilli",
+  "oil": "olive oil",
+  "grated tasty cheese": "grated cheese",
+  "salt and pepper": "salt",
+  "peas": "frozen peas",
+  "hot water": "water",
+  "potato slices or frozen chips": "chips",
+  "oven potatoes / chips": "chips",
+  "toastbrötchen": "toasties",
+  "english muffins": "toasties",
+  "toast or english muffins": "toasties",
+  "rote spitzpaprika": "red pepper",
+  "mittelscharfer senf": "mustard",
+  "petersilie": "parsley",
+  "eierspätzle frisch": "spätzle",
+  "tumeric": "turmeric",
+  "apple": "apples"
+};
+
+function normalizeIngredient(name) {
+  if (!name) return name;
+  const trimmed = name.trim();
+  return ingredientAliases[trimmed.toLowerCase()] || trimmed;
+}
+
 // Update cookie with selected meals
 function updateCookie(event) {
     const checkboxes = document.querySelectorAll('.recipe-checkbox');
@@ -42,8 +83,12 @@ function createRecipeDiv(recipe) {
   checkbox.type = 'checkbox';
   checkbox.classList.add('recipe-checkbox');
   checkbox.dataset.meal = recipe.meal;
-  checkbox.addEventListener('change', updateCookie);
-  checkbox.addEventListener("change", updateSummary);
+  checkbox.addEventListener('change', () => {
+    recipeDiv.classList.toggle('selected', checkbox.checked);
+    updateCookie();
+    updateSummary();
+    updateSelectedCount();
+  });
   recipeDiv.appendChild(checkbox);
 
   const ingredientsDetails = document.createElement('details');
@@ -55,7 +100,8 @@ function createRecipeDiv(recipe) {
   ingredientsList.classList.add('ingredients-list');
   recipe.ingredients.forEach(ingredient => {
     const ingredientItem = document.createElement('li');
-     let itemText = `<span class="name">${ingredient.food}</span>`;
+    const foodName = normalizeIngredient(ingredient.food);
+     let itemText = `<span class="name">${foodName}</span>`;
     if (ingredient.amount) {
       itemText += `, <span class="amount">${ingredient.amount}</span>`;
     }
@@ -120,27 +166,35 @@ async function loadStaples() {
   }
 }
 
-function updateSummary(event) {
-  const checkbox = event.target;
-  const recipe = checkbox.closest('.recipe');
-  const recipeName = recipe.querySelector('h2').textContent;
-  const ingredientsList = recipe.querySelector('.ingredients-list');
-  const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => {
-    const nameSpan = item.querySelector('span.name');
-    const amountSpan = item.querySelector('span.amount');
-    const unitSpan  = item.querySelector('span.unit');
-    const howSpan = item.querySelector('span.how');
-    const name = nameSpan ? nameSpan.textContent : '';
-    const amount = amountSpan ? amountSpan.textContent : '';
-    const unit = unitSpan ? unitSpan.textContent : '';
-    const how = howSpan ? howSpan.textContent : '';
-    return { name, amount, unit, how, recipeName };
-  });
-  if (checkbox.checked) {
-    selectedRecipes.push(...ingredients);
-  } else {
-      selectedRecipes = selectedRecipes.filter(item => item.recipeName !== recipeName);
+function updateSelectedCount() {
+  const count = document.querySelectorAll('.recipe-checkbox:checked').length;
+  const pill = document.getElementById('selected-count');
+  if (pill) {
+    pill.textContent = `${count} selected`;
   }
+}
+
+function updateSummary() {
+  // Rebuild the selected ingredient list from the currently checked recipes so
+  // the summary always reflects the real state (no stale entries).
+  selectedRecipes = [];
+  document.querySelectorAll('.recipe-checkbox:checked').forEach(checkbox => {
+    const recipe = checkbox.closest('.recipe');
+    const recipeName = recipe.querySelector('h2').textContent;
+    const ingredientsList = recipe.querySelector('.ingredients-list');
+    const ingredients = Array.from(ingredientsList.querySelectorAll('li')).map(item => {
+      const nameSpan = item.querySelector('span.name');
+      const amountSpan = item.querySelector('span.amount');
+      const unitSpan  = item.querySelector('span.unit');
+      const howSpan = item.querySelector('span.how');
+      const name = nameSpan ? nameSpan.textContent : '';
+      const amount = amountSpan ? amountSpan.textContent : '';
+      const unit = unitSpan ? unitSpan.textContent : '';
+      const how = howSpan ? howSpan.textContent : '';
+      return { name, amount, unit, how, recipeName };
+    });
+    selectedRecipes.push(...ingredients);
+  });
   renderSummary();
 }
 
@@ -177,96 +231,218 @@ async function translateAndUpdateLink(name, nameItem) {
   }
 }
 
+// --- Amount aggregation helpers -------------------------------------------
+// The same ingredient is often listed with the same unit across recipes
+// (e.g. garlic "1", "2", "2-4"). These helpers parse the amounts and add
+// them together so the shopping list shows a single total per unit.
+
+const unicodeFractions = {
+  '½': 0.5, '⅓': 1 / 3, '⅔': 2 / 3, '¼': 0.25, '¾': 0.75,
+  '⅕': 0.2, '⅖': 0.4, '⅗': 0.6, '⅘': 0.8,
+  '⅙': 1 / 6, '⅚': 5 / 6, '⅛': 0.125, '⅜': 0.375, '⅝': 0.625, '⅞': 0.875
+};
+
+function parseSingleAmount(value) {
+  const s = String(value).trim();
+  if (/^\d+(?:[.,]\d+)?$/.test(s)) {
+    return parseFloat(s.replace(',', '.'));
+  }
+  const fractionMatch = s.match(/^(\d+)?\s*([½⅓⅔¼¾⅕⅖⅗⅘⅙⅚⅛⅜⅝⅞])$/);
+  if (fractionMatch) {
+    const whole = fractionMatch[1] ? parseInt(fractionMatch[1], 10) : 0;
+    return whole + unicodeFractions[fractionMatch[2]];
+  }
+  return null;
+}
+
+// Returns { min, max } for a numeric amount (ranges like "2-4" included) or null.
+function parseAmountRange(value) {
+  if (value == null) return null;
+  const s = String(value).trim();
+  if (!s) return null;
+  const rangeMatch = s.match(/^(\d+(?:[.,]\d+)?)\s*[-–]\s*(\d+(?:[.,]\d+)?)$/);
+  if (rangeMatch) {
+    return {
+      min: parseFloat(rangeMatch[1].replace(',', '.')),
+      max: parseFloat(rangeMatch[2].replace(',', '.'))
+    };
+  }
+  const single = parseSingleAmount(s);
+  return single == null ? null : { min: single, max: single };
+}
+
+function formatAmountValue(value) {
+  if (Number.isInteger(value)) return String(value);
+  const fractions = [
+    [1 / 8, '⅛'], [1 / 4, '¼'], [1 / 3, '⅓'], [3 / 8, '⅜'],
+    [1 / 2, '½'], [5 / 8, '⅝'], [2 / 3, '⅔'], [3 / 4, '¾'], [7 / 8, '⅞']
+  ];
+  const whole = Math.floor(value);
+  const fraction = value - whole;
+  for (const [amount, symbol] of fractions) {
+    if (Math.abs(fraction - amount) < 0.001) {
+      return whole > 0 ? `${whole}${symbol}` : symbol;
+    }
+  }
+  return String(Math.round(value * 100) / 100);
+}
+
+function normalizeUnit(unit) {
+  if (!unit) return '';
+  const u = String(unit).trim().toLowerCase();
+  const aliases = {
+    'piece': '', 'pieces': '', 'pc': '', 'pcs': '',
+    'pack': 'pack', 'packs': 'pack', 'packet': 'pack', 'packets': 'pack',
+    'can': 'can', 'cans': 'can', 'tin': 'can', 'tins': 'can',
+    'bunch': 'bunch', 'bunches': 'bunch',
+    'cup': 'cup', 'cups': 'cup',
+    'handful': 'handful', 'handfuls': 'handful', 'handfull': 'handful', 'handfulls': 'handful'
+  };
+  return aliases[u] !== undefined ? aliases[u] : u;
+}
+
+// Some ingredients are listed with different units across recipes but refer to
+// the same package. Convert those to a common unit so they can be added up
+// (e.g. a 250 ml tin of coconut milk is one can).
+const ingredientUnitConversions = {
+  'coconut milk': { from: 'ml', to: 'can', per: 250 }
+};
+
+// Groups the selected ingredients by name and adds numeric amounts together
+// per unit. Returns a sorted array of { name, details: [string, ...] }.
+function groupSelectedIngredients() {
+  const groups = {};
+
+  selectedRecipes.forEach(ingredient => {
+    const { name, amount, unit, how } = ingredient;
+    if (!groups[name]) {
+      groups[name] = { name, numeric: [], notes: [] };
+    }
+
+    const range = parseAmountRange(amount);
+    if (range) {
+      let entryMin = range.min;
+      let entryMax = range.max;
+      let entryUnit = unit || '';
+
+      const conversion = ingredientUnitConversions[name.toLowerCase()];
+      if (conversion && normalizeUnit(entryUnit) === normalizeUnit(conversion.from)) {
+        entryMin = range.min / conversion.per;
+        entryMax = range.max / conversion.per;
+        entryUnit = conversion.to;
+      }
+
+      groups[name].numeric.push({
+        min: entryMin,
+        max: entryMax,
+        unit: entryUnit,
+        displayUnit: normalizeUnit(entryUnit) === '' ? '' : entryUnit,
+        how: how || ''
+      });
+    } else {
+      const parts = [];
+      if (amount) parts.push(amount);
+      if (unit) parts.push(unit);
+      if (how) parts.push(`(${how})`);
+      if (parts.length > 0) {
+        const text = parts.join(' ');
+        if (!groups[name].notes.includes(text)) groups[name].notes.push(text);
+      }
+    }
+  });
+
+  return Object.values(groups).map(group => {
+    const details = [];
+    const byUnit = {};
+
+    group.numeric.forEach(entry => {
+      const key = normalizeUnit(entry.unit);
+      if (!byUnit[key]) {
+        byUnit[key] = { min: 0, max: 0, displayUnit: entry.displayUnit, hows: [] };
+      }
+      byUnit[key].min += entry.min;
+      byUnit[key].max += entry.max;
+      if (entry.how && !byUnit[key].hows.includes(entry.how)) {
+        byUnit[key].hows.push(entry.how);
+      }
+    });
+
+    Object.values(byUnit).forEach(aggregated => {
+      let text = formatAmountValue(aggregated.min);
+      if (aggregated.max !== aggregated.min) {
+        text += `-${formatAmountValue(aggregated.max)}`;
+      }
+      if (aggregated.displayUnit) text += ` ${aggregated.displayUnit}`;
+      if (aggregated.hows.length > 0) text += ` (${aggregated.hows.join(', ')})`;
+      details.push(text);
+    });
+
+    group.notes.forEach(note => details.push(note));
+
+    return { name: group.name, details };
+  }).sort((a, b) => a.name.localeCompare(b.name));
+}
+
 function renderSummary() {
   const summaryList = document.getElementById('summary-list');
   summaryList.innerHTML = '';
 
-  const groupedIngredients = {};
-  const selectedRecipeNames = new Set();
+  const selectedRecipeNames = new Set(selectedRecipes.map(item => item.recipeName));
 
-  selectedRecipes.forEach(ingredient => {
-    const { name, amount, unit, how,recipeName } = ingredient;
-    const key = name;
+  if (selectedRecipeNames.size === 0) {
+    const empty = document.createElement('p');
+    empty.className = 'summary-empty';
+    empty.textContent = 'Select recipes to build your shopping list.';
+    summaryList.appendChild(empty);
+    return;
+  }
 
-    if (!groupedIngredients[key]) {
-      groupedIngredients[key] = {
-        name: key,
-        details: [],
-      };
-    }
+  const recipeNamesHeader = document.createElement('h3');
+  recipeNamesHeader.textContent = 'Selected Recipes';
+  summaryList.appendChild(recipeNamesHeader);
 
-    const detail = [];
-    if (amount) {
-      detail.push(amount);
-    }
-    if (unit) {
-      detail.push(unit);
-    }
-    if (how) {
-      detail.push(`(${how})`);
-    }
-    if (detail.length > 0) {
-      groupedIngredients[key].details.push(detail.join(' '));
-    }
-    selectedRecipeNames.add(recipeName);
-
+  const recipeNamesList = document.createElement('ul');
+  Array.from(selectedRecipeNames).forEach(recipeName => {
+    const recipeNameItem = document.createElement('li');
+    recipeNameItem.textContent = recipeName;
+    recipeNamesList.appendChild(recipeNameItem);
   });
+  summaryList.appendChild(recipeNamesList);
 
-  if (selectedRecipeNames.size > 0) {
-      const recipeNamesHeader = document.createElement('h3');
-      recipeNamesHeader.textContent = 'Selected Recipes:';
-      summaryList.appendChild(recipeNamesHeader);
-
-      const recipeNamesList = document.createElement('ul');
-      Array.from(selectedRecipeNames).forEach(recipeName => {
-        const recipeNameItem = document.createElement('li');
-        recipeNameItem.textContent = recipeName;
-        recipeNamesList.appendChild(recipeNameItem);
-      });
-      summaryList.appendChild(recipeNamesList);
-
-      // Add a separator
-      const separator = document.createElement('hr');
-      summaryList.appendChild(separator);
-    }
   const ingredientsHeader = document.createElement('h3');
-  ingredientsHeader.textContent = 'Ingredients:';
+  ingredientsHeader.textContent = 'Ingredients';
   summaryList.appendChild(ingredientsHeader);
 
-  const sortedIngredients = Object.values(groupedIngredients).sort((a, b) => a.name.localeCompare(b.name));
+  const ingredientsList = document.createElement('ul');
+  const sortedIngredients = groupSelectedIngredients();
 
   sortedIngredients.forEach(ingredient => {
-    const { name, details,recipeNames } = ingredient;
+    const { name, details } = ingredient;
     const listItem = document.createElement('li');
     const nameItem = document.createElement('span');
-    const link = foodLinks[name]+"#add_to_basket" || `https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC`;
+    const link = foodLinks[name] + "#add_to_basket" || `https://shop.rewe.de/productList?search=${encodeURIComponent(name)}&sorting=PRICE_ASC`;
     nameItem.innerHTML = `<a target="_blank" href="${link}">${name}</a>`;
     listItem.appendChild(nameItem);
-    
+
     // translate to german
-    if (!foodLinks[name]) {translateAndUpdateLink(name, nameItem);}
+    if (!foodLinks[name]) { translateAndUpdateLink(name, nameItem); }
 
     if (details.length > 0) {
-      const detailsList = document.createElement('span');
-      details.forEach(detail => {
-        const detailItem = document.createElement('span');
-        detailItem.textContent =", " + detail;
-        detailsList.appendChild(detailItem);
-      });
-      listItem.appendChild(detailsList);
+      const detailsSpan = document.createElement('span');
+      detailsSpan.className = 'details';
+      detailsSpan.textContent = ', ' + details.join(', ');
+      listItem.appendChild(detailsSpan);
     }
-    summaryList.appendChild(listItem);
+    ingredientsList.appendChild(listItem);
   });
-  
-
+  summaryList.appendChild(ingredientsList);
 
   if (staples.length > 0) {
-    const separator = document.createElement('hr');
-    summaryList.appendChild(separator);
-    
     const staplesHeader = document.createElement('h3');
-    staplesHeader.textContent = 'Staples:';
+    staplesHeader.textContent = 'Staples';
     summaryList.appendChild(staplesHeader);
+
+    const staplesList = document.createElement('ul');
 
     // Count occurrences
     const stapleCounts = staples.reduce((acc, item) => {
@@ -290,12 +466,85 @@ function renderSummary() {
 
       if (stapleCounts[stapleName] > 1) {
         const countSpan = document.createElement('span');
+        countSpan.className = 'details';
         countSpan.textContent = ` (x${stapleCounts[stapleName]})`;
         listItem.appendChild(countSpan);
       }
 
-      summaryList.appendChild(listItem);
+      staplesList.appendChild(listItem);
     });
+    summaryList.appendChild(staplesList);
+  }
+}
+
+// Build a plain-text version of the summary (shopping list + staples) for copying
+function buildSummaryText() {
+  const lines = [];
+
+  const selectedRecipeNames = new Set(selectedRecipes.map(item => item.recipeName));
+  if (selectedRecipeNames.size > 0) {
+    lines.push('Selected Recipes:');
+    Array.from(selectedRecipeNames).forEach(recipeName => lines.push(`- ${recipeName}`));
+    lines.push('');
+  }
+
+  lines.push('Ingredients:');
+  groupSelectedIngredients().forEach(ingredient => {
+    const details = ingredient.details.length > 0 ? `, ${ingredient.details.join(', ')}` : '';
+    lines.push(`- ${ingredient.name}${details}`);
+  });
+
+  if (staples.length > 0) {
+    lines.push('');
+    lines.push('Staples:');
+    const stapleCounts = staples.reduce((acc, item) => {
+      acc[item] = (acc[item] || 0) + 1;
+      return acc;
+    }, {});
+    Object.keys(stapleCounts)
+      .sort((a, b) => a.localeCompare(b))
+      .forEach(stapleName => {
+        const count = stapleCounts[stapleName] > 1 ? ` (x${stapleCounts[stapleName]})` : '';
+        lines.push(`- ${stapleName}${count}`);
+      });
+  }
+
+  return lines.join('\n');
+}
+
+function copySummary() {
+  const text = buildSummaryText();
+  const button = document.getElementById('copy-summary-button');
+  const showFeedback = (message) => {
+    if (!button) return;
+    const original = button.textContent;
+    button.textContent = message;
+    setTimeout(() => { button.textContent = original; }, 1500);
+  };
+
+  const fallbackCopy = () => {
+    const textarea = document.createElement('textarea');
+    textarea.value = text;
+    textarea.style.position = 'fixed';
+    textarea.style.opacity = '0';
+    document.body.appendChild(textarea);
+    textarea.select();
+    try {
+      document.execCommand('copy');
+      showFeedback('Copied!');
+    } catch (error) {
+      console.error('Error copying summary:', error);
+      showFeedback('Copy failed');
+    }
+    document.body.removeChild(textarea);
+  };
+
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text)
+      .then(() => showFeedback('Copied!'))
+      .catch(() => fallbackCopy());
+  } else {
+    fallbackCopy();
   }
 }
 
@@ -316,7 +565,6 @@ async function buildRecipes() {
           recipesContainer.appendChild(recipeDiv);
         });
         const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
-        renderSummary(); // Call renderSummary after creating recipe divs
 
         // recover clicked meals
         selectedMeals.forEach(meal => {
@@ -326,6 +574,9 @@ async function buildRecipes() {
                 checkbox.dispatchEvent(new Event("change"))
             }
         });
+
+        updateSummary(); // Build the summary from the restored selection
+        updateSelectedCount();
       } else {
         console.error('Error: recipes is not an array');
       }
@@ -340,5 +591,9 @@ async function buildRecipes() {
 
 // Call the buildRecipes function when the page loads
 window.addEventListener('load', () => {
+  const copyButton = document.getElementById('copy-summary-button');
+  if (copyButton) {
+    copyButton.addEventListener('click', copySummary);
+  }
   buildRecipes().catch(error => console.error('Error in buildRecipes:', error));
 });

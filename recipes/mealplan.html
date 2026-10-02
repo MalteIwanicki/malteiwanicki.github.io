@@ -1,35 +1,59 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipe Book</title>
-    <link rel="stylesheet" href="style.css">
-</head>
+    <link rel="stylesheet" href="style.css" />
+  </head>
 
-<body>
-    <header>
-        <h1>Recipe Book</h1>
+  <body>
+    <header class="site-header">
+      <div class="site-header__inner">
+        <div class="site-header__titles">
+          <h1>Recipe Book</h1>
+          <p class="site-header__subtitle">
+            Pick your meals, get a shopping list.
+          </p>
+        </div>
+        <a
+          href="tampermonkey_script.js"
+          id="setupButton"
+          class="btn btn--ghost"
+        >
+          Setup
+        </a>
+      </div>
     </header>
 
-    <main>
-        <button>
-            <a href="tampermonkey_script.js" id="setupButton">Setup</a>
-        </button>
-
-        <div id="recipes-container"></div>
-        <div id="summary-panel">
-            <h2>Summary</h2>
-            <ul id="summary-list"></ul>
+    <main class="layout">
+      <section class="recipes-column">
+        <div class="recipes-toolbar">
+          <h2 class="section-title">Recipes</h2>
+          <span id="selected-count" class="pill">0 selected</span>
         </div>
+        <div id="recipes-container"></div>
+      </section>
+
+      <aside id="summary-panel">
+        <div class="summary-header">
+          <h2>Summary</h2>
+          <button
+            id="copy-summary-button"
+            type="button"
+            class="btn btn--primary"
+          >
+            Copy shopping list
+          </button>
+        </div>
+        <div id="summary-list"></div>
+      </aside>
     </main>
 
     <footer>
-        <p>&copy; 2024 Recipe Book</p>
+      <p>&copy; 2024 Recipe Book</p>
     </footer>
 
     <script src="scripts.js"></script>
-</body>
-
+  </body>
 </html>
