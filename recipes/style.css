@@ -76,6 +76,130 @@ body {
   color: rgba(255, 255, 255, 0.65);
 }
 
+.site-header__actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* --------------------------------------------------------------------------
+   Auth widget
+   -------------------------------------------------------------------------- */
+
+.auth-widget {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* display rules below would otherwise override the [hidden] attribute. */
+.auth-widget [hidden] {
+  display: none !important;
+}
+
+.auth-widget .btn {
+  padding: 8px 14px;
+}
+
+.auth-user {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.auth-user__avatar {
+  position: relative;
+  width: 28px;
+  height: 28px;
+  flex: 0 0 28px;
+  border-radius: 50%;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.auth-user__avatar [hidden] {
+  display: none !important;
+}
+
+.auth-user__photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.auth-user__initials {
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: #fff;
+  line-height: 1;
+}
+
+.auth-user__name {
+  font-weight: 600;
+  font-size: 0.9rem;
+  max-width: 160px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Personal features stay hidden until signed in. */
+body.signed-out .personal-only {
+  display: none;
+}
+
+.auth-message {
+  max-width: 1400px;
+  margin: 10px auto 0;
+  padding: 8px 12px;
+  font-size: 0.85rem;
+  color: #fff;
+  background: rgba(190, 40, 40, 0.85);
+  border-radius: var(--radius-sm);
+}
+
+.auth-message a {
+  color: #fff;
+  text-decoration: underline;
+}
+
+.access-denied {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(20, 24, 33, 0.72);
+  padding: 24px;
+}
+
+.access-denied [hidden] {
+  display: none !important;
+}
+
+.access-denied__card {
+  background: var(--surface);
+  color: var(--text);
+  max-width: 420px;
+  padding: 24px 28px;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-lg);
+  text-align: center;
+}
+
+.access-denied__card h2 {
+  margin-top: 0;
+}
+
+.access-denied__card a {
+  color: var(--accent);
+}
+
 /* --------------------------------------------------------------------------
    Buttons
    -------------------------------------------------------------------------- */

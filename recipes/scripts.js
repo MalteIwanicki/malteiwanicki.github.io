@@ -67,6 +67,60 @@ function updateCookie(event) {
         }
     });
     setCookie("selectedMeals", JSON.stringify(selectedMeals), 30);  // Save for 30 days
+    scheduleCloudSave(selectedMeals);
+}
+
+// --- Cross-device persistence (Firestore) ---------------------------------
+// When signed in, the selection is stored per user at users/{uid} so it syncs
+// across devices. When signed out, the cookie above is the only store.
+
+let cloudSaveTimer = null;
+let cloudLoadInFlight = false;
+let recipesRendered = false;
+
+function scheduleCloudSave(meals) {
+    if (!window.recipeStore || !window.recipeStore.isReady()) return;
+    clearTimeout(cloudSaveTimer);
+    // Debounce: a burst of checkbox clicks results in a single write.
+    cloudSaveTimer = setTimeout(() => {
+        window.recipeStore.saveSelection(meals)
+            .catch(err => console.error('Failed to save selection:', err));
+    }, 500);
+}
+
+// Apply a list of meal names to the checkboxes (without re-triggering saves).
+function applySelectedMeals(meals) {
+    document.querySelectorAll('.recipe-checkbox').forEach(checkbox => {
+        const shouldCheck = meals.includes(checkbox.dataset.meal);
+        if (checkbox.checked !== shouldCheck) {
+            checkbox.checked = shouldCheck;
+            checkbox.closest('.recipe').classList.toggle('selected', shouldCheck);
+        }
+    });
+    updateSummary();
+    updateSelectedCount();
+}
+
+// Load the signed-in user's selection and use it if it exists; otherwise
+// migrate the current cookie/local selection up to their account.
+async function loadCloudSelection() {
+    if (cloudLoadInFlight || !window.recipeStore || !window.recipeStore.isReady()) return;
+    cloudLoadInFlight = true;
+    try {
+        const meals = await window.recipeStore.loadSelection();
+        if (meals && meals.length) {
+            applySelectedMeals(meals);
+            setCookie("selectedMeals", JSON.stringify(meals), 30);
+        } else {
+            // First sign-in on any device: push the local selection up.
+            const local = JSON.parse(getCookie('selectedMeals') || '[]');
+            if (local.length) scheduleCloudSave(local);
+        }
+    } catch (err) {
+        console.error('Failed to load selection:', err);
+    } finally {
+        cloudLoadInFlight = false;
+    }
 }
 
 function createRecipeDiv(recipe) {
@@ -563,18 +617,13 @@ async function buildRecipes() {
           recipesContainer.appendChild(recipeDiv);
         });
         const selectedMeals = JSON.parse(getCookie('selectedMeals') || '[]');
+        // Restore the local selection without triggering a save.
+        applySelectedMeals(selectedMeals);
 
-        // recover clicked meals
-        selectedMeals.forEach(meal => {
-            const checkbox = document.querySelector(`.recipe-checkbox[data-meal="${meal}"]`);
-            if (checkbox) {
-                checkbox.checked = true;
-                checkbox.dispatchEvent(new Event("change"))
-            }
-        });
-
-        updateSummary(); // Build the summary from the restored selection
-        updateSelectedCount();
+        recipesRendered = true;
+        // If already signed in, replace with the cloud selection (or migrate
+        // the local one up on first sign-in).
+        loadCloudSelection();
       } else {
         console.error('Error: recipes is not an array');
       }
@@ -587,6 +636,59 @@ async function buildRecipes() {
     
 }
 
+// Wire up the Google sign-in widget. auth.js is an ES module and runs after
+// this classic script, so we wait for its ready event if needed.
+function initAuth() {
+  const widget = document.getElementById('auth-widget');
+  if (!widget || !window.recipeAuth) return;
+
+  const signinBtn = document.getElementById('auth-signin');
+  const userBox = document.getElementById('auth-user');
+  const photo = document.getElementById('auth-user-photo');
+  const initials = document.getElementById('auth-user-initials');
+  const nameEl = document.getElementById('auth-user-name');
+  const signoutBtn = document.getElementById('auth-signout');
+
+  const showPhoto = () => { photo.hidden = false; initials.hidden = true; };
+  const showInitials = () => { photo.hidden = true; initials.hidden = false; };
+  photo.addEventListener('load', showPhoto);
+  photo.addEventListener('error', showInitials);
+
+  function getInitials(user) {
+    const source = (user.displayName || user.email || '?').trim();
+    const parts = source.split(/[\s@._-]+/).filter(Boolean);
+    const letters = parts.slice(0, 2).map(p => p[0]).join('');
+    return (letters || source[0] || '?').toUpperCase();
+  }
+
+  signinBtn.addEventListener('click', () => window.recipeAuth.signIn());
+  signoutBtn.addEventListener('click', () => window.recipeAuth.signOut());
+
+  window.recipeAuth.onChange((user) => {
+    const signedIn = Boolean(user);
+    document.body.classList.toggle('signed-in', signedIn);
+    document.body.classList.toggle('signed-out', !signedIn);
+    signinBtn.hidden = signedIn;
+    userBox.hidden = !signedIn;
+    if (signedIn) {
+      nameEl.textContent = user.displayName || user.email || 'Signed in';
+      initials.textContent = getInitials(user);
+      // Show initials first, then the photo once it actually loads. Google
+      // avatar URLs can fail (blocked proxy, expired link) — the fallback
+      // keeps the header intact either way.
+      showInitials();
+      if (user.photoURL) {
+        photo.src = user.photoURL;
+      } else {
+        photo.removeAttribute('src');
+      }
+    }
+    // Pull this user's saved selection (or migrate the local one up) if the
+    // recipes have already been rendered; otherwise buildRecipes will do it.
+    if (recipesRendered) loadCloudSelection();
+  });
+}
+
 // Call the buildRecipes function when the page loads
 window.addEventListener('load', () => {
   const copyButton = document.getElementById('copy-summary-button');
@@ -594,4 +696,7 @@ window.addEventListener('load', () => {
     copyButton.addEventListener('click', copySummary);
   }
   buildRecipes().catch(error => console.error('Error in buildRecipes:', error));
+
+  if (window.recipeAuth) initAuth();
+  else window.addEventListener('recipeauthready', initAuth, { once: true });
 });

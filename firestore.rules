@@ -1,0 +1,20 @@
+rules_version = '2';
+
+// PRIVATE APP: only these verified Google accounts may read/write ANY data.
+// Enforced server-side, so it cannot be bypassed from the client.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAllowedUser() {
+      return request.auth != null
+        && request.auth.token.email_verified == true
+        && request.auth.token.email.lower() in [
+             "iwanicki.rm@gmail.com",
+             "malteiwa@gmail.com"
+           ];
+    }
+
+    match /users/{uid} {
+      allow read, write: if isAllowedUser() && request.auth.uid == uid;
+    }
+  }
+}

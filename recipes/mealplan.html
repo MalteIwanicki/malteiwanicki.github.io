@@ -16,14 +16,46 @@
             Pick your meals, get a shopping list.
           </p>
         </div>
-        <a
-          href="tampermonkey_script.js"
-          id="setupButton"
-          class="btn btn--ghost"
-        >
-          Setup
-        </a>
+        <div class="site-header__actions">
+          <a
+            href="tampermonkey_script.js"
+            id="setupButton"
+            class="btn btn--ghost"
+          >
+            Setup
+          </a>
+
+          <div class="auth-widget" id="auth-widget">
+            <button
+              id="auth-signin"
+              class="btn btn--primary"
+              type="button"
+              hidden
+            >
+              Sign in with Google
+            </button>
+            <div id="auth-user" class="auth-user" hidden>
+              <span class="auth-user__avatar">
+                <img
+                  id="auth-user-photo"
+                  class="auth-user__photo"
+                  alt=""
+                  referrerpolicy="no-referrer"
+                />
+                <span
+                  id="auth-user-initials"
+                  class="auth-user__initials"
+                ></span>
+              </span>
+              <span id="auth-user-name" class="auth-user__name"></span>
+              <button id="auth-signout" class="btn btn--ghost" type="button">
+                Sign out
+              </button>
+            </div>
+          </div>
+        </div>
       </div>
+      <p id="auth-message" class="auth-message" hidden></p>
     </header>
 
     <main class="layout">
@@ -55,5 +87,19 @@
     </footer>
 
     <script src="scripts.js"></script>
+    <script type="module" src="auth.js"></script>
+
+    <div id="access-denied-overlay" class="access-denied" hidden>
+      <div class="access-denied__card">
+        <h2>Private app</h2>
+        <p>
+          This is a private app, contact Malte at
+          <a href="mailto:malteiwa+mealplan@gmail.com"
+            >malteiwa+mealplan@gmail.com</a
+          >
+          to get access.
+        </p>
+      </div>
+    </div>
   </body>
 </html>
