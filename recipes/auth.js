@@ -179,7 +179,8 @@ async function loadBook() {
       staples: Array.isArray(data.staples) ? data.staples : [],
       links: data.links && typeof data.links === "object" ? data.links : {},
       theme: typeof data.theme === "string" ? data.theme : "violet",
-      mode: typeof data.mode === "string" ? data.mode : "light"
+      mode: typeof data.mode === "string" ? data.mode : "light",
+      checkedItems: Array.isArray(data.checkedItems) ? data.checkedItems : []
     };
 
     // Backfill staples/links for books created before those fields existed.
@@ -250,6 +251,7 @@ async function saveBook(book) {
   if (book.links && typeof book.links === "object") payload.links = book.links;
   if (typeof book.theme === "string") payload.theme = book.theme;
   if (typeof book.mode === "string") payload.mode = book.mode;
+  if (Array.isArray(book.checkedItems)) payload.checkedItems = book.checkedItems;
   await setDoc(doc(db, "recipebooks", currentUser.uid), payload, {
     merge: true
   });

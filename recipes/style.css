@@ -820,6 +820,19 @@ body.signed-out #manage-shopping {
   font-size: 0.85rem;
 }
 
+/* Ticked-off items: struck through and dimmed. */
+#summary-list > ul > li.summary-item--done .summary-item__name,
+#summary-list > ul > li.summary-item--done .summary-item__amount {
+  text-decoration: line-through;
+  color: var(--text-muted);
+  opacity: 0.7;
+}
+
+#summary-list > ul > li.summary-item--done .summary-item__name a {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
 #summary-list a {
   color: var(--text);
   text-decoration: none;

@@ -53,7 +53,7 @@ function normalizeIngredient(name) {
 
 // --- App state -------------------------------------------------------------
 
-let book = { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet" };
+let book = { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", checkedItems: [] };
 let parsedCache = new Map();
 let editMode = false;
 let selectedRecipes = [];
@@ -68,6 +68,32 @@ function getStaples() {
 
 function getLinks() {
   return book.links && typeof book.links === "object" ? book.links : {};
+}
+
+// Names the user has already ticked off the shopping list (struck through).
+function getChecked() {
+  return new Set(Array.isArray(book.checkedItems) ? book.checkedItems : []);
+}
+
+// Wire a shopping-list item so clicking it toggles its "done" state. Attached
+// to the name span (not the link) so it survives the link being re-rendered by
+// the translation helper.
+function wireCheckedToggle(nameItem, name) {
+  nameItem.addEventListener("click", () => {
+    const set = getChecked();
+    const li = nameItem.closest("li");
+    if (!li) return;
+    const nowDone = !set.has(name);
+    if (nowDone) {
+      set.add(name);
+      li.classList.add("summary-item--done");
+    } else {
+      set.delete(name);
+      li.classList.remove("summary-item--done");
+    }
+    book.checkedItems = Array.from(set);
+    scheduleSave({ checkedItems: book.checkedItems });
+  });
 }
 
 // --- Small helpers ---------------------------------------------------------
@@ -566,8 +592,10 @@ function renderSummary() {
   if (selectedRecipeNames.size > 0) {
     summaryList.appendChild(el("h3", null, "Ingredients"));
     const ingredientsList = el("ul", "summary-items");
+    const checked = getChecked();
     groupSelectedIngredients().forEach(({ name, details }) => {
       const listItem = el("li");
+      if (checked.has(name)) listItem.classList.add("summary-item--done");
       const nameItem = el("span", "summary-item__name");
       const link =
         links[name] != null
@@ -577,6 +605,7 @@ function renderSummary() {
             )}&sorting=PRICE_ASC`;
       nameItem.innerHTML = `<a target="_blank" href="${link}">${name} <i class="fa-solid fa-cart-plus" aria-hidden="true"></i></a>`;
       listItem.appendChild(nameItem);
+      wireCheckedToggle(nameItem, name);
 
       if (!links[name]) translateAndUpdateLink(name, nameItem);
 
@@ -597,10 +626,12 @@ function renderSummary() {
       acc[item] = (acc[item] || 0) + 1;
       return acc;
     }, {});
+    const checked = getChecked();
     Object.keys(stapleCounts)
       .sort((a, b) => a.localeCompare(b))
       .forEach((stapleName) => {
         const listItem = el("li");
+        if (checked.has(stapleName)) listItem.classList.add("summary-item--done");
         const nameItem = el("span", "summary-item__name");
         const link =
           links[stapleName] != null
@@ -610,6 +641,7 @@ function renderSummary() {
               )}&sorting=PRICE_ASC`;
         nameItem.innerHTML = `<a target="_blank" href="${link}">${stapleName} <i class="fa-solid fa-cart-plus" aria-hidden="true"></i></a>`;
         listItem.appendChild(nameItem);
+        wireCheckedToggle(nameItem, stapleName);
 
         if (!links[stapleName]) translateAndUpdateLink(stapleName, nameItem);
 
@@ -1090,7 +1122,7 @@ async function loadBookAndRender() {
   if (!window.recipeStore || !window.recipeStore.isReady()) return;
   try {
     const loaded = await window.recipeStore.loadBook();
-    book = loaded || { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet" };
+    book = loaded || { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", checkedItems: [] };
     invalidate();
     renderBook();
     refreshIngredientNames();
