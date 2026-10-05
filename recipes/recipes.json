@@ -211,41 +211,6 @@
       "instructions": ["Follow cook it recipe"]
     },
     {
-      "meal": "Red Pepper Toast",
-      "ingredients": [
-        {
-          "food": "toasties",
-          "amount": "4"
-        },
-        {
-          "food": "oil",
-          "amount": "2",
-          "unit": "Tbsp"
-        },
-        {
-          "food": "red pepper",
-          "amount": "1",
-          "how": "diced"
-        },
-        {
-          "food": "slices of cheese",
-          "amount": "4"
-        },
-        {
-          "food": "eggs",
-          "amount": "4"
-        }
-      ],
-      "instructions": [
-        "Toast the bread",
-        "Heat 1 Tbsp oil in a pan and cook the red pepper for 3-4 minutes. Season with salt and pepper",
-        "Spread the red pepper on the bread and cover each with ½ a slice of cheese",
-        "Bake at 200°C until the cheese starts to brown",
-        "Fry the eggs, season with salt and pepper and put ½ an egg on top of each slice"
-      ]
-    },
-
-    {
       "meal": "Spinach Pasta bake",
       "ingredients": [
         {
@@ -417,19 +382,20 @@
         "Cut the Romana into 2cm strips and mix into the dressing"
       ]
     },
-
     {
       "meal": "Köttbullar & Mash potatoe",
       "ingredients": [
+        { "food": "potatoes", "amount": "1", "unit": "kg" },
+        { "food": "butter", "amount": "100", "unit": "g" },
+        { "food": "salt", "amount": "1", "unit": "tsp" },
+        { "food": "frozen Köttbullar", "amount": "500", "unit": "g" },
         {
-          "food": "Köttbullar"
+          "food": "Köttbullar sauce fix packet",
+          "how": "or Rahmsoße + 1 tsp soy sauce + ½ tsp mustard"
         },
-        {
-          "food": "cream sauce (fix)"
-        },
-        { "food": "cranberry jam" },
-        { "food": "peas" },
-        { "food": "potato", "amount": "8" }
+        { "food": "KOCHsahne", "amount": "200", "unit": "ml" },
+        { "food": "Preiselbeere jam" },
+        { "food": "peas" }
       ],
       "instructions": ["make it like Ikea"]
     },
@@ -955,10 +921,8 @@
           "how": "chopped"
         },
         {
-          "food": "mozzarella",
-          "amount": "250",
-          "unit": "g",
-          "how": "sliced"
+          "food": "mozzarella balls",
+          "amount": "2"
         }
       ],
       "instructions": [
@@ -1381,6 +1345,56 @@
         }
       ],
       "instructions": []
+    },
+
+    {
+      "meal": "Butter Chicken",
+      "ingredients": [
+        { "food": "yoghurt (3.5% fat)", "amount": "2", "unit": "Tbsp" },
+        { "food": "vegetable oil", "amount": "3", "unit": "Tbsp" },
+        { "food": "lemon juice", "amount": "3", "unit": "Tbsp" },
+        { "food": "ground turmeric", "amount": "½", "unit": "tsp" },
+        { "food": "chilli powder", "amount": "½", "unit": "tsp" },
+        { "food": "rose paprika powder", "amount": "1", "unit": "tsp" },
+        { "food": "garam masala", "amount": "1", "unit": "tsp" },
+        {
+          "food": "chicken breast fillet",
+          "amount": "3",
+          "unit": "pieces",
+          "how": "approx. 200 g each, diced (2 cm)"
+        },
+        {
+          "food": "onions",
+          "amount": "2",
+          "how": "peeled, halved, approx. 80 g each"
+        },
+        { "food": "garlic cloves", "amount": "3", "how": "peeled" },
+        {
+          "food": "ginger",
+          "amount": "1",
+          "unit": "piece",
+          "how": "walnut-sized, peeled"
+        },
+        { "food": "vegetable oil", "amount": "50", "unit": "ml" },
+        { "food": "butter", "amount": "50", "unit": "g" },
+        { "food": "ground turmeric", "amount": "½", "unit": "tsp" },
+        { "food": "rose paprika powder", "amount": "½", "unit": "tsp" },
+        { "food": "chilli powder", "amount": "½", "unit": "tsp" },
+        { "food": "ground coriander", "amount": "½", "unit": "tsp" },
+        { "food": "garam masala", "amount": "1", "unit": "tsp" },
+        { "food": "ground cumin", "amount": "½", "unit": "tsp" },
+        { "food": "salt", "amount": "1", "unit": "tsp" },
+        { "food": "ground black pepper", "amount": "½", "unit": "tsp" },
+        { "food": "sugar", "amount": "½", "unit": "tsp" },
+        { "food": "tomatoes", "amount": "500", "unit": "g" },
+        { "food": "cream", "amount": "200", "unit": "ml" },
+        { "food": "cornstarch", "amount": "1", "unit": "Tbsp" },
+        { "food": "water", "amount": "1", "unit": "Tbsp" },
+        { "food": "cream", "how": "for garnish" },
+        { "food": "fresh coriander", "how": "to garnish" },
+        { "food": "black pepper", "how": "coarsely crushed, for garnish" }
+      ],
+      "instructions": ["follow cookit recipe"]
     },
     {
       "meal": "Smashed potato, yoghurt/tzatziki, pesto and onion rings",
