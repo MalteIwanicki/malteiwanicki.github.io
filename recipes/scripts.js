@@ -214,12 +214,26 @@ function renderEmptyState() {
   container.innerHTML = "";
   const box = el("div", "empty-state");
   const signedIn = window.recipeStore && window.recipeStore.isReady();
+  const mark = el("div", "empty-state__mark");
+  mark.innerHTML = signedIn
+    ? '<i class="fa-solid fa-utensils" aria-hidden="true"></i>'
+    : '<i class="fa-solid fa-lock" aria-hidden="true"></i>';
+  box.appendChild(mark);
+  box.appendChild(
+    el(
+      "p",
+      "empty-state__title",
+      signedIn ? "No recipes yet" : "Sign in to see your recipe book"
+    )
+  );
   if (signedIn) {
-    box.appendChild(el("div", "empty-state__mark", "—"));
-    box.appendChild(el("p", null, "No recipes yet. Use “Add recipe” to create your first one."));
-  } else {
-    box.appendChild(el("div", "empty-state__mark", "—"));
-    box.appendChild(el("p", null, "Sign in to see your recipe book."));
+    box.appendChild(
+      el(
+        "p",
+        "empty-state__hint",
+        "Use “Add recipe” to create your first one."
+      )
+    );
   }
   container.appendChild(box);
 }

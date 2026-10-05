@@ -508,8 +508,8 @@ textarea:focus-visible {
   align-items: center;
   padding: 4px 12px;
   border-radius: var(--radius-pill);
-  background: var(--sun);
-  color: var(--sun-ink);
+  background: var(--accent-soft);
+  color: var(--accent-dark);
   border: none;
   font-size: 0.82rem;
   font-weight: 800;
@@ -537,19 +537,34 @@ body.signed-out #manage-shopping {
   background: var(--surface);
   border: 1px dashed var(--border-strong);
   border-radius: var(--radius);
-  padding: 48px 24px;
+  padding: 56px 24px;
   text-align: center;
 }
 
 .empty-state__mark {
-  font-size: 1.6rem;
+  width: 64px;
+  height: 64px;
+  margin: 0 auto 14px;
+  border-radius: 50%;
+  background: var(--accent-soft);
   color: var(--accent);
-  margin-bottom: 6px;
+  font-size: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-.empty-state p {
-  color: var(--text-muted);
+.empty-state__title {
   margin: 0;
+  font-size: 1.05rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.empty-state__hint {
+  margin: 6px 0 0;
+  color: var(--text-muted);
+  font-size: 0.9rem;
 }
 
 .recipe {
@@ -617,11 +632,42 @@ body.signed-out #manage-shopping {
   position: absolute;
   top: 16px;
   right: 16px;
-  width: 20px;
-  height: 20px;
+  width: 24px;
+  height: 24px;
   margin: 0;
   cursor: pointer;
-  accent-color: var(--accent);
+  appearance: none;
+  -webkit-appearance: none;
+  border: 2px solid var(--border-strong);
+  border-radius: 50%;
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.recipe-checkbox::after {
+  content: "\f00c";
+  font-family: "Font Awesome 6 Free";
+  font-weight: 900;
+  font-size: 0.7rem;
+  color: #fff;
+  opacity: 0;
+  transition: opacity 0.12s ease;
+}
+
+.recipe-checkbox:hover {
+  border-color: var(--accent);
+}
+
+.recipe-checkbox:checked {
+  background: var(--accent);
+  border-color: var(--accent);
+}
+
+.recipe-checkbox:checked::after {
+  opacity: 1;
 }
 
 /* Edit-mode affordances */
@@ -821,14 +867,14 @@ body.signed-out #manage-shopping {
 }
 
 /* Ticked-off items: struck through and dimmed. */
-#summary-list > ul > li.summary-item--done .summary-item__name,
-#summary-list > ul > li.summary-item--done .summary-item__amount {
+#summary-list>ul>li.summary-item--done .summary-item__name,
+#summary-list>ul>li.summary-item--done .summary-item__amount {
   text-decoration: line-through;
   color: var(--text-muted);
   opacity: 0.7;
 }
 
-#summary-list > ul > li.summary-item--done .summary-item__name a {
+#summary-list>ul>li.summary-item--done .summary-item__name a {
   text-decoration: line-through;
   color: var(--text-muted);
 }
