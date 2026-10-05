@@ -4,27 +4,32 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Recipe Book</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
     <link rel="stylesheet" href="style.css" />
   </head>
 
-  <body>
+  <body class="signed-out">
     <header class="site-header">
       <div class="site-header__inner">
         <div class="site-header__titles">
-          <h1>Recipe Book :)</h1>
+          <h1>Recipe Book</h1>
           <p class="site-header__subtitle">
             Pick your meals, get a shopping list.
           </p>
         </div>
         <div class="site-header__actions">
-          <a
-            href="tampermonkey_script.js"
-            id="setupButton"
-            class="btn btn--ghost"
-          >
-            Setup
-          </a>
-
           <div class="auth-widget" id="auth-widget">
             <button
               id="auth-signin"
@@ -32,7 +37,8 @@
               type="button"
               hidden
             >
-              Sign in with Google
+              <i class="fa-brands fa-google" aria-hidden="true"></i> Sign in
+              with Google
             </button>
             <div id="auth-user" class="auth-user" hidden>
               <span class="auth-user__avatar">
@@ -53,29 +59,89 @@
               </button>
             </div>
           </div>
+
+          <div class="settings">
+            <button
+              id="settings-toggle"
+              class="icon-btn icon-btn--on-color"
+              type="button"
+              aria-label="Settings"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <i class="fa-solid fa-gear" aria-hidden="true"></i>
+            </button>
+            <div id="settings-menu" class="settings-menu" hidden>
+              <span class="settings-menu__label">Appearance</span>
+              <div id="mode-options" class="appearance-options">
+                <button type="button" class="appearance-btn" data-mode="light">
+                  <i class="fa-solid fa-sun" aria-hidden="true"></i> Light
+                </button>
+                <button type="button" class="appearance-btn" data-mode="dark">
+                  <i class="fa-solid fa-moon" aria-hidden="true"></i> Dark
+                </button>
+              </div>
+              <span class="settings-menu__label">Theme</span>
+              <div id="theme-options" class="theme-options"></div>
+
+              <span class="settings-menu__label">Shopping helper</span>
+              <a class="settings-link" href="tampermonkey_script.js" download>
+                <i class="fa-solid fa-download" aria-hidden="true"></i>
+                Install Tampermonkey script
+              </a>
+              <p class="settings-hint">
+                Adds REWE items to your basket automatically from the shopping
+                list.
+              </p>
+            </div>
+          </div>
         </div>
       </div>
       <p id="auth-message" class="auth-message" hidden></p>
+      <p id="parser-notice" class="parser-notice" hidden>
+        Offline mode: using the simple recipe reader.
+      </p>
     </header>
 
     <main class="layout">
       <section class="recipes-column">
         <div class="recipes-toolbar">
-          <h2 class="section-title">Recipes</h2>
-          <span id="selected-count" class="pill">0 selected</span>
+          <h2 class="section-title">My recipes</h2>
+          <div class="recipes-toolbar__right">
+            <span id="selected-count" class="pill">0 selected</span>
+            <button id="manage-shopping" class="btn btn--soft" type="button">
+              <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+              Staples &amp; links
+            </button>
+            <button id="add-recipe" class="btn btn--primary" type="button">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i> Add recipe
+            </button>
+            <button
+              id="edit-toggle"
+              class="btn btn--soft"
+              type="button"
+              aria-pressed="false"
+            >
+              <i class="fa-solid fa-pen" aria-hidden="true"></i> Edit
+            </button>
+          </div>
         </div>
         <div id="recipes-container"></div>
       </section>
 
       <aside id="summary-panel">
         <div class="summary-header">
-          <h2>Summary</h2>
+          <h2>
+            <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+            Shopping list
+          </h2>
           <button
             id="copy-summary-button"
             type="button"
             class="btn btn--primary"
           >
-            Copy shopping list
+            <i class="fa-solid fa-copy" aria-hidden="true"></i> Copy shopping
+            list
           </button>
         </div>
         <div id="summary-list"></div>
@@ -83,14 +149,201 @@
     </main>
 
     <footer>
-      <p>&copy; 2024 Recipe Book</p>
+      <p>&copy; 2024 Recipe Book &middot; recipes are private to you</p>
     </footer>
 
-    <script src="scripts.js"></script>
+    <!-- Ingredient autocomplete -->
+    <datalist id="ingredient-names"></datalist>
+
+    <!-- Add / edit recipe -->
+    <dialog id="recipe-dialog" class="recipe-dialog">
+      <div class="recipe-dialog__form">
+        <header class="recipe-dialog__header">
+          <h2 id="dialog-title">Add a new recipe</h2>
+          <button
+            type="button"
+            id="recipe-cancel"
+            class="icon-btn"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <div class="tabs" role="tablist">
+          <button type="button" id="tab-form" class="tab is-active" role="tab">
+            <i class="fa-solid fa-pen-to-square" aria-hidden="true"></i> Form
+          </button>
+          <button type="button" id="tab-cooklang" class="tab" role="tab">
+            <i class="fa-solid fa-code" aria-hidden="true"></i> Cooklang
+          </button>
+        </div>
+
+        <div class="recipe-dialog__body">
+          <div class="editor-pane">
+            <div id="pane-form" class="pane">
+              <label class="field">
+                <span class="field__label">Recipe name</span>
+                <input
+                  id="recipe-title"
+                  class="field__input"
+                  type="text"
+                  placeholder="Yummy pancakes"
+                  autocomplete="off"
+                />
+              </label>
+
+              <div class="field-group">
+                <div class="field-group__head">
+                  <span class="field__label">Ingredients</span>
+                  <button
+                    type="button"
+                    id="add-ingredient"
+                    class="btn btn--soft btn--sm"
+                  >
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Add
+                    ingredient
+                  </button>
+                </div>
+                <div
+                  class="ingredient-row ingredient-row--legend"
+                  aria-hidden="true"
+                >
+                  <span>Name</span><span>Amount</span><span>Unit</span
+                  ><span>Prep</span><span></span>
+                </div>
+                <div id="ingredient-rows"></div>
+              </div>
+
+              <div class="field-group">
+                <div class="field-group__head">
+                  <span class="field__label">Steps</span>
+                  <button
+                    type="button"
+                    id="add-step"
+                    class="btn btn--soft btn--sm"
+                  >
+                    <i class="fa-solid fa-plus" aria-hidden="true"></i> Add step
+                  </button>
+                </div>
+                <div id="step-rows"></div>
+              </div>
+            </div>
+
+            <div id="pane-cooklang" class="pane" hidden>
+              <p class="field__hint">
+                Write in
+                <a href="https://cooklang.org/" target="_blank" rel="noopener"
+                  >Cooklang</a
+                >
+                &mdash; e.g. <code>@flour{200%g}</code>, <code>@eggs{2}</code>.
+              </p>
+              <textarea
+                id="recipe-source"
+                class="source-editor"
+                spellcheck="false"
+                aria-label="Cooklang source"
+              ></textarea>
+            </div>
+          </div>
+
+          <aside class="preview-pane">
+            <span class="field__label">Preview</span>
+            <div id="recipe-preview" class="preview"></div>
+          </aside>
+        </div>
+
+        <footer class="recipe-dialog__footer">
+          <button
+            type="button"
+            class="btn btn--ghost-dark"
+            id="recipe-cancel-footer"
+          >
+            Cancel
+          </button>
+          <button type="button" id="recipe-save" class="btn btn--primary">
+            <i class="fa-solid fa-floppy-disk" aria-hidden="true"></i> Save
+            recipe
+          </button>
+        </footer>
+      </div>
+    </dialog>
+
+    <script type="module" src="scripts.js"></script>
     <script type="module" src="auth.js"></script>
+
+    <!-- Staples & shopping links -->
+    <dialog id="shopping-dialog" class="recipe-dialog shopping-dialog">
+      <div class="recipe-dialog__form">
+        <header class="recipe-dialog__header">
+          <h2>Staples &amp; links</h2>
+          <button
+            type="button"
+            id="shopping-close"
+            class="icon-btn"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <div class="shopping-body">
+          <section class="shopping-block">
+            <div class="field-group__head">
+              <span class="field__label">Staples</span>
+              <button
+                type="button"
+                id="add-staple"
+                class="btn btn--soft btn--sm"
+              >
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> Add staple
+              </button>
+            </div>
+            <p class="field__hint">
+              Always on the shopping list. Repeats count up (x2, x3).
+            </p>
+            <div id="staple-rows"></div>
+          </section>
+
+          <section class="shopping-block">
+            <div class="field-group__head">
+              <span class="field__label">REWE links</span>
+              <button type="button" id="add-link" class="btn btn--soft btn--sm">
+                <i class="fa-solid fa-plus" aria-hidden="true"></i> Add link
+              </button>
+            </div>
+            <p class="field__hint">
+              Full product URL for an ingredient. Empty = search fallback.
+            </p>
+            <div id="link-rows"></div>
+          </section>
+        </div>
+
+        <footer class="recipe-dialog__footer">
+          <button
+            type="button"
+            class="btn btn--ghost-dark"
+            id="shopping-cancel"
+          >
+            Cancel
+          </button>
+          <button type="button" id="shopping-save" class="btn btn--primary">
+            Save
+          </button>
+        </footer>
+      </div>
+    </dialog>
 
     <div id="access-denied-overlay" class="access-denied" hidden>
       <div class="access-denied__card">
+        <button
+          type="button"
+          id="access-denied-close"
+          class="icon-btn access-denied__close"
+          aria-label="Close"
+        >
+          <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+        </button>
         <h2>Private app</h2>
         <p>
           This is a private app, contact Malte at

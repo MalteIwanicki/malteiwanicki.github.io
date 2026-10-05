@@ -13,7 +13,14 @@ service cloud.firestore {
            ];
     }
 
+    // Legacy per-user selection store (kept for the one-time migration).
     match /users/{uid} {
+      allow read, write: if isAllowedUser() && request.auth.uid == uid;
+    }
+
+    // Each user's PRIVATE recipe book (recipes + selected meals).
+    // Owner-only: a user can never read or write anyone else's book.
+    match /recipebooks/{uid} {
       allow read, write: if isAllowedUser() && request.auth.uid == uid;
     }
   }
