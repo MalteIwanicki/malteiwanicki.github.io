@@ -33,7 +33,6 @@ const ingredientAliases = {
   "vegetables": "frozen mixed veggies",
   "porree": "leek",
   "schalotten": "schallots",
-  "kochsahne": "kochsahne",
   "chili": "chilli",
   "oil": "olive oil",
   "grated tasty cheese": "grated cheese",
