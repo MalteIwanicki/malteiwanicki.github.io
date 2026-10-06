@@ -54,6 +54,14 @@
                 ></span>
               </span>
               <span id="auth-user-name" class="auth-user__name"></span>
+              <button
+                id="auth-switch"
+                class="btn btn--ghost"
+                type="button"
+                title="Switch Google account"
+              >
+                <i class="fa-solid fa-right-left" aria-hidden="true"></i> Switch
+              </button>
               <button id="auth-signout" class="btn btn--ghost" type="button">
                 Sign out
               </button>
@@ -93,6 +101,22 @@
                 Adds REWE items to your basket automatically from the shopping
                 list.
               </p>
+
+              <span class="settings-menu__label">Shopping</span>
+              <div class="settings-links">
+                <button
+                  id="manage-staples"
+                  class="settings-link"
+                  type="button"
+                >
+                  <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
+                  Edit staples
+                </button>
+                <button id="manage-links" class="settings-link" type="button">
+                  <i class="fa-solid fa-link" aria-hidden="true"></i>
+                  REWE links
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -106,16 +130,11 @@
     <main class="layout">
       <section class="recipes-column">
         <div class="recipes-toolbar">
-          <h2 class="section-title">My recipes</h2>
+          <div class="recipes-toolbar__left">
+            <h2 class="section-title">My recipes</h2>
+            <span id="recipe-count" class="pill pill--muted">0</span>
+          </div>
           <div class="recipes-toolbar__right">
-            <span id="selected-count" class="pill">0 selected</span>
-            <button id="manage-shopping" class="btn btn--soft" type="button">
-              <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
-              Staples &amp; links
-            </button>
-            <button id="add-recipe" class="btn btn--primary" type="button">
-              <i class="fa-solid fa-plus" aria-hidden="true"></i> Add recipe
-            </button>
             <button
               id="edit-toggle"
               class="btn btn--soft"
@@ -124,27 +143,67 @@
             >
               <i class="fa-solid fa-pen" aria-hidden="true"></i> Edit
             </button>
+            <button id="add-recipe" class="btn btn--primary" type="button">
+              <i class="fa-solid fa-plus" aria-hidden="true"></i> Add recipe
+            </button>
+          </div>
+        </div>
+        <div id="selection-bar" class="selection-bar" hidden>
+          <span class="selection-bar__text">
+            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+            <strong id="selected-count">0</strong> selected
+          </span>
+          <div class="selection-bar__actions">
+            <button id="selection-clear" class="btn btn--soft btn--sm" type="button">
+              <i class="fa-solid fa-xmark" aria-hidden="true"></i> Clear
+            </button>
           </div>
         </div>
         <div id="recipes-container"></div>
       </section>
 
       <aside id="summary-panel">
-        <div class="summary-header">
-          <h2>
-            <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
-            Shopping list
-          </h2>
-          <button
-            id="copy-summary-button"
-            type="button"
-            class="btn btn--primary"
-          >
-            <i class="fa-solid fa-copy" aria-hidden="true"></i> Copy shopping
-            list
-          </button>
+        <div id="summary-card" class="summary-card">
+          <div class="summary-header">
+            <h2 class="summary-title">
+              <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+              Shopping list
+            </h2>
+            <div id="summary-progress" class="summary-progress" hidden>
+              <div
+                class="summary-progress__track"
+                role="progressbar"
+                aria-valuemin="0"
+                aria-valuemax="0"
+                aria-valuenow="0"
+              >
+                <span id="summary-progress-fill" class="summary-progress__fill"></span>
+              </div>
+              <span id="summary-progress-text" class="summary-progress__text"
+                >0/0</span
+              >
+            </div>
+          </div>
+          <div id="summary-list"></div>
+          <div id="staples-inline" class="staples-inline" hidden>
+            <div class="field-group__head">
+              <span class="field__label">Staples</span>
+            </div>
+            <p class="field__hint">
+              Always on the list. Add an amount instead of repeating an item.
+            </p>
+            <div id="staple-rows"></div>
+          </div>
+          <div class="summary-footer">
+            <button
+              id="copy-summary-button"
+              type="button"
+              class="btn btn--primary"
+            >
+              <i class="fa-solid fa-copy" aria-hidden="true"></i> Copy list
+            </button>
+          </div>
         </div>
-        <div id="summary-list"></div>
       </aside>
     </main>
 
@@ -272,14 +331,14 @@
     <script type="module" src="scripts.js"></script>
     <script type="module" src="auth.js"></script>
 
-    <!-- Staples & shopping links -->
-    <dialog id="shopping-dialog" class="recipe-dialog shopping-dialog">
+    <!-- Staples editor -->
+    <dialog id="staples-dialog" class="recipe-dialog shopping-dialog">
       <div class="recipe-dialog__form">
         <header class="recipe-dialog__header">
-          <h2>Staples &amp; links</h2>
+          <h2>Staples</h2>
           <button
             type="button"
-            id="shopping-close"
+            id="staples-close"
             class="icon-btn"
             aria-label="Close"
           >
@@ -300,11 +359,44 @@
               </button>
             </div>
             <p class="field__hint">
-              Always on the shopping list. Repeats count up (x2, x3).
+              Always on the shopping list. Add an amount (e.g. 2) instead of
+              entering the same item twice.
             </p>
-            <div id="staple-rows"></div>
+            <div id="staple-rows-dialog"></div>
           </section>
+        </div>
 
+        <footer class="recipe-dialog__footer">
+          <button
+            type="button"
+            class="btn btn--ghost-dark"
+            id="staples-cancel"
+          >
+            Cancel
+          </button>
+          <button type="button" id="staples-save" class="btn btn--primary">
+            Save
+          </button>
+        </footer>
+      </div>
+    </dialog>
+
+    <!-- REWE links editor -->
+    <dialog id="links-dialog" class="recipe-dialog shopping-dialog">
+      <div class="recipe-dialog__form">
+        <header class="recipe-dialog__header">
+          <h2>REWE links</h2>
+          <button
+            type="button"
+            id="links-close"
+            class="icon-btn"
+            aria-label="Close"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+
+        <div class="shopping-body">
           <section class="shopping-block">
             <div class="field-group__head">
               <span class="field__label">REWE links</span>
@@ -313,7 +405,8 @@
               </button>
             </div>
             <p class="field__hint">
-              Full product URL for an ingredient. Empty = search fallback.
+              Every ingredient is listed. Paste a full product URL to link it;
+              leave it empty to use a REWE search instead.
             </p>
             <div id="link-rows"></div>
           </section>
@@ -323,16 +416,52 @@
           <button
             type="button"
             class="btn btn--ghost-dark"
-            id="shopping-cancel"
+            id="links-cancel"
           >
             Cancel
           </button>
-          <button type="button" id="shopping-save" class="btn btn--primary">
+          <button type="button" id="links-save" class="btn btn--primary">
             Save
           </button>
         </footer>
       </div>
     </dialog>
+
+    <!-- Mobile shopping list: floating button + bottom sheet -->
+    <button
+      id="summary-fab"
+      class="summary-fab"
+      type="button"
+      aria-label="Open shopping list"
+      hidden
+    >
+      <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+      <span id="summary-fab-count" class="summary-fab__badge" hidden>0</span>
+    </button>
+
+    <dialog id="summary-sheet" class="summary-sheet">
+      <div class="summary-sheet__inner">
+        <header class="summary-sheet__header">
+          <span class="summary-sheet__grip" aria-hidden="true"></span>
+          <button
+            id="summary-sheet-close"
+            class="icon-btn summary-sheet__close"
+            type="button"
+            aria-label="Close shopping list"
+          >
+            <i class="fa-solid fa-xmark" aria-hidden="true"></i>
+          </button>
+        </header>
+        <div id="summary-sheet-slot" class="summary-sheet__slot"></div>
+      </div>
+    </dialog>
+
+    <div
+      id="toast-container"
+      class="toast-container"
+      aria-live="polite"
+      aria-atomic="false"
+    ></div>
 
     <div id="access-denied-overlay" class="access-denied" hidden>
       <div class="access-denied__card">

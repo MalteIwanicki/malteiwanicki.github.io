@@ -66,6 +66,17 @@ function getStaples() {
   return Array.isArray(book.staples) ? book.staples : [];
 }
 
+// How many of a staple to buy, e.g. 1 (default) or 2. Legacy books just stored
+// a repeat count via duplicate entries, which auth.js folds into amounts.
+function getStapleAmount(name) {
+  const amounts = book.stapleAmounts;
+  if (amounts && typeof amounts === "object" && amounts[name] != null) {
+    const n = parseInt(amounts[name], 10);
+    return Number.isFinite(n) && n > 0 ? n : 1;
+  }
+  return 1;
+}
+
 function getLinks() {
   return book.links && typeof book.links === "object" ? book.links : {};
 }
@@ -75,24 +86,39 @@ function getChecked() {
   return new Set(Array.isArray(book.checkedItems) ? book.checkedItems : []);
 }
 
+// Persist the ticked-off set and refresh the shopping list.
+function setChecked(set) {
+  book.checkedItems = Array.from(set);
+  scheduleSave({ checkedItems: book.checkedItems });
+  renderSummary();
+}
+
+// A visible circular tick control for a shopping-list row.
+function summaryCheckButton(name, isDone) {
+  const btn = el("button", "summary-item__check");
+  btn.type = "button";
+  btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
+  btn.setAttribute("aria-pressed", String(isDone));
+  btn.setAttribute("aria-label", `${isDone ? "Untick" : "Tick off"} ${name}`);
+  btn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const set = getChecked();
+    if (set.has(name)) set.delete(name);
+    else set.add(name);
+    setChecked(set);
+  });
+  return btn;
+}
+
 // Wire a shopping-list item so clicking it toggles its "done" state. Attached
 // to the name span (not the link) so it survives the link being re-rendered by
 // the translation helper.
 function wireCheckedToggle(nameItem, name) {
   nameItem.addEventListener("click", () => {
     const set = getChecked();
-    const li = nameItem.closest("li");
-    if (!li) return;
-    const nowDone = !set.has(name);
-    if (nowDone) {
-      set.add(name);
-      li.classList.add("summary-item--done");
-    } else {
-      set.delete(name);
-      li.classList.remove("summary-item--done");
-    }
-    book.checkedItems = Array.from(set);
-    scheduleSave({ checkedItems: book.checkedItems });
+    if (set.has(name)) set.delete(name);
+    else set.add(name);
+    setChecked(set);
   });
 }
 
@@ -107,6 +133,27 @@ function el(tag, className, text) {
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
+// --- Toasts ----------------------------------------------------------------
+
+function showToast(message, variant = "success") {
+  const container = document.getElementById("toast-container");
+  if (!container) return;
+  const toast = el("div", `toast toast--${variant}`);
+  const icon =
+    variant === "error"
+      ? '<i class="fa-solid fa-circle-exclamation" aria-hidden="true"></i>'
+      : '<i class="fa-solid fa-circle-check" aria-hidden="true"></i>';
+  toast.innerHTML = `${icon}<span></span>`;
+  toast.lastChild.textContent = message;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.style.transition = "opacity 0.25s ease, transform 0.25s ease";
+    toast.style.opacity = "0";
+    toast.style.transform = "translateY(8px)";
+    setTimeout(() => toast.remove(), 260);
+  }, 2200);
 }
 
 // --- Theme -----------------------------------------------------------------
@@ -242,6 +289,8 @@ function renderBook() {
   const container = document.getElementById("recipes-container");
   container.innerHTML = "";
   recipesRendered = true;
+  updateRecipeCount();
+  syncSummaryPlacement();
 
   if (!book.recipes.length) {
     renderEmptyState();
@@ -267,7 +316,25 @@ function createRecipeCard(recipe, isSelected) {
   if (isSelected) card.classList.add("selected");
 
   const head = el("div", "recipe__head");
-  head.appendChild(el("h2", "recipe__title", title));
+  const monogram = el(
+    "span",
+    "recipe__monogram",
+    (title.trim()[0] || "?").toUpperCase()
+  );
+  monogram.setAttribute("aria-hidden", "true");
+  const heading = el("div", "recipe__heading");
+  heading.appendChild(el("h2", "recipe__title", title));
+  const stepCount = parsed.steps.filter((s) => s.text).length;
+  const meta = el("div", "recipe__meta");
+  const ingMeta = el("span");
+  ingMeta.innerHTML = `<i class="fa-solid fa-carrot" aria-hidden="true"></i> ${parsed.ingredients.length} ingredients`;
+  const stepMeta = el("span");
+  stepMeta.innerHTML = `<i class="fa-solid fa-list-ol" aria-hidden="true"></i> ${stepCount} steps`;
+  meta.appendChild(ingMeta);
+  meta.appendChild(stepMeta);
+  heading.appendChild(meta);
+  head.appendChild(monogram);
+  head.appendChild(heading);
   card.appendChild(head);
 
   if (editMode) {
@@ -356,6 +423,13 @@ function createRecipeCard(recipe, isSelected) {
 
 // --- Selection -------------------------------------------------------------
 
+function updateRecipeCount() {
+  const countEl = document.getElementById("recipe-count");
+  if (!countEl) return;
+  const n = book.recipes.length;
+  countEl.textContent = n === 1 ? "1 recipe" : `${n} recipes`;
+}
+
 function toggleSelected(id, isSelected) {
   const set = new Set(book.selectedMeals);
   if (isSelected) set.add(id);
@@ -367,9 +441,72 @@ function toggleSelected(id, isSelected) {
 }
 
 function updateSelectedCount() {
+  const boxes = document.querySelectorAll(".recipe-checkbox");
   const count = document.querySelectorAll(".recipe-checkbox:checked").length;
-  const pill = document.getElementById("selected-count");
-  if (pill) pill.textContent = `${count} selected`;
+  const countEl = document.getElementById("selected-count");
+  if (countEl) countEl.textContent = String(count);
+
+  const bar = document.getElementById("selection-bar");
+  if (bar) bar.hidden = count === 0 || boxes.length === 0;
+
+  syncFab();
+}
+
+// --- Mobile shopping sheet / FAB -------------------------------------------
+
+function isMobileLayout() {
+  return Boolean(
+    window.matchMedia && window.matchMedia("(max-width: 1024px)").matches
+  );
+}
+
+// Keep the single summary card in the right container: the desktop sidebar on
+// wide screens, the bottom-sheet slot on small ones.
+function syncSummaryPlacement() {
+  const card = document.getElementById("summary-card");
+  if (!card) return;
+  const panel = document.getElementById("summary-panel");
+  const slot = document.getElementById("summary-sheet-slot");
+  if (isMobileLayout()) {
+    if (slot && card.parentElement !== slot) slot.appendChild(card);
+  } else {
+    if (panel && card.parentElement !== panel) panel.appendChild(card);
+  }
+  syncFab();
+}
+
+// The floating button only appears on small screens for signed-in users who
+// actually have something on their list.
+function syncFab() {
+  const fab = document.getElementById("summary-fab");
+  if (!fab) return;
+  const signedIn = document.body.classList.contains("signed-in");
+  const hasList = selectedRecipes.length > 0 || getStaples().length > 0;
+  fab.hidden = !(isMobileLayout() && signedIn && hasList);
+
+  const badge = document.getElementById("summary-fab-count");
+  if (badge) {
+    const total = document.querySelectorAll(
+      "#summary-list .summary-items > li"
+    ).length;
+    badge.hidden = total === 0;
+    badge.textContent = String(total);
+  }
+}
+
+function openSummarySheet() {
+  const sheet = document.getElementById("summary-sheet");
+  if (!sheet) return;
+  if (!isMobileLayout()) return;
+  if (typeof sheet.showModal === "function") sheet.showModal();
+  else sheet.setAttribute("open", "");
+}
+
+function closeSummarySheet() {
+  const sheet = document.getElementById("summary-sheet");
+  if (!sheet) return;
+  if (typeof sheet.close === "function") sheet.close();
+  else sheet.removeAttribute("open");
 }
 
 // --- Saving (debounced) ----------------------------------------------------
@@ -456,6 +593,81 @@ const ingredientUnitConversions = {
   "coconut milk": { from: "ml", to: "can", per: 250 }
 };
 
+// --- Supermarket walkthrough order -----------------------------------------
+// Sort the shopping list the way you walk a typical supermarket: fruit &
+// vegetables first, frozen last. Items are matched to the first pattern that
+// hits (patterns are ordered most-specific first, e.g. "canned tomatoes" is
+// pantry, not produce, and anything "frozen" always ends up in the freezer).
+const SUPERMARKET_ORDER = [
+  "produce",
+  "bakery",
+  "deli",
+  "dairy",
+  "pantry",
+  "snacks",
+  "drinks",
+  "other",
+  "frozen"
+];
+
+const AISLE_PATTERNS = [
+  // Frozen is always last — check it before anything else.
+  [
+    "frozen",
+    /\b(frozen|gefroren|tiefk|tk|fish sticks|ice cream|eis|pommes|chips frozen)\b/
+  ],
+  // Pantry items that would otherwise match a fresh keyword ("canned tomatoes",
+  // "tomato paste", "cornflakes", "peanut butter", ...).
+  [
+    "pantry",
+    /\b(canned|tinned|\btin\b|\bcan\b|jar|dose|konserve|paste|sauce|stock|broth|bouillon|flour|sugar|rice|pasta|spaghetti|noodle|noodles|penne|macaroni|fusilli|couscous|quinoa|lentil|lentils|\bbean\b|beans|chickpea|chickpeas|\boil\b|vinegar|soy|mustard|ketchup|mayo|mayonnaise|honey|syrup|spice|spices|salt|baking|yeast|cocoa|chocolate|oat|oats|oatmeal|cereal|cornflakes|breadcrumb|breadcrumbs|\bnuts\b|nut|almond|walnut|cashew|peanut|raisin|cube|curry|turmeric|cumin|cinnamon|nutmeg|vanilla|jam|marmalade|tahini|miso|sriracha|stock cube|semolina|polenta|tapioca|desiccated)\b/
+  ],
+  // Fruit & vegetables.
+  [
+    "produce",
+    /\b(apple|apples|banana|bananas|orange|oranges|lemon|lemons|lime|limes|tomato|tomatoes|potato|potatoes|onion|onions|shallot|shallots|schallot|schallots|garlic|carrot|carrots|cucumber|cucumbers|courgette|courgettes|zucchini|pepper|peppers|bell pepper|paprika|lettuce|salad|spinach|rocket|arugula|broccoli|cauliflower|mushroom|mushrooms|celery|leek|porree|spring onion|spring onions|scallion|ginger|chilli|chili|parsley|basil|cilantro|coriander|mint|dill|thyme|rosemary|herb|herbs|avocado|corn|sweetcorn|cabbage|beetroot|radish|radishes|pumpkin|squash|berr(y|ies)|strawberr|blueberr|raspberr|grape|grapes|mango|pear|peach|apricot|melon|watermelon|fig|dates?|asparagus|aubergine|eggplant|gherkin|pickle|pickles|\bpea\b|peas|gemüse|obst|kartoffel|zwiebel|tomate|gurke|salat|apfel|banane|ingwer|lauch|kohl|pilze|zitrone)\b/
+  ],
+  // Bakery.
+  [
+    "bakery",
+    /\b(bread|toast|toasties|toastbrötchen|baguette|bagel|bun|buns|roll|rolls|croissant|pita|tortilla|wrap|wraps|muffin|muffins|brötchen|pretzel|naan|ciabatta|sourdough)\b/
+  ],
+  // Deli: meat, fish & cheese counter.
+  [
+    "deli",
+    /\b(ham|bacon|sausage|sausages|salami|chorizo|mince|minced|beef|pork|chicken|turkey|lamb|steak|meat|fish|salmon|tuna|cod|prawn|prawns|shrimp|seafood|deli|cold cuts|parma|pepperoni|bratwurst|wurst|hähnchen|hack|schnitzel)\b/
+  ],
+  // Dairy & chilled.
+  [
+    "dairy",
+    /\b(milk|butter|cheese|yoghurt|yogurt|cream|crème|creme fraiche|cream cheese|mascarpone|mozzarella|parmesan|feta|ricotta|curd|quark|egg|eggs|margarine|sour cream|skyr|kefir|buttermilk|ghee|halloumi|paneer|pudding|milch|käse|joghurt|sahne|\bei\b|eier)\b/
+  ],
+  // Snacks & sweets.
+  [
+    "snacks",
+    /\b(crisps|chips|cracker|crackers|biscuit|biscuits|cookie|cookies|gummy|gummies|candy|sweets|popcorn|granola bar|cereal bar|keks|süßigkeiten)\b/
+  ],
+  // Drinks.
+  [
+    "drinks",
+    /\b(water|sparkling|juice|cola|lemonade|beer|wine|soda|drink|drinks|tea|coffee|espresso|kombucha|smoothie|cordial|getränk|saft|wasser|bier|wein)\b/
+  ]
+];
+
+// Which aisle an item belongs to (falls back to "other" = before frozen).
+function aisleIndex(name) {
+  const n = String(name || "").toLowerCase();
+  for (const [aisle, pattern] of AISLE_PATTERNS) {
+    if (pattern.test(n)) return SUPERMARKET_ORDER.indexOf(aisle);
+  }
+  return SUPERMARKET_ORDER.indexOf("other");
+}
+
+// Walkthrough comparison: aisle order first, then alphabetical within an aisle.
+function compareByAisle(a, b) {
+  return aisleIndex(a) - aisleIndex(b) || String(a).localeCompare(String(b));
+}
+
 function groupSelectedIngredients() {
   const groups = {};
 
@@ -528,7 +740,7 @@ function groupSelectedIngredients() {
 
       return { name: group.name, details };
     })
-    .sort((a, b) => a.name.localeCompare(b.name));
+    .sort((a, b) => compareByAisle(a.name, b.name));
 }
 
 function updateSummary() {
@@ -618,6 +830,7 @@ function renderSummary() {
               name
             )}&sorting=PRICE_ASC`;
       nameItem.innerHTML = `<a target="_blank" href="${link}">${name} <i class="fa-solid fa-cart-plus" aria-hidden="true"></i></a>`;
+      listItem.appendChild(summaryCheckButton(name, checked.has(name)));
       listItem.appendChild(nameItem);
       wireCheckedToggle(nameItem, name);
 
@@ -633,16 +846,14 @@ function renderSummary() {
     summaryList.appendChild(ingredientsList);
   }
 
-  if (staples.length > 0) {
+  // In edit mode the staples live in the inline editor, so don't also render
+  // the read-only staples section here (it would duplicate them).
+  if (staples.length > 0 && !editMode) {
     summaryList.appendChild(el("h3", null, "Staples"));
     const staplesList = el("ul", "summary-items");
-    const stapleCounts = staples.reduce((acc, item) => {
-      acc[item] = (acc[item] || 0) + 1;
-      return acc;
-    }, {});
     const checked = getChecked();
-    Object.keys(stapleCounts)
-      .sort((a, b) => a.localeCompare(b))
+    Array.from(new Set(staples))
+      .sort(compareByAisle)
       .forEach((stapleName) => {
         const listItem = el("li");
         if (checked.has(stapleName)) listItem.classList.add("summary-item--done");
@@ -654,19 +865,46 @@ function renderSummary() {
                 stapleName
               )}&sorting=PRICE_ASC`;
         nameItem.innerHTML = `<a target="_blank" href="${link}">${stapleName} <i class="fa-solid fa-cart-plus" aria-hidden="true"></i></a>`;
+        listItem.appendChild(summaryCheckButton(stapleName, checked.has(stapleName)));
         listItem.appendChild(nameItem);
         wireCheckedToggle(nameItem, stapleName);
 
         if (!links[stapleName]) translateAndUpdateLink(stapleName, nameItem);
 
-        if (stapleCounts[stapleName] > 1) {
-          listItem.appendChild(
-            el("span", "summary-item__amount", `×${stapleCounts[stapleName]}`)
-          );
+        const amount = getStapleAmount(stapleName);
+        if (amount > 1) {
+          listItem.appendChild(el("span", "summary-item__amount", `×${amount}`));
         }
         staplesList.appendChild(listItem);
       });
     summaryList.appendChild(staplesList);
+  }
+
+  updateSummaryProgress();
+  syncFab();
+}
+
+// Tick progress for the shopping list (ticked / total) + the Clear-ticked button.
+function updateSummaryProgress() {
+  const items = document.querySelectorAll("#summary-list .summary-items > li");
+  const total = items.length;
+  const done = document.querySelectorAll(
+    "#summary-list .summary-items > li.summary-item--done"
+  ).length;
+
+  const progress = document.getElementById("summary-progress");
+  if (progress) {
+    progress.hidden = total === 0;
+    const track = progress.querySelector(".summary-progress__track");
+    const fill = document.getElementById("summary-progress-fill");
+    const text = document.getElementById("summary-progress-text");
+    const pct = total ? Math.round((done / total) * 100) : 0;
+    if (fill) fill.style.width = `${pct}%`;
+    if (text) text.textContent = `${done}/${total}`;
+    if (track) {
+      track.setAttribute("aria-valuemax", String(total));
+      track.setAttribute("aria-valuenow", String(done));
+    }
   }
 }
 
@@ -693,14 +931,11 @@ function buildSummaryText() {
   if (staples.length > 0) {
     lines.push("");
     lines.push("Staples:");
-    const stapleCounts = staples.reduce((acc, item) => {
-      acc[item] = (acc[item] || 0) + 1;
-      return acc;
-    }, {});
-    Object.keys(stapleCounts)
-      .sort((a, b) => a.localeCompare(b))
+    Array.from(new Set(staples))
+      .sort(compareByAisle)
       .forEach((stapleName) => {
-        const count = stapleCounts[stapleName] > 1 ? ` (x${stapleCounts[stapleName]})` : "";
+        const amount = getStapleAmount(stapleName);
+        const count = amount > 1 ? ` (x${amount})` : "";
         lines.push(`- ${stapleName}${count}`);
       });
   }
@@ -710,15 +945,6 @@ function buildSummaryText() {
 
 function copySummary() {
   const text = buildSummaryText();
-  const button = document.getElementById("copy-summary-button");
-  const showFeedback = (message) => {
-    if (!button) return;
-    const original = button.dataset.label || button.textContent;
-    button.textContent = message;
-    setTimeout(() => {
-      button.textContent = original;
-    }, 1500);
-  };
 
   const fallbackCopy = () => {
     const textarea = document.createElement("textarea");
@@ -729,10 +955,10 @@ function copySummary() {
     textarea.select();
     try {
       document.execCommand("copy");
-      showFeedback("Copied!");
+      showToast("Shopping list copied");
     } catch (error) {
       console.error("Error copying summary:", error);
-      showFeedback("Copy failed");
+      showToast("Copy failed", "error");
     }
     document.body.removeChild(textarea);
   };
@@ -740,7 +966,7 @@ function copySummary() {
   if (navigator.clipboard && navigator.clipboard.writeText) {
     navigator.clipboard
       .writeText(text)
-      .then(() => showFeedback("Copied!"))
+      .then(() => showToast("Shopping list copied"))
       .catch(() => fallbackCopy());
   } else {
     fallbackCopy();
@@ -757,6 +983,7 @@ function setEditMode(on) {
     toggle.textContent = on ? "Done" : "Edit";
     toggle.setAttribute("aria-pressed", String(on));
   }
+  setStapleEditMode(on);
   renderBook();
 }
 
@@ -1054,24 +1281,32 @@ function saveEditor() {
   refreshIngredientNames();
 }
 
-// Populate the ingredient autocomplete datalist from all known recipes.
-function refreshIngredientNames() {
-  const list = document.getElementById("ingredient-names");
-  if (!list) return;
+// Every ingredient name mentioned across the recipes, plus the user's staples
+// (some of which are ingredients too). Sorted in supermarket-walk order.
+function allIngredientNames() {
   const names = new Set();
   book.recipes.forEach((recipe) => {
     getParsed(recipe).ingredients.forEach((ing) => {
       if (ing.name) names.add(normalizeIngredient(ing.name));
     });
   });
+  getStaples().forEach((s) => {
+    const name = normalizeIngredient(s);
+    if (name) names.add(name);
+  });
+  return Array.from(names).sort(compareByAisle);
+}
+
+// Populate the ingredient autocomplete datalist from all known recipes.
+function refreshIngredientNames() {
+  const list = document.getElementById("ingredient-names");
+  if (!list) return;
   list.innerHTML = "";
-  Array.from(names)
-    .sort((a, b) => a.localeCompare(b))
-    .forEach((name) => {
-      const option = document.createElement("option");
-      option.value = name;
-      list.appendChild(option);
-    });
+  allIngredientNames().forEach((name) => {
+    const option = document.createElement("option");
+    option.value = name;
+    list.appendChild(option);
+  });
 }
 
 // --- Auth wiring -----------------------------------------------------------
@@ -1107,6 +1342,10 @@ function initAuth() {
 
   signinBtn.addEventListener("click", () => window.recipeAuth.signIn());
   signoutBtn.addEventListener("click", () => window.recipeAuth.signOut());
+  const switchBtn = document.getElementById("auth-switch");
+  if (switchBtn) {
+    switchBtn.addEventListener("click", () => window.recipeAuth.switchAccount());
+  }
 
   window.recipeAuth.onChange(async (user) => {
     const signedIn = Boolean(user);
@@ -1128,6 +1367,7 @@ function initAuth() {
       renderEmptyState();
       updateSummary();
       updateSelectedCount();
+      closeSummarySheet();
     }
   });
 }
@@ -1164,6 +1404,46 @@ function wireStaticControls() {
 
   const addBtn = document.getElementById("add-recipe");
   if (addBtn) addBtn.addEventListener("click", () => openEditor(null));
+
+  // Clear the whole meal selection (shown inside the selection bar).
+  const selectionClear = document.getElementById("selection-clear");
+  if (selectionClear) {
+    selectionClear.addEventListener("click", () => {
+      book.selectedMeals = [];
+      scheduleSave({ selectedMeals: book.selectedMeals });
+      renderBook();
+    });
+  }
+
+  // Mobile shopping sheet + FAB.
+  const fab = document.getElementById("summary-fab");
+  if (fab) fab.addEventListener("click", openSummarySheet);
+  const sheetClose = document.getElementById("summary-sheet-close");
+  if (sheetClose) sheetClose.addEventListener("click", closeSummarySheet);
+  const sheet = document.getElementById("summary-sheet");
+  if (sheet) {
+    sheet.addEventListener("click", (e) => {
+      if (e.target === sheet) closeSummarySheet();
+    });
+  }
+
+  if (window.matchMedia) {
+    const mq = window.matchMedia("(max-width: 1024px)");
+    const onChange = () => {
+      closeSummarySheet();
+      syncSummaryPlacement();
+    };
+    if (mq.addEventListener) mq.addEventListener("change", onChange);
+    else if (mq.addListener) mq.addListener(onChange);
+  }
+
+  // Fallback for environments where the media-query change event does not fire
+  // (e.g. programmatic resizes): re-place the summary card on window resize.
+  let resizeTimer = null;
+  window.addEventListener("resize", () => {
+    clearTimeout(resizeTimer);
+    resizeTimer = setTimeout(syncSummaryPlacement, 150);
+  });
 
   // Let the access-denied overlay be dismissed with its ✕ or by clicking the
   // backdrop.
@@ -1274,21 +1554,30 @@ function wireThemePicker() {
   });
 }
 
-// --- Staples & shopping links editor ---------------------------------------
+// --- Staples & shopping links rows -----------------------------------------
 
-function stapleRow(value = "") {
+function stapleRow(name = "", amount = "") {
   const row = el("div", "staple-row");
   const input = el("input", "staple-name");
   input.type = "text";
-  input.value = value;
-  input.placeholder = "e.g. milk";
+  input.value = name;
+  input.placeholder = "Add a staple";
   input.setAttribute("aria-label", "Staple");
-  const remove = el("button", "icon-btn");
+  input.setAttribute("list", "ingredient-names");
+  input.addEventListener("input", () => maybeGrowStapleRow(row));
+  const amountInput = el("input", "staple-amount");
+  amountInput.type = "number";
+  amountInput.min = "1";
+  amountInput.step = "1";
+  amountInput.value = amount;
+  amountInput.placeholder = "1";
+  amountInput.setAttribute("aria-label", "Amount");
+  const remove = el("button", "icon-btn staple-remove");
   remove.type = "button";
   remove.innerHTML = '<i class="fa-solid fa-xmark" aria-hidden="true"></i>';
   remove.title = "Remove staple";
-  remove.addEventListener("click", () => row.remove());
   row.appendChild(input);
+  row.appendChild(amountInput);
   row.appendChild(remove);
   return row;
 }
@@ -1317,76 +1606,234 @@ function linkRow(name = "", url = "") {
   return row;
 }
 
-function openShoppingEditor() {
-  const dialog = document.getElementById("shopping-dialog");
+// --- Staples editor --------------------------------------------------------
+
+function openStaplesEditor() {
+  const dialog = document.getElementById("staples-dialog");
   if (!dialog) return;
-
-  const stapleContainer = document.getElementById("staple-rows");
-  stapleContainer.innerHTML = "";
-  getStaples().forEach((s) => stapleContainer.appendChild(stapleRow(s)));
-
-  const linkContainer = document.getElementById("link-rows");
-  linkContainer.innerHTML = "";
-  Object.entries(getLinks()).forEach(([name, url]) =>
-    linkContainer.appendChild(linkRow(name, url))
-  );
-
+  const container = document.getElementById("staple-rows-dialog");
+  container.innerHTML = "";
+  Array.from(new Set(getStaples())).forEach((s) => {
+    const amount = getStapleAmount(s);
+    container.appendChild(stapleRow(s, amount > 1 ? String(amount) : ""));
+  });
+  const addRow = el("button", "staple-add-row");
+  addRow.type = "button";
+  addRow.id = "staple-add-row-dialog";
+  addRow.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Add staple';
+  addRow.addEventListener("click", () => {
+    const row = stapleRow();
+    container.insertBefore(row, addRow);
+    row.querySelector(".staple-name").focus();
+  });
+  container.appendChild(addRow);
   if (typeof dialog.showModal === "function") dialog.showModal();
   else dialog.setAttribute("open", "");
 }
 
-function closeShoppingEditor() {
-  const dialog = document.getElementById("shopping-dialog");
+function closeStaplesEditor() {
+  const dialog = document.getElementById("staples-dialog");
   if (!dialog) return;
   if (typeof dialog.close === "function") dialog.close();
   else dialog.removeAttribute("open");
 }
 
-function saveShoppingEditor() {
-  const staples = Array.from(
-    document.querySelectorAll("#staple-rows .staple-name")
-  )
-    .map((i) => i.value.trim())
-    .filter(Boolean);
+function saveStaplesEditor() {
+  const staples = [];
+  const stapleAmounts = {};
+  document.querySelectorAll("#staple-rows-dialog .staple-row").forEach((row) => {
+    const name = row.querySelector(".staple-name").value.trim();
+    if (!name) return;
+    if (staples.includes(name)) return; // merge duplicates into one entry
+    const raw = parseInt(row.querySelector(".staple-amount").value, 10);
+    staples.push(name);
+    stapleAmounts[name] = Number.isFinite(raw) && raw > 0 ? raw : 1;
+  });
+  book.staples = staples;
+  book.stapleAmounts = stapleAmounts;
+  scheduleSave({ staples, stapleAmounts });
+  closeStaplesEditor();
+  updateSummary();
+  refreshIngredientNames();
+}
 
+// --- REWE links editor -----------------------------------------------------
+
+function openLinksEditor() {
+  const dialog = document.getElementById("links-dialog");
+  if (!dialog) return;
+  // Every ingredient mentioned across the recipes gets a row. If a matching
+  // link already exists its URL is filled in; otherwise it stays empty (the
+  // shopping list then falls back to a REWE search for that name).
+  const container = document.getElementById("link-rows");
+  container.innerHTML = "";
+  const links = getLinks();
+  allIngredientNames().forEach((name) => {
+    if (links[name] == null) links[name] = "";
+  });
+  Object.keys(links)
+    .sort((a, b) => a.localeCompare(b))
+    .forEach((name) => container.appendChild(linkRow(name, links[name])));
+  if (typeof dialog.showModal === "function") dialog.showModal();
+  else dialog.setAttribute("open", "");
+}
+
+function closeLinksEditor() {
+  const dialog = document.getElementById("links-dialog");
+  if (!dialog) return;
+  if (typeof dialog.close === "function") dialog.close();
+  else dialog.removeAttribute("open");
+}
+
+function saveLinksEditor() {
   const links = {};
   document.querySelectorAll("#link-rows .link-row").forEach((row) => {
     const name = row.querySelector(".link-name").value.trim();
     const url = row.querySelector(".link-url").value.trim();
     if (name && url) links[name] = url;
   });
-
-  book.staples = staples;
   book.links = links;
-  scheduleSave({ staples, links });
-  closeShoppingEditor();
+  scheduleSave({ links });
+  closeLinksEditor();
   updateSummary();
-  refreshIngredientNames();
 }
+
+// --- Inline staples editor (shopping list, edit mode) ----------------------
+
+function wireStapleRowEditing() {
+  const container = document.getElementById("staple-rows");
+  if (!container || container.dataset.wired) return;
+  container.dataset.wired = "true";
+  const persist = () => {
+    const draft = readStapleRows();
+    book.staples = draft.staples;
+    book.stapleAmounts = draft.stapleAmounts;
+    scheduleSave({
+      staples: draft.staples,
+      stapleAmounts: draft.stapleAmounts
+    });
+    updateSummary();
+    refreshIngredientNames();
+  };
+  container.addEventListener("click", (e) => {
+    const btn = e.target.closest(".staple-remove");
+    if (!btn) return;
+    const row = btn.closest(".staple-row");
+    if (!row) return;
+    row.remove();
+    persist();
+  });
+  // Commit a row once the user leaves its name (and give it a default amount).
+  container.addEventListener(
+    "change",
+    (e) => {
+      if (!e.target.classList.contains("staple-name")) return;
+      const row = e.target.closest(".staple-row");
+      const amount = row.querySelector(".staple-amount");
+      if (amount && !amount.value) amount.value = "1";
+      if (e.target.value.trim()) {
+        book.staples = Array.from(new Set(getStaples().concat(e.target.value.trim())));
+      }
+      persist();
+    },
+    true
+  );
+}
+
+// Read the inline staples editor rows into names + amounts.
+function readStapleRows() {
+  const staples = [];
+  const stapleAmounts = {};
+  document.querySelectorAll("#staple-rows .staple-row").forEach((row) => {
+    const name = row.querySelector(".staple-name").value.trim();
+    if (!name) return;
+    if (staples.includes(name)) return;
+    const raw = parseInt(row.querySelector(".staple-amount").value, 10);
+    staples.push(name);
+    stapleAmounts[name] = Number.isFinite(raw) && raw > 0 ? raw : 1;
+  });
+  return { staples, stapleAmounts };
+}
+
+// The inline editor grows a new blank row once the last row gets a name.
+function maybeGrowStapleRow(row) {
+  const container = document.getElementById("staple-rows");
+  if (!container || row !== container.lastElementChild) return;
+  const name = row.querySelector(".staple-name").value.trim();
+  if (!name) return;
+  const add = document.getElementById("staple-add-row");
+  container.insertBefore(stapleRow(), add);
+}
+
+// Edit-mode toggle for the inline staples editor inside the shopping list.
+function setStapleEditMode(on) {
+  const card = document.getElementById("summary-card");
+  const inline = document.getElementById("staples-inline");
+  if (card) card.classList.toggle("is-editing", on);
+  if (inline) inline.hidden = !on;
+  if (on) renderStapleEditorRows();
+  else updateSummary();
+}
+
+function renderStapleEditorRows() {
+  const container = document.getElementById("staple-rows");
+  if (!container) return;
+  container.innerHTML = "";
+  Array.from(new Set(getStaples())).forEach((s) => {
+    const amount = getStapleAmount(s);
+    container.appendChild(stapleRow(s, amount > 1 ? String(amount) : ""));
+  });
+  const addRow = el("button", "staple-add-row");
+  addRow.type = "button";
+  addRow.id = "staple-add-row";
+  addRow.innerHTML = '<i class="fa-solid fa-plus" aria-hidden="true"></i> Add staple';
+  addRow.addEventListener("click", () => {
+    const row = stapleRow();
+    container.insertBefore(row, addRow);
+    row.querySelector(".staple-name").focus();
+  });
+  container.appendChild(addRow);
+}
+
 function wireShoppingDialog() {
-  const dialog = document.getElementById("shopping-dialog");
-  if (!dialog) return;
-  const manageBtn = document.getElementById("manage-shopping");
-  if (manageBtn) manageBtn.addEventListener("click", openShoppingEditor);
-  document
-    .getElementById("add-staple")
-    .addEventListener("click", () =>
-      document.getElementById("staple-rows").appendChild(stapleRow())
-    );
-  document
-    .getElementById("add-link")
-    .addEventListener("click", () =>
+  wireStapleRowEditing();
+
+  // Staples editor dialog.
+  const staplesBtn = document.getElementById("manage-staples");
+  if (staplesBtn) staplesBtn.addEventListener("click", openStaplesEditor);
+  const addStaple = document.getElementById("add-staple");
+  if (addStaple) {
+    addStaple.addEventListener("click", () => {
+      const container = document.getElementById("staple-rows-dialog");
+      const add = document.getElementById("staple-add-row-dialog");
+      const row = stapleRow();
+      if (add) container.insertBefore(row, add);
+      else container.appendChild(row);
+      row.querySelector(".staple-name").focus();
+    });
+  }
+  const staplesSave = document.getElementById("staples-save");
+  if (staplesSave) staplesSave.addEventListener("click", saveStaplesEditor);
+  const staplesCancel = document.getElementById("staples-cancel");
+  if (staplesCancel) staplesCancel.addEventListener("click", closeStaplesEditor);
+  const staplesClose = document.getElementById("staples-close");
+  if (staplesClose) staplesClose.addEventListener("click", closeStaplesEditor);
+
+  // REWE links editor dialog.
+  const linksBtn = document.getElementById("manage-links");
+  if (linksBtn) linksBtn.addEventListener("click", openLinksEditor);
+  const addLink = document.getElementById("add-link");
+  if (addLink) {
+    addLink.addEventListener("click", () =>
       document.getElementById("link-rows").appendChild(linkRow())
     );
-  document
-    .getElementById("shopping-save")
-    .addEventListener("click", saveShoppingEditor);
-  document
-    .getElementById("shopping-cancel")
-    .addEventListener("click", closeShoppingEditor);
-  document
-    .getElementById("shopping-close")
-    .addEventListener("click", closeShoppingEditor);
+  }
+  const linksSave = document.getElementById("links-save");
+  if (linksSave) linksSave.addEventListener("click", saveLinksEditor);
+  const linksCancel = document.getElementById("links-cancel");
+  if (linksCancel) linksCancel.addEventListener("click", closeLinksEditor);
+  const linksClose = document.getElementById("links-close");
+  if (linksClose) linksClose.addEventListener("click", closeLinksEditor);
 }
 
 async function boot() {

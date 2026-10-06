@@ -32,6 +32,36 @@
 
   --font: "Nunito", system-ui, -apple-system, "Segoe UI", "Helvetica Neue",
     Arial, sans-serif;
+
+  /* Native controls (number spinners, scrollbars, date pickers) follow this. */
+  color-scheme: light;
+
+  /* Spacing scale */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+
+  /* Type scale */
+  --text-xs: 0.72rem;
+  --text-sm: 0.82rem;
+  --text-md: 0.9rem;
+  --text-lg: 1.05rem;
+  --text-xl: 1.3rem;
+  --text-2xl: 1.6rem;
+
+  /* Motion */
+  --ease: cubic-bezier(0.2, 0.7, 0.3, 1);
+  --dur-fast: 0.13s;
+  --dur: 0.2s;
+
+  /* Focus ring + derived surfaces (theme-aware) */
+  --ring: 0 0 0 3px color-mix(in srgb, var(--accent) 38%, transparent);
+  --header-bg: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  --accent-contrast: #fff;
 }
 
 /* --------------------------------------------------------------------------
@@ -114,6 +144,7 @@ html[data-theme="graphite"] {
 /* Overrides the neutral surfaces and derives accent tints from the theme via
    color-mix, so every palette gets a matching dark variant. */
 html[data-mode="dark"] {
+  color-scheme: dark;
   --bg: #191823;
   --surface: #232230;
   --surface-alt: #2a2938;
@@ -518,7 +549,8 @@ textarea:focus-visible {
 /* Personal actions only make sense when signed in. */
 body.signed-out #add-recipe,
 body.signed-out #edit-toggle,
-body.signed-out #manage-shopping {
+body.signed-out #manage-staples,
+body.signed-out #manage-links {
   display: none;
 }
 
@@ -1003,6 +1035,7 @@ body.signed-out #manage-shopping {
 .step-text,
 .source-editor,
 .staple-name,
+.staple-amount,
 .link-name,
 .link-url {
   width: 100%;
@@ -1018,7 +1051,8 @@ body.signed-out #manage-shopping {
 .field__input:focus,
 .ingredient-row input:focus,
 .step-text:focus,
-.source-editor:focus {
+.source-editor:focus,
+.staple-amount:focus {
   border-color: var(--accent);
 }
 
@@ -1191,10 +1225,15 @@ body.signed-out #manage-shopping {
 
 .staple-row {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 1fr 76px auto;
   gap: 8px;
   margin-bottom: 6px;
   align-items: center;
+}
+
+.staple-amount {
+  text-align: center;
+  font-variant-numeric: tabular-nums;
 }
 
 .link-row {
@@ -1392,6 +1431,567 @@ footer p {
   --swatch: #616161;
 }
 
+/* ==========================================================================
+   v2 refresh — header, toolbar, cards, shopping list, mobile sheet, toasts
+   (later in the cascade, so it overrides the rules above)
+   ========================================================================== */
+
+/* --- Header --------------------------------------------------------------- */
+
+.site-header {
+  background: var(--header-bg);
+}
+
+.site-header h1 {
+  font-size: var(--text-xl);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+/* --- Focus ring ----------------------------------------------------------- */
+
+.btn:focus-visible,
+.icon-btn:focus-visible,
+.tab:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+.recipe-checkbox:focus-visible,
+.theme-swatch:focus-visible,
+.summary-item__check:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
+/* --- Toolbar / selection -------------------------------------------------- */
+
+.recipes-toolbar__left {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.pill--muted {
+  background: var(--surface);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.selection-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: 10px 14px;
+  margin-bottom: var(--space-4);
+  background: var(--accent-soft);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius);
+  position: sticky;
+  top: 84px;
+  z-index: 6;
+  animation: slideDown var(--dur) var(--ease);
+}
+
+.selection-bar[hidden] {
+  display: none;
+}
+
+.selection-bar__text {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: 700;
+  color: var(--accent-dark);
+}
+
+.selection-bar__text i {
+  font-size: 0.95em;
+}
+
+.selection-bar__actions {
+  display: flex;
+  gap: 8px;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-6px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* --- Recipe cards --------------------------------------------------------- */
+
+.recipe {
+  padding: 18px 18px 14px;
+  overflow: hidden;
+}
+
+.recipe::before {
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  border-radius: 0;
+  opacity: 0;
+}
+
+.recipe.selected {
+  background: color-mix(in srgb, var(--accent) 6%, var(--surface));
+}
+
+.recipe--editing .recipe__head {
+  padding-left: 30px;
+}
+
+.recipe__head {
+  align-items: center;
+  gap: var(--space-3);
+  margin-bottom: 10px;
+  padding-right: 34px;
+}
+
+.recipe__monogram {
+  width: 42px;
+  height: 42px;
+  flex: 0 0 42px;
+  border-radius: 12px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: var(--text-lg);
+  color: var(--accent-contrast);
+  background: linear-gradient(135deg, var(--accent), var(--accent-dark));
+  box-shadow: var(--shadow-sm);
+  text-transform: uppercase;
+}
+
+.recipe__heading {
+  min-width: 0;
+}
+
+.recipe__title {
+  font-size: 1rem;
+}
+
+.recipe__meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 2px;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  font-weight: 700;
+}
+
+.recipe__meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.recipe__meta i {
+  font-size: 0.78em;
+  color: var(--accent);
+}
+
+.recipe-checkbox {
+  width: 26px;
+  height: 26px;
+  transition: background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease), box-shadow var(--dur-fast) var(--ease);
+}
+
+.recipe-checkbox:hover {
+  box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+/* --- Shopping list -------------------------------------------------------- */
+
+#summary-panel {
+  padding: 0;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.summary-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 20px;
+  box-shadow: var(--shadow-sm);
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+.summary-header {
+  gap: var(--space-3);
+  padding-bottom: 14px;
+  border-bottom: 2px dashed var(--border);
+  margin-bottom: 14px;
+}
+
+.summary-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.summary-title i {
+  color: var(--accent);
+}
+
+.summary-progress {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-progress[hidden] {
+  display: none;
+}
+
+.summary-progress__track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: var(--border);
+  overflow: hidden;
+}
+
+.summary-progress__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-pill);
+  background: var(--accent);
+  transition: width var(--dur) var(--ease);
+}
+
+.summary-progress__text {
+  font-size: var(--text-xs);
+  font-weight: 800;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+}
+
+#summary-list {
+  flex: 1;
+  min-height: 0;
+}
+
+.summary-footer {
+  display: flex;
+  gap: var(--space-2);
+  padding-top: 14px;
+  margin-top: 14px;
+  border-top: 1px solid var(--border);
+}
+
+.summary-footer .btn--primary {
+  flex: 1;
+}
+
+/* Inline staples editor inside the shopping list (visible in edit mode). */
+.staples-inline {
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 1px dashed var(--border);
+}
+
+.staples-inline[hidden] {
+  display: none;
+}
+
+.staples-inline .field-group__head {
+  margin-bottom: 6px;
+}
+
+/* Edit mode: the staples editor can grow long, so let the whole card scroll
+   (instead of only #summary-list) and stop the list from being clipped. */
+.summary-card.is-editing {
+  overflow-y: auto;
+}
+
+.summary-card.is-editing #summary-list {
+  flex: none;
+  overflow: visible;
+  max-height: none;
+}
+
+.summary-card.is-editing .staples-inline,
+.summary-card.is-editing .summary-footer {
+  flex: none;
+}
+
+.staple-add-row {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px;
+  margin-top: 2px;
+  border: 1px dashed var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--accent-dark);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.staple-add-row:hover {
+  background: var(--accent-soft);
+  border-color: var(--accent);
+}
+
+/* Settings menu: stacked secondary actions. */
+.settings-links {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+button.settings-link {
+  width: 100%;
+  font-family: inherit;
+  cursor: pointer;
+  text-align: left;
+}
+
+/* Row tick affordance */
+#summary-list ul.summary-items > li {
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+}
+
+.summary-item__check {
+  width: 22px;
+  height: 22px;
+  flex: 0 0 22px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: transparent;
+  font-size: 0.62rem;
+  transition: background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.summary-item__check:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+li.summary-item--done .summary-item__check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+.summary-item__name {
+  cursor: pointer;
+}
+
+/* --- Floating action button + bottom sheet -------------------------------- */
+
+.summary-fab {
+  position: fixed;
+  right: 18px;
+  bottom: 18px;
+  z-index: 40;
+  width: 56px;
+  height: 56px;
+  border: none;
+  border-radius: 50%;
+  background: var(--header-bg);
+  color: var(--accent-contrast);
+  font-size: 1.25rem;
+  box-shadow: var(--shadow-lg);
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  transition: transform var(--dur-fast) var(--ease);
+}
+
+.summary-fab:hover {
+  transform: scale(1.05);
+}
+
+.summary-fab:active {
+  transform: scale(0.96);
+}
+
+.summary-fab[hidden] {
+  display: none !important;
+}
+
+.summary-fab__badge {
+  position: absolute;
+  top: -4px;
+  right: -4px;
+  min-width: 22px;
+  height: 22px;
+  padding: 0 6px;
+  border-radius: var(--radius-pill);
+  background: var(--danger);
+  color: #fff;
+  font-size: 0.72rem;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: 2px solid var(--bg);
+}
+
+.summary-sheet {
+  border: none;
+  padding: 0;
+  margin: 0;
+  width: 100%;
+  max-width: 100%;
+  max-height: 85vh;
+  background: transparent;
+  color: var(--text);
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  top: auto;
+}
+
+.summary-sheet::backdrop {
+  background: rgba(45, 35, 70, 0.5);
+}
+
+.summary-sheet__inner {
+  background: var(--surface);
+  border-radius: 20px 20px 0 0;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+  padding: 8px 16px 18px;
+  box-shadow: var(--shadow-lg);
+  animation: sheetUp var(--dur) var(--ease);
+}
+
+.summary-sheet__header {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 6px 0 10px;
+}
+
+.summary-sheet__grip {
+  width: 44px;
+  height: 5px;
+  border-radius: var(--radius-pill);
+  background: var(--border-strong);
+}
+
+.summary-sheet__close {
+  position: absolute;
+  right: 0;
+  top: 0;
+}
+
+.summary-sheet__slot {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  overflow: hidden;
+}
+
+.summary-sheet__slot .summary-card {
+  border: none;
+  box-shadow: none;
+  padding: 4px 0 0;
+  flex: 1;
+  min-height: 0;
+}
+
+.summary-sheet__slot #summary-list {
+  max-height: 52vh;
+}
+
+@keyframes sheetUp {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+/* --- Toasts --------------------------------------------------------------- */
+
+.toast-container {
+  position: fixed;
+  left: 50%;
+  bottom: 20px;
+  transform: translateX(-50%);
+  z-index: 60;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  align-items: center;
+  pointer-events: none;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: var(--text);
+  color: var(--surface);
+  padding: 10px 16px;
+  border-radius: var(--radius-pill);
+  font-weight: 700;
+  font-size: var(--text-md);
+  box-shadow: var(--shadow-lg);
+  animation: toastIn var(--dur) var(--ease);
+}
+
+.toast--success i {
+  color: var(--sun);
+}
+
+.toast--error {
+  background: var(--danger);
+  color: #fff;
+}
+
+@keyframes toastIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
 /* --------------------------------------------------------------------------
    Responsive
    -------------------------------------------------------------------------- */
@@ -1477,5 +2077,45 @@ footer p {
   * {
     transition: none !important;
     animation: none !important;
+  }
+}
+
+/* --- v2 responsive: mobile shopping sheet --------------------------------- */
+
+@media (max-width: 1024px) {
+  /* On small screens the shopping list lives in the bottom sheet, not beside  */
+  /* the recipes. The card is relocated into #summary-sheet-slot by JS.        */
+  #summary-panel {
+    display: none;
+  }
+
+  .summary-fab {
+    display: inline-flex;
+  }
+
+  .selection-bar {
+    top: 76px;
+  }
+}
+
+@media (max-width: 768px) {
+  .recipes-toolbar__right {
+    width: 100%;
+  }
+
+  .recipes-toolbar__right .btn {
+    flex: 1 1 auto;
+    justify-content: center;
+  }
+
+  .toast-container {
+    bottom: 84px;
+  }
+}
+
+@media (max-width: 480px) {
+  .summary-fab {
+    right: 14px;
+    bottom: 14px;
   }
 }
