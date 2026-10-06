@@ -908,69 +908,121 @@ function updateSummaryProgress() {
   }
 }
 
-function buildSummaryText() {
-  const lines = [];
-  const selectedRecipeNames = new Set(selectedRecipes.map((i) => i.recipeName));
-  if (selectedRecipeNames.size > 0) {
-    lines.push("Selected Recipes:");
-    Array.from(selectedRecipeNames).forEach((n) => lines.push(`- ${n}`));
-    lines.push("");
+function addToShoppingList() {
+  const items = collectShoppingListItems();
+  if (!items.length) {
+    showToast("Nothing to add \u2014 select recipes first", "error");
+    return;
   }
 
-  const staples = getStaples();
-  if (selectedRecipeNames.size > 0) {
-    lines.push("Ingredients:");
-    groupSelectedIngredients().forEach((ingredient) => {
-      const details = ingredient.details.length
-        ? `, ${ingredient.details.join(", ")}`
-        : "";
-      lines.push(`- ${ingredient.name}${details}`);
-    });
+  const signedIn = window.recipeStore && window.recipeStore.isReady();
+  const existing = signedIn
+    ? Array.isArray(book.shoppingList)
+      ? book.shoppingList
+      : []
+    : readLocalShoppingList();
+  const keyOf = (it) =>
+    `${String(it.name).toLowerCase()}|${String(it.amount || "").toLowerCase()}`;
+  const seen = new Set(existing.map(keyOf));
+
+  const toAdd = [];
+  const toRevive = [];
+  items.forEach((it) => {
+    const key = keyOf(it);
+    const match = existing.find((e) => keyOf(e) === key);
+    if (match) {
+      // Same item + amount already on the list: move it back to the top
+      // (unbought) instead of adding a duplicate row.
+      match.done = false;
+      match.at = Date.now();
+      if (match.id) toRevive.push({ id: match.id, done: false, at: match.at });
+      return;
+    }
+    seen.add(key);
+    const item = {
+      id: window.recipeStore ? window.recipeStore.newId() : String(Date.now()) + Math.random().toString(36).slice(2, 6),
+      name: it.name,
+      amount: it.amount || "",
+      note: it.note || "",
+      done: false,
+      at: Date.now()
+    };
+    existing.push(item);
+    toAdd.push(item);
+  });
+  const added = toAdd.length;
+
+  // Signed in: the shared per-user list in Firestore, written per item so a
+  // partner shopping at the same time never clobbers these adds. Signed out:
+  // this browser's local list, so the flow still works without an account.
+  if (signedIn && window.recipeStore.upsertShoppingItems) {
+    window.recipeStore.upsertShoppingItems(toAdd);
+    toRevive.forEach((it) =>
+      window.recipeStore.updateShoppingItem(it.id, {
+        done: it.done,
+        at: it.at
+      })
+    );
+    book.shoppingList = existing;
+  } else if (signedIn) {
+    book.shoppingList = existing;
+    scheduleSave({ shoppingList: book.shoppingList });
+  } else {
+    writeLocalShoppingList(existing);
   }
 
-  if (staples.length > 0) {
-    lines.push("");
-    lines.push("Staples:");
-    Array.from(new Set(staples))
-      .sort(compareByAisle)
-      .forEach((stapleName) => {
-        const amount = getStapleAmount(stapleName);
-        const count = amount > 1 ? ` (x${amount})` : "";
-        lines.push(`- ${stapleName}${count}`);
-      });
-  }
-
-  return lines.join("\n");
+  const total = existing.length;
+  if (added > 0) showToast(`Added ${added} item${added === 1 ? "" : "s"} copy to shopping list`);
+  else showToast(`${total} item${total === 1 ? "" : "s"} already on the list`);
 }
 
-function copySummary() {
-  const text = buildSummaryText();
+// Local (signed-out) shopping list, shared with shoppinglist.html via the
+// same localStorage key.
+const SHOPPINGLIST_LS_KEY = "recipeShoppingList";
 
-  const fallbackCopy = () => {
-    const textarea = document.createElement("textarea");
-    textarea.value = text;
-    textarea.style.position = "fixed";
-    textarea.style.opacity = "0";
-    document.body.appendChild(textarea);
-    textarea.select();
-    try {
-      document.execCommand("copy");
-      showToast("Shopping list copied");
-    } catch (error) {
-      console.error("Error copying summary:", error);
-      showToast("Copy failed", "error");
-    }
-    document.body.removeChild(textarea);
-  };
-
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard
-      .writeText(text)
-      .then(() => showToast("Shopping list copied"))
-      .catch(() => fallbackCopy());
-  } else {
-    fallbackCopy();
+function readLocalShoppingList() {
+  try {
+    const raw = localStorage.getItem(SHOPPINGLIST_LS_KEY);
+    const arr = raw ? JSON.parse(raw) : [];
+    return Array.isArray(arr) ? arr : [];
+  } catch (_) {
+    return [];
   }
+}
+
+function writeLocalShoppingList(list) {
+  try {
+    localStorage.setItem(SHOPPINGLIST_LS_KEY, JSON.stringify(list));
+  } catch (_) {
+    /* ignore */
+  }
+}
+
+// Flatten the current selection (recipe ingredients + staples) into plain
+// { name, amount, note } items for the shopping list page. No links here.
+function collectShoppingListItems() {
+  const items = [];
+
+  groupSelectedIngredients().forEach(({ name, details }) => {
+    items.push({
+      name,
+      amount: details.length ? details.join(", ") : "",
+      note: ""
+    });
+  });
+
+  Array.from(new Set(getStaples()))
+    .sort(compareByAisle)
+    .forEach((stapleName) => {
+      const amount = getStapleAmount(stapleName);
+      items.push({
+        name: stapleName,
+        amount: amount > 1 ? `\u00d7${amount}` : "",
+        note: ""
+      });
+    });
+
+  return items;
 }
 
 // --- Edit mode -------------------------------------------------------------
@@ -1377,6 +1429,8 @@ function initAuth() {
       showInitials();
       if (user.photoURL) photo.src = user.photoURL;
       else photo.removeAttribute("src");
+      const hint = document.getElementById("shoppinglist-signedout");
+      if (hint) hint.hidden = true;
       await loadBookAndRender();
     } else {
       showIcon();
@@ -1387,6 +1441,8 @@ function initAuth() {
       updateSummary();
       updateSelectedCount();
       closeSummarySheet();
+      const hint = document.getElementById("shoppinglist-signedout");
+      if (hint) hint.hidden = false;
     }
   });
 }
@@ -1444,8 +1500,9 @@ async function loadBookAndRender() {
 // --- Boot ------------------------------------------------------------------
 
 function wireStaticControls() {
-  const copyButton = document.getElementById("copy-summary-button");
-  if (copyButton) copyButton.addEventListener("click", copySummary);
+  const addToListButton = document.getElementById("copy-summary-button");
+  if (addToListButton)
+    addToListButton.addEventListener("click", addToShoppingList);
 
   const editToggle = document.getElementById("edit-toggle");
   if (editToggle) {

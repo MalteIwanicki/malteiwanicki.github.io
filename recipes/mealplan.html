@@ -114,6 +114,10 @@
 
               <span class="settings-menu__label">Shopping</span>
               <div class="settings-links">
+                <a class="settings-link" href="shoppinglist.html">
+                  <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+                  Open shopping list
+                </a>
                 <button id="manage-staples" class="settings-link" type="button">
                   <i class="fa-solid fa-list-ul" aria-hidden="true"></i>
                   Edit staples
@@ -208,14 +212,31 @@
             <div id="staple-rows"></div>
           </div>
           <div class="summary-footer">
-            <button
-              id="copy-summary-button"
-              type="button"
-              class="btn btn--primary"
-            >
-              <i class="fa-solid fa-copy" aria-hidden="true"></i> Copy list
-            </button>
+            <div class="split-btn">
+              <button
+                id="copy-summary-button"
+                type="button"
+                class="split-btn__main"
+              >
+                <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+                copy to shopping list
+              </button>
+              <a
+                class="split-btn__link"
+                href="shoppinglist.html"
+                aria-label="Open shopping list"
+                title="Open shopping list"
+              >
+                <i
+                  class="fa-solid fa-arrow-up-right-from-square"
+                  aria-hidden="true"
+                ></i>
+              </a>
+            </div>
           </div>
+          <p id="shoppinglist-signedout" class="settings-hint" hidden>
+            Not signed in &mdash; items are saved on this device only.
+          </p>
         </div>
       </aside>
     </main>

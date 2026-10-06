@@ -1742,6 +1742,64 @@ textarea:focus-visible,
   flex: 1;
 }
 
+/* Combined "copy to shopping list" + open-list button: a single pill split into the
+   primary action and a smaller link part pinned to the right edge. */
+.split-btn {
+  flex: 1;
+  display: flex;
+  align-items: stretch;
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+  box-shadow: var(--shadow-sm);
+}
+
+.split-btn__main {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 12px 18px;
+  border: none;
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-family: inherit;
+  font-weight: 700;
+  font-size: var(--text-md);
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.split-btn__main:hover {
+  background: var(--accent-dark);
+}
+
+.split-btn__main:active {
+  transform: translateY(1px);
+}
+
+.split-btn__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 16px;
+  background: var(--accent-dark);
+  color: var(--accent-contrast);
+  text-decoration: none;
+  border-left: 1px solid color-mix(in srgb, var(--accent-contrast) 30%, transparent);
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.split-btn__link:hover {
+  background: color-mix(in srgb, var(--accent-dark) 80%, #000);
+}
+
+.split-btn__link:focus-visible,
+.split-btn__main:focus-visible {
+  outline: none;
+  box-shadow: var(--ring);
+}
+
 /* Inline staples editor inside the shopping list (visible in edit mode). */
 .staples-inline {
   margin-top: 14px;
@@ -2033,6 +2091,414 @@ li.summary-item--done .summary-item__check {
     opacity: 1;
     transform: none;
   }
+}
+
+/* --------------------------------------------------------------------------
+   Shopping list page (shoppinglist.html)
+   A standalone, native-app-style tick list.
+   -------------------------------------------------------------------------- */
+
+body.shoppinglist {
+  margin: 0;
+  min-height: 100dvh;
+  background: var(--surface-alt);
+  padding-bottom: env(safe-area-inset-bottom);
+}
+
+.sl-header {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  grid-template-areas:
+    "back title actions"
+    "progress progress progress";
+  align-items: center;
+  gap: 8px 6px;
+  padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
+  background: var(--header-bg);
+  color: #fff;
+  box-shadow: var(--shadow-sm);
+  transition: transform var(--dur) var(--ease);
+  will-change: transform;
+}
+
+/* Hide-on-scroll: slides up out of view while scrolling down. */
+.sl-header--hidden {
+  transform: translateY(-100%);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sl-header {
+    transition: none;
+  }
+}
+
+.sl-header__actions {
+  grid-area: actions;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.sl-header__back {
+  grid-area: back;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: #fff;
+  font-size: 1.05rem;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sl-header__back:hover {
+  background: rgba(255, 255, 255, 0.22);
+}
+
+.sl-header__title {
+  grid-area: title;
+  margin: 0;
+  min-width: 0;
+  font-size: var(--text-xl);
+  font-weight: 800;
+  color: #fff;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.sl-progress {
+  grid-area: progress;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 2px 4px 0;
+}
+
+.sl-progress[hidden] {
+  display: none;
+}
+
+.sl-progress__track {
+  flex: 1;
+  height: 8px;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.35);
+  overflow: hidden;
+}
+
+.sl-progress__fill {
+  display: block;
+  height: 100%;
+  width: 0;
+  border-radius: var(--radius-pill);
+  background: #fff;
+  transition: width var(--dur) var(--ease);
+}
+
+.sl-progress__text {
+  font-size: var(--text-xs);
+  font-weight: 800;
+  color: #fff;
+  font-variant-numeric: tabular-nums;
+}
+
+.sl-main {
+  width: 100%;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 14px 12px 40px;
+}
+
+/* Add row */
+.sl-add {
+  display: grid;
+  grid-template-columns: 1fr 88px auto;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.sl-add__name,
+.sl-add__amount {
+  width: 100%;
+  min-width: 0;
+  padding: 12px 14px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-md);
+}
+
+.sl-add__name:focus,
+.sl-add__amount:focus {
+  outline: none;
+  border-color: var(--accent);
+  box-shadow: var(--ring);
+}
+
+.sl-add__btn {
+  width: 48px;
+  height: 48px;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--accent);
+  color: var(--accent-contrast);
+  font-size: 1.05rem;
+  cursor: pointer;
+  transition: background-color var(--dur-fast) var(--ease);
+}
+
+.sl-add__btn:hover {
+  background: var(--accent-dark);
+}
+
+/* List */
+.sl-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.sl-item {
+  display: grid;
+  grid-template-columns: auto auto 1fr auto;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  animation: slItemIn var(--dur) var(--ease);
+}
+
+/* Drag handle. touch-action: none lets the pointer drag take over instead of
+   scrolling the page while a row is being reordered. */
+.sl-item__grip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  align-self: stretch;
+  padding: 0 2px;
+  margin-left: -4px;
+  color: var(--text-muted);
+  opacity: 0.5;
+  cursor: grab;
+  touch-action: none;
+  font-size: 0.9rem;
+  transition: opacity var(--dur-fast) var(--ease);
+}
+
+.sl-item__grip:hover {
+  opacity: 0.9;
+}
+
+.sl-item__grip:active {
+  cursor: grabbing;
+}
+
+/* The row being dragged stays in flow; the pointer just reinserts it. */
+.sl-item.is-dragging {
+  opacity: 0.95;
+  box-shadow: var(--shadow-md);
+  border-color: var(--accent);
+  position: relative;
+  z-index: 2;
+}
+
+body.is-dragging {
+  user-select: none;
+  cursor: grabbing;
+}
+
+@keyframes slItemIn {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.sl-item__check {
+  width: 30px;
+  height: 30px;
+  flex: 0 0 30px;
+  border-radius: 50%;
+  border: 2px solid var(--border-strong);
+  background: var(--surface);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: transparent;
+  font-size: 0.8rem;
+  transition: background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
+}
+
+.sl-item__check:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.sl-item__body {
+  min-width: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 6px;
+  cursor: pointer;
+  user-select: none;
+}
+
+.sl-item__name {
+  min-width: 0;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  color: var(--text);
+  word-break: break-word;
+}
+
+/* Inline editable amount: looks like text until focused, then a field. */
+.sl-item__amount {
+  width: 8ch;
+  min-width: 8ch;
+  max-width: 40vw;
+  padding: 5px 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius-sm);
+  background: transparent;
+  font-family: inherit;
+  font-size: var(--text-sm);
+  font-weight: 600;
+  color: var(--text-muted);
+  font-variant-numeric: tabular-nums;
+  transition: background-color var(--dur-fast) var(--ease),
+    border-color var(--dur-fast) var(--ease);
+}
+
+.sl-item__amount::placeholder {
+  color: var(--text-muted);
+  opacity: 0.55;
+  font-weight: 500;
+}
+
+.sl-item__amount:hover {
+  border-color: var(--border-strong);
+  background: var(--surface-alt);
+}
+
+.sl-item__amount:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: var(--surface);
+  color: var(--text);
+  box-shadow: var(--ring);
+}
+
+.sl-item__del {
+  width: 32px;
+  height: 32px;
+  border: none;
+  border-radius: 50%;
+  background: transparent;
+  color: var(--text-muted);
+  cursor: pointer;
+  font-size: 0.95rem;
+}
+
+.sl-item__del:hover {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
+}
+
+/* Bought: struck through, dimmed, pushed to the bottom (order set in JS). */
+.sl-item--done {
+  opacity: 0.75;
+  background: var(--surface-alt);
+}
+
+.sl-item--done .sl-item__name {
+  text-decoration: line-through;
+  color: var(--text-muted);
+}
+
+.sl-item--done .sl-item__amount {
+  text-decoration: line-through;
+}
+
+.sl-item--done .sl-item__amount:focus {
+  text-decoration: none;
+}
+
+.sl-item--done .sl-item__check {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: var(--accent-contrast);
+}
+
+/* Empty + signed-out states */
+.sl-empty {
+  text-align: center;
+  padding: 48px 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.sl-empty[hidden] {
+  display: none;
+}
+
+.sl-empty__mark {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--accent-soft);
+  color: var(--accent);
+  font-size: 1.6rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.sl-empty__title {
+  margin: 0;
+  font-size: var(--text-lg);
+  font-weight: 800;
+  color: var(--text);
+}
+
+.sl-empty__hint {
+  margin: 0 0 8px;
+  max-width: 30ch;
+  color: var(--text-muted);
+  font-size: var(--text-md);
+}
+
+.sl-signin {
+  text-align: center;
+  margin-top: 16px;
+}
+
+.sl-signin[hidden] {
+  display: none;
 }
 
 /* --------------------------------------------------------------------------

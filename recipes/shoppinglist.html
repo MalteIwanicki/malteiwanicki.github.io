@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#7c5cff" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+    <meta name="apple-mobile-web-app-title" content="Shopping list" />
+    <title>Shopping list</title>
+    <link rel="apple-touch-icon" href="icons/icon-192.png" />
+    <link rel="icon" href="icons/icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
+      integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="style.css" />
+  </head>
+
+  <body class="shoppinglist">
+    <header class="sl-header">
+      <button
+        id="sl-back"
+        class="sl-header__back"
+        type="button"
+        aria-label="Back to recipes"
+      >
+        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
+      </button>
+      <h1 class="sl-header__title">Shopping list</h1>
+      <div class="sl-header__actions">
+        <div class="auth-widget" id="auth-widget">
+          <button
+            id="auth-user-toggle"
+            class="auth-user__trigger"
+            type="button"
+            aria-label="Account and settings"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <span class="auth-user__avatar">
+              <img
+                id="auth-user-photo"
+                class="auth-user__photo"
+                alt=""
+                referrerpolicy="no-referrer"
+                hidden
+              />
+              <span
+                id="auth-user-initials"
+                class="auth-user__initials"
+                hidden
+              ></span>
+              <i
+                id="auth-user-icon"
+                class="fa-solid fa-user auth-user__icon"
+                aria-hidden="true"
+              ></i>
+            </span>
+            <span id="auth-user-name" class="auth-user__name" hidden></span>
+            <i
+              class="fa-solid fa-chevron-down auth-user__caret"
+              aria-hidden="true"
+            ></i>
+          </button>
+
+          <div id="auth-user-menu" class="settings-menu auth-user__menu" hidden>
+            <button id="auth-signin" class="settings-link" type="button">
+              <i class="fa-brands fa-google" aria-hidden="true"></i>
+              Sign in with Google
+            </button>
+
+            <div id="auth-account-actions" hidden>
+              <span class="settings-menu__label">Account</span>
+              <button id="auth-switch" class="settings-link" type="button">
+                <i class="fa-solid fa-right-left" aria-hidden="true"></i>
+                Switch account
+              </button>
+              <button id="auth-signout" class="settings-link" type="button">
+                <i
+                  class="fa-solid fa-arrow-right-from-bracket"
+                  aria-hidden="true"
+                ></i>
+                Sign out
+              </button>
+            </div>
+
+            <span class="settings-menu__label">Appearance</span>
+            <div id="mode-options" class="appearance-options">
+              <button type="button" class="appearance-btn" data-mode="light">
+                <i class="fa-solid fa-sun" aria-hidden="true"></i> Light
+              </button>
+              <button type="button" class="appearance-btn" data-mode="dark">
+                <i class="fa-solid fa-moon" aria-hidden="true"></i> Dark
+              </button>
+            </div>
+            <span class="settings-menu__label">Theme</span>
+            <div id="theme-options" class="theme-options"></div>
+
+            <span class="settings-menu__label">Shopping</span>
+            <a class="settings-link" href="mealplan.html">
+              <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+              Open Recipe Book
+            </a>
+            <button id="sl-clear-done" class="settings-link" type="button">
+              <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+              Clear bought items
+            </button>
+            <button id="sl-clear-all" class="settings-link" type="button">
+              <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+              Clear all items
+            </button>
+          </div>
+        </div>
+      </div>
+      <div class="sl-progress" id="sl-progress" hidden>
+        <span class="sl-progress__track">
+          <span id="sl-progress-fill" class="sl-progress__fill"></span>
+        </span>
+        <span id="sl-progress-text" class="sl-progress__text">0/0</span>
+      </div>
+    </header>
+
+    <main class="sl-main">
+      <form id="sl-add-form" class="sl-add" autocomplete="off">
+        <input
+          id="sl-add-name"
+          class="sl-add__name"
+          type="text"
+          placeholder="Add an item"
+          aria-label="Add an item"
+        />
+        <input
+          id="sl-add-amount"
+          class="sl-add__amount"
+          type="text"
+          placeholder="Amount"
+          aria-label="Amount"
+        />
+        <button class="sl-add__btn" type="submit" aria-label="Add item">
+          <i class="fa-solid fa-plus" aria-hidden="true"></i>
+        </button>
+      </form>
+
+      <ul id="sl-list" class="sl-list"></ul>
+
+      <div id="sl-empty" class="sl-empty" hidden>
+        <div class="sl-empty__mark">
+          <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+        </div>
+        <p class="sl-empty__title">Your list is empty</p>
+        <p class="sl-empty__hint">
+          Add items here, or open the Recipe Book and tap “copy to shopping
+          list”.
+        </p>
+        <a class="btn btn--soft" href="mealplan.html">
+          <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+          Open Recipe Book
+        </a>
+      </div>
+    </main>
+
+    <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+    <script type="module" src="shoppinglist.js"></script>
+    <script type="module" src="auth.js"></script>
+  </body>
+</html>

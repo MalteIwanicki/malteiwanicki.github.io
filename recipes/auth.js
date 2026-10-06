@@ -11,7 +11,10 @@ import {
   getFirestore,
   doc,
   getDoc,
-  setDoc
+  setDoc,
+  updateDoc,
+  onSnapshot,
+  FieldValue
 } from "https://www.gstatic.com/firebasejs/12.19.0/firebase-firestore.js";
 import { firebaseConfig } from "./firebase-config.js";
 import {
@@ -73,6 +76,31 @@ function normalizeStapleEntries(stapleList, amounts) {
     if (!(result[name] > 0)) result[name] = 1;
   });
   return { names, amounts: result };
+}
+
+// --- Shopping list storage shape -------------------------------------------
+// The shared list is stored as a MAP on the book: shoppingList: { [id]: item }.
+// Storing one field per item (instead of one big array) means two people
+// shopping at the same time can tick / edit different items without one write
+// clobbering the other's. Older books stored a plain array; both are accepted
+// on read and arrays are migrated to a map on load.
+function shoppingListToMap(value) {
+  if (Array.isArray(value)) {
+    const map = {};
+    value.forEach((it) => {
+      if (it && it.id) map[it.id] = it;
+    });
+    return map;
+  }
+  if (value && typeof value === "object") return { ...value };
+  return {};
+}
+
+function shoppingListToArray(value) {
+  const map = shoppingListToMap(value);
+  return Object.keys(map)
+    .map((k) => map[k])
+    .filter((it) => it && it.id);
 }
 
 function emit() {
@@ -226,7 +254,8 @@ async function loadBook() {
       links: data.links && typeof data.links === "object" ? data.links : {},
       theme: typeof data.theme === "string" ? data.theme : "violet",
       mode: typeof data.mode === "string" ? data.mode : "light",
-      checkedItems: Array.isArray(data.checkedItems) ? data.checkedItems : []
+      checkedItems: Array.isArray(data.checkedItems) ? data.checkedItems : [],
+      shoppingList: shoppingListToArray(data.shoppingList)
     };
 
     // Fold legacy duplicate staples ("milk, milk, milk") into one entry with an
@@ -249,6 +278,20 @@ async function loadBook() {
         } catch (err) {
           console.warn("Staple amount migration failed:", err.message);
         }
+      }
+    }
+
+    // One-time migration: a legacy array shopping list is rewritten as a
+    // per-item map so concurrent shoppers stop overwriting each other.
+    if (Array.isArray(data.shoppingList)) {
+      try {
+        await setDoc(
+          ref,
+          { shoppingList: shoppingListToMap(data.shoppingList) },
+          { merge: true }
+        );
+      } catch (err) {
+        console.warn("Shopping-list map migration failed:", err.message);
       }
     }
 
@@ -297,6 +340,7 @@ async function loadBook() {
     selectedMeals,
     staples,
     links,
+    shoppingList: [],
     seeded: true,
     updatedAt: Date.now()
   };
@@ -305,7 +349,7 @@ async function loadBook() {
   } catch (err) {
     console.error("Failed to seed recipe book:", err.message);
   }
-  return { recipes, selectedMeals, staples, links };
+  return { recipes, selectedMeals, staples, links, shoppingList: [] };
 }
 
 // Persist the user's book. `book` may contain any of recipes/selectedMeals/
@@ -323,6 +367,7 @@ async function saveBook(book) {
   if (typeof book.theme === "string") payload.theme = book.theme;
   if (typeof book.mode === "string") payload.mode = book.mode;
   if (Array.isArray(book.checkedItems)) payload.checkedItems = book.checkedItems;
+  if (Array.isArray(book.shoppingList)) payload.shoppingList = book.shoppingList;
   await setDoc(doc(db, "recipebooks", currentUser.uid), payload, {
     merge: true
   });
@@ -335,8 +380,113 @@ window.recipeStore = {
   newId,
   // Kept for backwards compatibility with any older callers.
   loadSelection: async () => (await loadBook())?.selectedMeals ?? null,
-  saveSelection: (meals) => saveBook({ selectedMeals: meals })
+  saveSelection: (meals) => saveBook({ selectedMeals: meals }),
+  // --- Per-item shopping list API (conflict-free for concurrent shoppers) ---
+  // The list lives at shoppingList.<id> as a map, so each item is its own field.
+  upsertShoppingItems(items) {
+    if (!currentUser || !isAllowed(currentUser) || !items.length) return;
+    const map = {};
+    items.forEach((it) => {
+      if (it && it.id) map[`shoppingList.${it.id}`] = it;
+    });
+    updateDoc(doc(db, "recipebooks", currentUser.uid), {
+      ...map,
+      updatedAt: Date.now()
+    }).catch((err) => console.error("Failed to add items:", err.message));
+  },
+  updateShoppingItem(id, patch) {
+    if (!currentUser || !isAllowed(currentUser) || !id) return;
+    const payload = {};
+    Object.keys(patch).forEach((k) => {
+      payload[`shoppingList.${id}.${k}`] = patch[k];
+    });
+    payload.updatedAt = Date.now();
+    updateDoc(doc(db, "recipebooks", currentUser.uid), payload).catch((err) =>
+      console.error("Failed to update item:", err.message)
+    );
+  },
+  removeShoppingItem(id) {
+    if (!currentUser || !isAllowed(currentUser) || !id) return;
+    updateDoc(doc(db, "recipebooks", currentUser.uid), {
+      [`shoppingList.${id}`]: FieldValue.delete(),
+      updatedAt: Date.now()
+    }).catch((err) => console.error("Failed to remove item:", err.message));
+  },
+  clearShoppingList() {
+    if (!currentUser || !isAllowed(currentUser)) return;
+    updateDoc(doc(db, "recipebooks", currentUser.uid), {
+      shoppingList: {},
+      updatedAt: Date.now()
+    }).catch((err) => console.error("Failed to clear list:", err.message));
+  }
 };
+
+// --- Live shopping-list sync -----------------------------------------------
+// Both partners sign in with the SAME allowlisted Google account, so they share
+// the one recipebooks/{uid} document. This subscription pushes the shared
+// shopping list to every open tab/device in real time (onSnapshot over
+// Firestore's listen channel), so two people shopping at once see each other's
+// ticks, edits and new items.
+let shoppingListUnsub = null;
+const shoppingListCallbacks = new Set();
+
+function notifyShoppingList(list) {
+  shoppingListCallbacks.forEach((cb) => {
+    try {
+      cb(Array.isArray(list) ? list : null);
+    } catch (err) {
+      console.error("Shopping-list listener failed:", err);
+    }
+  });
+}
+
+// Subscribe to the shared list. `cb` is called immediately (with the latest
+// list, or null if the doc has no list yet) and again on every remote change.
+// Subscribing also (re)binds the underlying Firestore listener to the current
+// user, so it is safe to call whenever auth state changes.
+function watchShoppingList(cb) {
+  shoppingListCallbacks.add(cb);
+  bindShoppingListWatcher();
+
+  return () => {
+    shoppingListCallbacks.delete(cb);
+    if (!shoppingListCallbacks.size && shoppingListUnsub) {
+      shoppingListUnsub();
+      shoppingListUnsub = null;
+    }
+  };
+}
+
+function bindShoppingListWatcher() {
+  // (Re)bind to the current user whenever the watcher is needed.
+  if (shoppingListUnsub) {
+    shoppingListUnsub();
+    shoppingListUnsub = null;
+  }
+  if (!currentUser || !isAllowed(currentUser)) {
+    notifyShoppingList(null);
+    return;
+  }
+  shoppingListUnsub = onSnapshot(
+    doc(db, "recipebooks", currentUser.uid),
+    (snap) => {
+      const data = snap.exists() ? snap.data() || {} : {};
+      notifyShoppingList(
+        data.shoppingList === undefined
+          ? null
+          : shoppingListToArray(data.shoppingList)
+      );
+    },
+    (err) => console.error("Shopping-list sync error:", err.message)
+  );
+}
+
+// Rebind the listener whenever the signed-in user changes.
+onAuthStateChanged(auth, () => {
+  if (shoppingListCallbacks.size) bindShoppingListWatcher();
+});
+
+window.recipeStore.watchShoppingList = watchShoppingList;
 
 // Signal readiness for scripts that loaded before this module.
 window.dispatchEvent(new Event("recipeauthready"));

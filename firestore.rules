@@ -18,8 +18,10 @@ service cloud.firestore {
       allow read, write: if isAllowedUser() && request.auth.uid == uid;
     }
 
-    // Each user's PRIVATE recipe book (recipes + selected meals).
-    // Owner-only: a user can never read or write anyone else's book.
+    // Each user's PRIVATE recipe book (recipes + selected meals + the shared
+    // shopping list). Owner-only: a user can never read or write anyone else's
+    // book. Both partners sign in with the SAME allowlisted account, so they
+    // share this one document and the shopping list syncs live between them.
     match /recipebooks/{uid} {
       allow read, write: if isAllowedUser() && request.auth.uid == uid;
     }
