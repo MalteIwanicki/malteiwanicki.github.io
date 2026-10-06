@@ -30,6 +30,10 @@
           </p>
         </div>
         <div class="site-header__actions">
+          <a class="btn btn--ghost btn--sm" href="shoppinglist.html">
+            <i class="fa-solid fa-basket-shopping" aria-hidden="true"></i>
+            <span class="btn__label">To shopping list</span>
+          </a>
           <div class="auth-widget" id="auth-widget">
             <button
               id="auth-user-toggle"
@@ -145,31 +149,56 @@
             <span id="recipe-count" class="pill pill--muted">0</span>
           </div>
           <div class="recipes-toolbar__right">
+            <div
+              id="view-options"
+              class="view-toggle"
+              role="group"
+              aria-label="Display mode"
+            >
+              <button
+                type="button"
+                class="view-btn"
+                data-view="cards"
+                aria-label="Card view"
+                title="Cards"
+              >
+                <i class="fa-solid fa-table-cells-large" aria-hidden="true"></i>
+              </button>
+              <button
+                type="button"
+                class="view-btn"
+                data-view="compact"
+                aria-label="Compact view"
+                title="Compact"
+              >
+                <i class="fa-solid fa-table-cells" aria-hidden="true"></i>
+              </button>
+            </div>
+            <button
+              id="clear-selection"
+              class="btn btn--soft btn--icon"
+              type="button"
+              aria-label="Clear selection"
+              title="Clear selection"
+              hidden
+            >
+              <i class="fa-solid fa-broom" aria-hidden="true"></i>
+            </button>
             <button
               id="edit-toggle"
               class="btn btn--soft"
               type="button"
               aria-pressed="false"
             >
-              <i class="fa-solid fa-pen" aria-hidden="true"></i> Edit
+              <i
+                id="edit-toggle-icon"
+                class="fa-solid fa-wrench"
+                aria-hidden="true"
+              ></i>
+              <span id="edit-toggle-label">Edit</span>
             </button>
             <button id="add-recipe" class="btn btn--primary" type="button">
               <i class="fa-solid fa-plus" aria-hidden="true"></i> Add recipe
-            </button>
-          </div>
-        </div>
-        <div id="selection-bar" class="selection-bar" hidden>
-          <span class="selection-bar__text">
-            <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
-            <strong id="selected-count">0</strong> selected
-          </span>
-          <div class="selection-bar__actions">
-            <button
-              id="selection-clear"
-              class="btn btn--soft btn--sm"
-              type="button"
-            >
-              <i class="fa-solid fa-xmark" aria-hidden="true"></i> Clear
             </button>
           </div>
         </div>

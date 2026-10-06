@@ -31,98 +31,102 @@
   </head>
 
   <body class="shoppinglist">
-    <header class="sl-header">
-      <button
-        id="sl-back"
-        class="sl-header__back"
-        type="button"
-        aria-label="Back to recipes"
-      >
-        <i class="fa-solid fa-chevron-left" aria-hidden="true"></i>
-      </button>
-      <h1 class="sl-header__title">Shopping list</h1>
-      <div class="sl-header__actions">
-        <div class="auth-widget" id="auth-widget">
-          <button
-            id="auth-user-toggle"
-            class="auth-user__trigger"
-            type="button"
-            aria-label="Account and settings"
-            aria-haspopup="true"
-            aria-expanded="false"
+    <header class="site-header sl-header">
+      <div class="site-header__inner">
+        <div class="site-header__titles">
+          <h1>Shopping list</h1>
+          <p class="site-header__subtitle">Everything you need to buy.</p>
+        </div>
+        <div class="site-header__actions">
+          <a
+            class="btn btn--ghost btn--sm sl-header__link"
+            href="mealplan.html"
           >
-            <span class="auth-user__avatar">
-              <img
-                id="auth-user-photo"
-                class="auth-user__photo"
-                alt=""
-                referrerpolicy="no-referrer"
-                hidden
-              />
-              <span
-                id="auth-user-initials"
-                class="auth-user__initials"
-                hidden
-              ></span>
-              <i
-                id="auth-user-icon"
-                class="fa-solid fa-user auth-user__icon"
-                aria-hidden="true"
-              ></i>
-            </span>
-            <span id="auth-user-name" class="auth-user__name" hidden></span>
-            <i
-              class="fa-solid fa-chevron-down auth-user__caret"
-              aria-hidden="true"
-            ></i>
-          </button>
-
-          <div id="auth-user-menu" class="settings-menu auth-user__menu" hidden>
-            <button id="auth-signin" class="settings-link" type="button">
-              <i class="fa-brands fa-google" aria-hidden="true"></i>
-              Sign in with Google
-            </button>
-
-            <div id="auth-account-actions" hidden>
-              <span class="settings-menu__label">Account</span>
-              <button id="auth-switch" class="settings-link" type="button">
-                <i class="fa-solid fa-right-left" aria-hidden="true"></i>
-                Switch account
-              </button>
-              <button id="auth-signout" class="settings-link" type="button">
+            <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+            <span class="btn__label">To recipes</span>
+          </a>
+          <div class="auth-widget" id="auth-widget">
+            <button
+              id="auth-user-toggle"
+              class="auth-user__trigger"
+              type="button"
+              aria-label="Account and settings"
+              aria-haspopup="true"
+              aria-expanded="false"
+            >
+              <span class="auth-user__avatar">
+                <img
+                  id="auth-user-photo"
+                  class="auth-user__photo"
+                  alt=""
+                  referrerpolicy="no-referrer"
+                  hidden
+                />
+                <span
+                  id="auth-user-initials"
+                  class="auth-user__initials"
+                  hidden
+                ></span>
                 <i
-                  class="fa-solid fa-arrow-right-from-bracket"
+                  id="auth-user-icon"
+                  class="fa-solid fa-user auth-user__icon"
                   aria-hidden="true"
                 ></i>
-                Sign out
+              </span>
+              <span id="auth-user-name" class="auth-user__name" hidden></span>
+              <i
+                class="fa-solid fa-chevron-down auth-user__caret"
+                aria-hidden="true"
+              ></i>
+            </button>
+
+            <div
+              id="auth-user-menu"
+              class="settings-menu auth-user__menu"
+              hidden
+            >
+              <button id="auth-signin" class="settings-link" type="button">
+                <i class="fa-brands fa-google" aria-hidden="true"></i>
+                Sign in with Google
+              </button>
+
+              <div id="auth-account-actions" hidden>
+                <span class="settings-menu__label">Account</span>
+                <button id="auth-switch" class="settings-link" type="button">
+                  <i class="fa-solid fa-right-left" aria-hidden="true"></i>
+                  Switch account
+                </button>
+                <button id="auth-signout" class="settings-link" type="button">
+                  <i
+                    class="fa-solid fa-arrow-right-from-bracket"
+                    aria-hidden="true"
+                  ></i>
+                  Sign out
+                </button>
+              </div>
+
+              <span class="settings-menu__label">Appearance</span>
+              <div id="mode-options" class="appearance-options">
+                <button type="button" class="appearance-btn" data-mode="light">
+                  <i class="fa-solid fa-sun" aria-hidden="true"></i> Light
+                </button>
+                <button type="button" class="appearance-btn" data-mode="dark">
+                  <i class="fa-solid fa-moon" aria-hidden="true"></i> Dark
+                </button>
+              </div>
+              <span class="settings-menu__label">Theme</span>
+              <div id="theme-options" class="theme-options"></div>
+
+              <span class="settings-menu__label">Shopping</span>
+              <a class="settings-link" href="mealplan.html">
+                <i class="fa-solid fa-utensils" aria-hidden="true"></i>
+                Open Recipe Book
+              </a>
+              <button id="sl-clear-done" class="settings-link" type="button">
+                <i class="fa-solid fa-eraser" aria-hidden="true"></i>
+                Clear bought items
               </button>
             </div>
-
-            <span class="settings-menu__label">Appearance</span>
-            <div id="mode-options" class="appearance-options">
-              <button type="button" class="appearance-btn" data-mode="light">
-                <i class="fa-solid fa-sun" aria-hidden="true"></i> Light
-              </button>
-              <button type="button" class="appearance-btn" data-mode="dark">
-                <i class="fa-solid fa-moon" aria-hidden="true"></i> Dark
-              </button>
-            </div>
-            <span class="settings-menu__label">Theme</span>
-            <div id="theme-options" class="theme-options"></div>
-
-            <span class="settings-menu__label">Shopping</span>
-            <a class="settings-link" href="mealplan.html">
-              <i class="fa-solid fa-utensils" aria-hidden="true"></i>
-              Open Recipe Book
-            </a>
-            <button id="sl-clear-done" class="settings-link" type="button">
-              <i class="fa-solid fa-eraser" aria-hidden="true"></i>
-              Clear bought items
-            </button>
-            <button id="sl-clear-all" class="settings-link" type="button">
-              <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
-              Clear all items
-            </button>
           </div>
         </div>
       </div>
@@ -155,7 +159,20 @@
         </button>
       </form>
 
+      <p class="sl-list-hint">
+        <i class="fa-solid fa-hand-pointer" aria-hidden="true"></i>
+        Tap to tick &middot; swipe right to tick &middot; swipe left to delete
+        &middot; hold to reorder
+      </p>
+
       <ul id="sl-list" class="sl-list"></ul>
+
+      <div id="sl-clear-row" class="sl-clear-row" hidden>
+        <button id="sl-clear-all" class="btn btn--danger" type="button">
+          <i class="fa-solid fa-trash-can" aria-hidden="true"></i>
+          Clear shopping list
+        </button>
+      </div>
 
       <div id="sl-empty" class="sl-empty" hidden>
         <div class="sl-empty__mark">

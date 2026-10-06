@@ -60,6 +60,41 @@ let selectedRecipes = [];
 let recipesRendered = false;
 let currentEditId = null;
 let currentDialogMode = "form";
+// Display mode for the recipe list: "cards" (default) or "compact".
+let viewMode = "cards";
+const VIEW_STORAGE = "recipeBookView";
+const VIEWS = ["cards", "compact"];
+
+function storedView() {
+  try {
+    const v = localStorage.getItem(VIEW_STORAGE);
+    return VIEWS.includes(v) ? v : "cards";
+  } catch (_) {
+    return "cards";
+  }
+}
+
+// Apply a display mode: update the document attribute, the toggle buttons and
+// the (persisted) book state.
+function applyView(mode, persist = true) {
+  const v = VIEWS.includes(mode) ? mode : "cards";
+  viewMode = v;
+  document.documentElement.dataset.view = v;
+  book.view = v;
+  document.querySelectorAll("#view-options .view-btn").forEach((b) => {
+    b.classList.toggle("is-active", b.dataset.view === v);
+  });
+  if (persist) {
+    try {
+      localStorage.setItem(VIEW_STORAGE, v);
+    } catch (_) {
+      /* ignore */
+    }
+    if (window.recipeStore && window.recipeStore.isReady()) {
+      scheduleSave({ view: v });
+    }
+  }
+}
 
 // The user's book is the source of truth for staples and shopping links.
 function getStaples() {
@@ -301,10 +336,73 @@ function renderBook() {
 
   const selected = new Set(book.selectedMeals);
   book.recipes.forEach((recipe) => {
-    container.appendChild(createRecipeCard(recipe, selected.has(recipe.id)));
+    const node =
+      viewMode === "compact"
+        ? createRecipeChip(recipe, selected.has(recipe.id))
+        : createRecipeCard(recipe, selected.has(recipe.id));
+    container.appendChild(node);
   });
   updateSummary();
   updateSelectedCount();
+}
+
+// A dense, calendar-like cell: the recipe name and a tick/untick control only.
+function createRecipeChip(recipe, isSelected) {
+  const parsed = getParsed(recipe);
+  const title = parsed.title || recipe.title || "Untitled recipe";
+
+  const chip = el("div", "recipe-chip");
+  chip.dataset.id = recipe.id;
+  if (isSelected) chip.classList.add("selected");
+  if (editMode) chip.classList.add("recipe-chip--editing");
+
+  const checkbox = el("input", "recipe-checkbox");
+  checkbox.type = "checkbox";
+  checkbox.checked = isSelected;
+  checkbox.dataset.id = recipe.id;
+  checkbox.setAttribute("aria-label", `Select ${title}`);
+  checkbox.addEventListener("change", () => {
+    chip.classList.toggle("selected", checkbox.checked);
+    toggleSelected(recipe.id, checkbox.checked);
+  });
+
+  const name = el("span", "recipe-chip__name", title);
+  name.title = title;
+
+  chip.appendChild(checkbox);
+  chip.appendChild(name);
+
+  // Clicking the name (outside edit mode) toggles the selection too.
+  name.addEventListener("click", () => {
+    if (editMode) return;
+    checkbox.checked = !checkbox.checked;
+    chip.classList.toggle("selected", checkbox.checked);
+    toggleSelected(recipe.id, checkbox.checked);
+  });
+
+  if (editMode) {
+    const editBtn = el("button", "recipe-chip__action");
+    editBtn.type = "button";
+    editBtn.innerHTML = '<i class="fa-solid fa-pen" aria-hidden="true"></i>';
+    editBtn.setAttribute("aria-label", `Edit ${title}`);
+    editBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      openEditor(recipe.id);
+    });
+    chip.appendChild(editBtn);
+
+    const delBtn = el("button", "recipe-chip__action");
+    delBtn.type = "button";
+    delBtn.innerHTML = '<i class="fa-solid fa-trash" aria-hidden="true"></i>';
+    delBtn.setAttribute("aria-label", `Delete ${title}`);
+    delBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      deleteRecipe(recipe.id);
+    });
+    chip.appendChild(delBtn);
+  }
+
+  return chip;
 }
 
 function createRecipeCard(recipe, isSelected) {
@@ -441,13 +539,18 @@ function toggleSelected(id, isSelected) {
 }
 
 function updateSelectedCount() {
-  const boxes = document.querySelectorAll(".recipe-checkbox");
   const count = document.querySelectorAll(".recipe-checkbox:checked").length;
-  const countEl = document.getElementById("selected-count");
-  if (countEl) countEl.textContent = String(count);
 
-  const bar = document.getElementById("selection-bar");
-  if (bar) bar.hidden = count === 0 || boxes.length === 0;
+  // The broom button appears only while something is selected; clearing wipes
+  // the whole meal selection. The count lives in its title/aria-label so no
+  // separate selection bar is needed.
+  const clearBtn = document.getElementById("clear-selection");
+  if (clearBtn) {
+    clearBtn.hidden = count === 0;
+    clearBtn.title =
+      count === 1 ? "Clear 1 selected" : `Clear ${count} selected`;
+    clearBtn.setAttribute("aria-label", clearBtn.title);
+  }
 
   syncFab();
 }
@@ -1032,9 +1135,12 @@ function setEditMode(on) {
   document.body.classList.toggle("edit-mode", on);
   const toggle = document.getElementById("edit-toggle");
   if (toggle) {
-    toggle.textContent = on ? "Done" : "Edit";
     toggle.setAttribute("aria-pressed", String(on));
   }
+  const label = document.getElementById("edit-toggle-label");
+  if (label) label.textContent = on ? "Done" : "Edit";
+  const icon = document.getElementById("edit-toggle-icon");
+  if (icon) icon.className = on ? "fa-solid fa-eye" : "fa-solid fa-wrench";
   setStapleEditMode(on);
   renderBook();
 }
@@ -1488,9 +1594,10 @@ async function loadBookAndRender() {
     invalidate();
     renderBook();
     refreshIngredientNames();
-    // The signed-in user's saved theme/mode win; otherwise keep the local one.
+    // The signed-in user's saved appearance wins; otherwise keep the local one.
     if (book.theme) applyTheme(book.theme);
     if (book.mode) applyMode(book.mode);
+    applyView(book.view || storedView(), false);
   } catch (err) {
     console.error("Failed to load recipe book:", err);
     renderEmptyState();
@@ -1512,8 +1619,17 @@ function wireStaticControls() {
   const addBtn = document.getElementById("add-recipe");
   if (addBtn) addBtn.addEventListener("click", () => openEditor(null));
 
-  // Clear the whole meal selection (shown inside the selection bar).
-  const selectionClear = document.getElementById("selection-clear");
+  // Display-mode toggle (cards / compact).
+  document.querySelectorAll("#view-options .view-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      if (btn.dataset.view === viewMode) return;
+      applyView(btn.dataset.view);
+      renderBook();
+    });
+  });
+
+  // Clear the whole meal selection (the broom button in the toolbar).
+  const selectionClear = document.getElementById("clear-selection");
   if (selectionClear) {
     selectionClear.addEventListener("click", () => {
       book.selectedMeals = [];
@@ -1933,6 +2049,7 @@ async function boot() {
   // storage or the OS preference).
   applyTheme(storedTheme());
   applyMode(storedMode() || (prefersDark() ? "dark" : "light"));
+  applyView(storedView(), false);
 
   // Try to load the official Cooklang parser up-front; fall back if offline.
   await loadParser();

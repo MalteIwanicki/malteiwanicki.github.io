@@ -12,6 +12,7 @@
   --text: #322c3e;
   --text-muted: #857f96;
   --teal: #17a3a3;
+  --green: #1eaa5e;
   --danger: #cf4a63;
 
   /* Theme defaults (Violet) - overridden by html[data-theme="..."] */
@@ -200,7 +201,7 @@ body {
 }
 
 .site-header__inner {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   display: flex;
   align-items: center;
@@ -227,6 +228,11 @@ body {
   align-items: center;
   gap: 10px;
   flex-wrap: wrap;
+}
+
+/* Match the account trigger's height so the header buttons line up. */
+.site-header__actions .btn {
+  min-height: 40px;
 }
 
 .site-header .btn--ghost {
@@ -338,7 +344,7 @@ body {
 
 .auth-message,
 .parser-notice {
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 10px auto 0;
   padding: 8px 12px;
   font-size: 0.85rem;
@@ -487,6 +493,16 @@ textarea:focus-visible {
   border-color: var(--border-strong);
 }
 
+.btn--danger {
+  background-color: var(--danger);
+  color: #fff;
+  box-shadow: 0 4px 12px color-mix(in srgb, var(--danger) 30%, transparent);
+}
+
+.btn--danger:hover {
+  background-color: color-mix(in srgb, var(--danger) 85%, #000);
+}
+
 .icon-btn {
   border: none;
   background: transparent;
@@ -535,7 +551,7 @@ textarea:focus-visible {
 
 .layout {
   width: 100%;
-  max-width: 1200px;
+  max-width: 1600px;
   margin: 0 auto;
   padding: 24px;
   flex-grow: 1;
@@ -600,7 +616,7 @@ body.signed-out #manage-links {
 
 #recipes-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 16px;
 }
 
@@ -1517,42 +1533,28 @@ textarea:focus-visible,
   border: 1px solid var(--border);
 }
 
-.selection-bar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: var(--space-3);
-  flex-wrap: wrap;
-  padding: 10px 14px;
-  margin-bottom: var(--space-4);
-  background: var(--accent-soft);
-  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
-  border-radius: var(--radius);
-  position: sticky;
-  top: 84px;
-  z-index: 6;
-  animation: slideDown var(--dur) var(--ease);
+/* Subtle icon-only toolbar button (e.g. clear-selection broom). */
+.btn--icon {
+  padding: 9px;
+  width: 40px;
+  color: var(--text-muted);
 }
 
-.selection-bar[hidden] {
-  display: none;
-}
-
-.selection-bar__text {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: 700;
+.btn--icon:hover {
   color: var(--accent-dark);
 }
 
-.selection-bar__text i {
-  font-size: 0.95em;
+.btn--icon[hidden] {
+  display: none;
 }
 
-.selection-bar__actions {
-  display: flex;
-  gap: 8px;
+/* Add recipe only appears in edit mode; the count/pill stays visible. */
+#add-recipe {
+  display: none;
+}
+
+body.edit-mode:not(.signed-out) #add-recipe {
+  display: inline-flex;
 }
 
 @keyframes slideDown {
@@ -1568,7 +1570,6 @@ textarea:focus-visible,
 }
 
 /* --- Recipe cards --------------------------------------------------------- */
-
 .recipe {
   padding: 18px 18px 14px;
   overflow: hidden;
@@ -1588,6 +1589,16 @@ textarea:focus-visible,
 }
 
 .recipe--editing .recipe__head {
+  padding-left: 30px;
+}
+
+/* In edit mode the action buttons drop below the header instead of floating
+   over it, so they can never cover the recipe title (matters most when the
+   cards are narrow, e.g. two per row). */
+.recipe--editing .recipe__actions {
+  position: static;
+  justify-content: flex-end;
+  margin: 0 0 10px;
   padding-left: 30px;
 }
 
@@ -1652,6 +1663,144 @@ textarea:focus-visible,
 
 .recipe-checkbox:hover {
   box-shadow: 0 0 0 4px var(--accent-soft);
+}
+
+/* --- Display-mode toggle -------------------------------------------------- */
+
+.view-toggle {
+  display: inline-flex;
+  padding: 3px;
+  gap: 2px;
+  border-radius: var(--radius-pill);
+  background: var(--accent-soft);
+  border: 1px solid var(--border);
+}
+
+.view-btn {
+  width: 32px;
+  height: 30px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: background-color var(--dur-fast) var(--ease),
+    color var(--dur-fast) var(--ease);
+}
+
+.view-btn:hover {
+  color: var(--accent-dark);
+}
+
+.view-btn.is-active {
+  background: var(--surface);
+  color: var(--accent-dark);
+  box-shadow: var(--shadow-sm);
+}
+
+.view-btn:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 1px;
+}
+
+/* --- Compact (calendar-like) grid ----------------------------------------- */
+
+html[data-view="compact"] #recipes-container {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+}
+
+@media (max-width: 768px) {
+  html[data-view="compact"] #recipes-container {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 480px) {
+  html[data-view="compact"] #recipes-container {
+    grid-template-columns: 1fr;
+  }
+}
+
+.recipe-chip {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  min-width: 0;
+  padding: 8px 10px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm, 10px);
+  transition: border-color var(--dur-fast) var(--ease),
+    background-color var(--dur-fast) var(--ease),
+    box-shadow var(--dur-fast) var(--ease);
+}
+
+.recipe-chip:hover {
+  border-color: var(--border-strong);
+  box-shadow: var(--shadow-sm);
+}
+
+.recipe-chip.selected {
+  border-color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 10%, var(--surface));
+}
+
+.recipe-chip__name {
+  flex: 1 1 auto;
+  min-width: 0;
+  font-size: var(--text-sm);
+  font-weight: 700;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.recipe-chip--editing .recipe-chip__name {
+  cursor: default;
+}
+
+.recipe-chip .recipe-checkbox {
+  position: static;
+  top: auto;
+  right: auto;
+  flex: 0 0 auto;
+  width: 20px;
+  height: 20px;
+  margin-top: 1px;
+  border-width: 2px;
+}
+
+.recipe-chip .recipe-checkbox::after {
+  font-size: 0.6rem;
+}
+
+.recipe-chip .recipe-checkbox:hover {
+  box-shadow: 0 0 0 3px var(--accent-soft);
+}
+
+.recipe-chip__action {
+  flex: 0 0 auto;
+  width: 24px;
+  height: 24px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background: transparent;
+  color: var(--text-muted);
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 0.78rem;
+}
+
+.recipe-chip__action:hover {
+  background: var(--accent-soft);
+  color: var(--accent-dark);
 }
 
 /* --- Shopping list -------------------------------------------------------- */
@@ -2109,76 +2258,88 @@ body.shoppinglist {
   position: sticky;
   top: 0;
   z-index: 20;
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  grid-template-areas:
-    "back title actions"
-    "progress progress progress";
+  padding-bottom: 10px;
+}
+
+.sl-header__actions {
+  display: flex;
   align-items: center;
-  gap: 8px 6px;
-  padding: calc(env(safe-area-inset-top) + 10px) 12px 10px;
-  background: var(--header-bg);
-  color: #fff;
-  box-shadow: var(--shadow-sm);
-  transition: transform var(--dur) var(--ease);
-  will-change: transform;
+  gap: 10px;
+  flex-wrap: wrap;
 }
 
-/* Hide-on-scroll: slides up out of view while scrolling down. */
-.sl-header--hidden {
-  transform: translateY(-100%);
+/* The title/actions row is a grid whose height animates from its natural size
+   to 0 when scrolled. Animating grid-template-rows (not max-height) means the
+   header shrinks smoothly and steadily instead of collapsing all at once. */
+.sl-header .site-header__inner {
+  align-items: center;
+  display: grid;
+  grid-template-rows: 1fr;
+  grid-template-columns: 1fr auto;
+  transition: grid-template-rows var(--dur) var(--ease),
+    opacity var(--dur) var(--ease), padding-bottom var(--dur) var(--ease);
 }
 
+/* Compact-on-scroll: fade the row out, collapse it to zero height and pull the
+   progress bar up. Padding (not a margin) collapses with the row so the bar
+   does not jump. */
+.sl-header--compact .site-header__inner {
+  grid-template-rows: 0fr;
+  opacity: 0;
+  padding-bottom: 0;
+  pointer-events: none;
+}
+
+.sl-header .site-header__titles,
+.sl-header .site-header__actions {
+  overflow: hidden;
+}
+
+/* Reduced motion: no collapsing animation, just the (instant) compact state. */
 @media (prefers-reduced-motion: reduce) {
-  .sl-header {
+
+  .sl-header .site-header__inner,
+  .sl-progress,
+  .sl-progress__track,
+  .sl-progress__text {
     transition: none;
   }
 }
 
-.sl-header__actions {
-  grid-area: actions;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.sl-header__back {
-  grid-area: back;
-  width: 40px;
-  height: 40px;
-  border: none;
-  border-radius: 50%;
+/* "To recipes" link sitting next to the account widget in the dark header. */
+.sl-header__link {
+  color: #fff;
+  border-color: rgba(255, 255, 255, 0.55);
   background: transparent;
-  color: #fff;
-  font-size: 1.05rem;
-  cursor: pointer;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
 }
 
-.sl-header__back:hover {
-  background: rgba(255, 255, 255, 0.22);
+.sl-header__link:hover {
+  background: rgba(255, 255, 255, 0.18);
+  color: #fff;
 }
 
-.sl-header__title {
-  grid-area: title;
-  margin: 0;
-  min-width: 0;
-  font-size: var(--text-xl);
-  font-weight: 800;
-  color: #fff;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+@media (max-width: 480px) {
+  .sl-header__link {
+    padding: 6px 10px;
+  }
+}
+
+/* On narrow screens the navigation buttons shrink to their icons so the page
+   title keeps its space. */
+@media (max-width: 600px) {
+
+  .site-header .btn__label,
+  .sl-header .btn__label {
+    display: none;
+  }
 }
 
 .sl-progress {
-  grid-area: progress;
   display: flex;
   align-items: center;
   gap: 10px;
-  padding: 2px 4px 0;
+  max-width: 1600px;
+  margin: 0 auto;
 }
 
 .sl-progress[hidden] {
@@ -2191,6 +2352,10 @@ body.shoppinglist {
   border-radius: var(--radius-pill);
   background: rgba(255, 255, 255, 0.35);
   overflow: hidden;
+}
+
+.sl-header--compact .sl-progress__track {
+  height: 4px;
 }
 
 .sl-progress__fill {
@@ -2207,6 +2372,10 @@ body.shoppinglist {
   font-weight: 800;
   color: #fff;
   font-variant-numeric: tabular-nums;
+}
+
+.sl-header--compact .sl-progress__text {
+  font-size: 0.68rem;
 }
 
 .sl-main {
@@ -2270,21 +2439,95 @@ body.shoppinglist {
   gap: 8px;
 }
 
+/* Destructive "clear everything" action, at the very end of the list. */
+.sl-clear-row {
+  display: flex;
+  justify-content: center;
+  margin-top: 16px;
+}
+
+.sl-clear-row[hidden] {
+  display: none;
+}
+
+.sl-clear-row .btn {
+  color: #fff;
+}
+
 .sl-item {
+  position: relative;
+  overflow: hidden;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow-sm);
+  background: var(--surface);
+  animation: slItemIn var(--dur) var(--ease);
+  /* Allow vertical panning; horizontal gestures are handled in JS. */
+  touch-action: pan-y;
+}
+
+/* Rows that were already on screen keep their place without re-animating, so
+   re-rendering the list (remote sync etc.) never flashes everything. */
+.sl-item--no-enter {
+  animation: none;
+}
+
+/* The swipeable layer that holds the actual row content. */
+.sl-item__content {
+  position: relative;
+  z-index: 1;
   display: grid;
   grid-template-columns: auto auto 1fr auto;
   align-items: center;
   gap: 10px;
   padding: 12px 14px;
   background: var(--surface);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
-  animation: slItemIn var(--dur) var(--ease);
+  /* Set during a gesture; snapped back / out via JS. */
+  will-change: transform;
 }
 
-/* Drag handle. touch-action: none lets the pointer drag take over instead of
-   scrolling the page while a row is being reordered. */
+/* Swipe action backgrounds sit behind the content and are revealed as it
+   slides. */
+.sl-item__action {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 0 20px;
+  font-weight: 800;
+  font-size: var(--text-sm);
+  color: #fff;
+  pointer-events: none;
+}
+
+.sl-item__action i {
+  font-size: 1.1rem;
+}
+
+/* Swipe right / tap → tick / untick (left edge, green). */
+.sl-item__action--tick {
+  left: 0;
+  justify-content: flex-start;
+  background: var(--green);
+}
+
+/* Swipe left → delete (right edge). */
+.sl-item__action--delete {
+  right: 0;
+  justify-content: flex-end;
+  background: var(--danger);
+}
+
+/* Haptic-style cue while a row is picked up to drag. */
+.sl-item.is-dragging .sl-item__content {
+  background: var(--accent-soft);
+}
+
+/* Handle for dragging. Picking it up starts a drag immediately; elsewhere on
+   the row, press & hold does the same. */
 .sl-item__grip {
   display: inline-flex;
   align-items: center;
@@ -2295,17 +2538,16 @@ body.shoppinglist {
   color: var(--text-muted);
   opacity: 0.5;
   cursor: grab;
-  touch-action: none;
   font-size: 0.9rem;
   transition: opacity var(--dur-fast) var(--ease);
+  /* Grabbing the handle must start our pointer drag, not scroll/select. */
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
 }
 
 .sl-item__grip:hover {
   opacity: 0.9;
-}
-
-.sl-item__grip:active {
-  cursor: grabbing;
 }
 
 /* The row being dragged stays in flow; the pointer just reinserts it. */
@@ -2315,6 +2557,46 @@ body.shoppinglist {
   border-color: var(--accent);
   position: relative;
   z-index: 2;
+  transform: scale(1.02);
+  transition: transform 0.12s var(--ease), box-shadow 0.12s var(--ease);
+}
+
+/* Settle animation on the row that was just dropped. */
+.sl-item--dropped {
+  animation: slItemDrop 0.3s var(--ease);
+}
+
+@keyframes slItemDrop {
+  0% {
+    transform: scale(1.02);
+  }
+
+  55% {
+    transform: scale(1.008);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+/* The whole list gives a small confirming pulse when a drag ends. */
+.sl-list--drop {
+  animation: slListDrop 0.3s var(--ease);
+}
+
+@keyframes slListDrop {
+  0% {
+    transform: scale(1);
+  }
+
+  45% {
+    transform: scale(1.006);
+  }
+
+  100% {
+    transform: scale(1);
+  }
 }
 
 body.is-dragging {
@@ -2374,6 +2656,25 @@ body.is-dragging {
   word-break: break-word;
 }
 
+/* Inline name editor (appears when a name is tapped). */
+.sl-item__name-edit {
+  width: 100%;
+  min-width: 60px;
+  padding: 4px 8px;
+  border: 1px solid var(--accent);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: var(--text-lg);
+  font-weight: 700;
+  box-shadow: var(--ring);
+}
+
+.sl-item__name-edit:focus {
+  outline: none;
+}
+
 /* Inline editable amount: looks like text until focused, then a field. */
 .sl-item__amount {
   width: 8ch;
@@ -2430,6 +2731,9 @@ body.is-dragging {
 /* Bought: struck through, dimmed, pushed to the bottom (order set in JS). */
 .sl-item--done {
   opacity: 0.75;
+}
+
+.sl-item--done .sl-item__content {
   background: var(--surface-alt);
 }
 
@@ -2450,6 +2754,43 @@ body.is-dragging {
   background: var(--accent);
   border-color: var(--accent);
   color: var(--accent-contrast);
+}
+
+/* While swiping, no entry animation / snap-back transition interference. */
+.sl-item.is-swiping {
+  animation: none;
+}
+
+.sl-item.is-removing {
+  animation: none;
+}
+
+/* Gesture hint (shown only on touch / small screens). */
+.sl-list-hint {
+  display: none;
+  margin: 0 2px 12px;
+  color: var(--text-muted);
+  font-size: var(--text-xs);
+  text-align: center;
+}
+
+.sl-list-hint i {
+  margin-right: 4px;
+}
+
+/* Touch / small screens: rely on swipe gestures + long-press instead of the
+   visible handle and ✕ button. */
+@media (hover: none),
+(max-width: 640px) {
+
+  .sl-item__del,
+  .sl-item__grip {
+    display: none;
+  }
+
+  .sl-list-hint {
+    display: block;
+  }
 }
 
 /* Empty + signed-out states */
@@ -2531,7 +2872,7 @@ body.is-dragging {
   }
 
   #recipes-container {
-    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 12px;
   }
 
@@ -2601,10 +2942,6 @@ body.is-dragging {
 
   .summary-fab {
     display: inline-flex;
-  }
-
-  .selection-bar {
-    top: 76px;
   }
 }
 
