@@ -246,6 +246,7 @@ body {
   display: flex;
   align-items: center;
   gap: 8px;
+  position: relative;
 }
 
 .auth-widget [hidden],
@@ -294,6 +295,45 @@ body {
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+/* Combined account + settings trigger (avatar + name + caret). */
+.auth-user__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 10px 4px 4px;
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease;
+}
+
+.auth-user__trigger:hover,
+.auth-user__trigger[aria-expanded="true"] {
+  background: rgba(255, 255, 255, 0.28);
+}
+
+.auth-user__icon {
+  font-size: 0.85rem;
+  color: #fff;
+}
+
+.auth-user__caret {
+  font-size: 0.7rem;
+  color: #fff;
+  opacity: 0.85;
+}
+
+.auth-user__menu {
+  min-width: 240px;
+}
+
+.auth-user__menu .settings-link+.settings-link,
+.auth-user__menu #auth-account-actions .settings-link+.settings-link {
+  margin-top: 6px;
 }
 
 .auth-message,

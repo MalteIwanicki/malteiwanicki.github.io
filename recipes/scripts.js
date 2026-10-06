@@ -1316,19 +1316,28 @@ function initAuth() {
   if (!widget || !window.recipeAuth) return;
 
   const signinBtn = document.getElementById("auth-signin");
-  const userBox = document.getElementById("auth-user");
+  const accountActions = document.getElementById("auth-account-actions");
   const photo = document.getElementById("auth-user-photo");
   const initials = document.getElementById("auth-user-initials");
+  const userIcon = document.getElementById("auth-user-icon");
   const nameEl = document.getElementById("auth-user-name");
   const signoutBtn = document.getElementById("auth-signout");
+  const switchBtn = document.getElementById("auth-switch");
 
   const showPhoto = () => {
     photo.hidden = false;
     initials.hidden = true;
+    userIcon.hidden = true;
   };
   const showInitials = () => {
     photo.hidden = true;
     initials.hidden = false;
+    userIcon.hidden = true;
+  };
+  const showIcon = () => {
+    photo.hidden = true;
+    initials.hidden = true;
+    userIcon.hidden = false;
   };
   photo.addEventListener("load", showPhoto);
   photo.addEventListener("error", showInitials);
@@ -1340,11 +1349,19 @@ function initAuth() {
     return (letters || source[0] || "?").toUpperCase();
   }
 
-  signinBtn.addEventListener("click", () => window.recipeAuth.signIn());
-  signoutBtn.addEventListener("click", () => window.recipeAuth.signOut());
-  const switchBtn = document.getElementById("auth-switch");
+  signinBtn.addEventListener("click", () => {
+    closeUserMenu();
+    window.recipeAuth.signIn();
+  });
+  signoutBtn.addEventListener("click", () => {
+    closeUserMenu();
+    window.recipeAuth.signOut();
+  });
   if (switchBtn) {
-    switchBtn.addEventListener("click", () => window.recipeAuth.switchAccount());
+    switchBtn.addEventListener("click", () => {
+      closeUserMenu();
+      window.recipeAuth.switchAccount();
+    });
   }
 
   window.recipeAuth.onChange(async (user) => {
@@ -1352,7 +1369,8 @@ function initAuth() {
     document.body.classList.toggle("signed-in", signedIn);
     document.body.classList.toggle("signed-out", !signedIn);
     signinBtn.hidden = signedIn;
-    userBox.hidden = !signedIn;
+    accountActions.hidden = !signedIn;
+    nameEl.hidden = !signedIn;
     if (signedIn) {
       nameEl.textContent = user.displayName || user.email || "Signed in";
       initials.textContent = getInitials(user);
@@ -1361,6 +1379,7 @@ function initAuth() {
       else photo.removeAttribute("src");
       await loadBookAndRender();
     } else {
+      showIcon();
       book = { recipes: [], selectedMeals: [] };
       invalidate();
       setEditMode(false);
@@ -1370,6 +1389,39 @@ function initAuth() {
       closeSummarySheet();
     }
   });
+}
+
+// Open/close the combined account + settings dropdown, and populate the
+// appearance controls inside it. Wired independently of auth so settings stay
+// reachable even if the auth module is unavailable.
+function wireUserMenu() {
+  const toggle = document.getElementById("auth-user-toggle");
+  const menu = document.getElementById("auth-user-menu");
+  if (!toggle || !menu) return;
+
+  toggle.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const open = menu.hidden;
+    menu.hidden = !open;
+    toggle.setAttribute("aria-expanded", String(open));
+  });
+
+  document.addEventListener("click", (e) => {
+    if (!menu.hidden && !menu.contains(e.target) && !toggle.contains(e.target)) {
+      menu.hidden = true;
+      toggle.setAttribute("aria-expanded", "false");
+    }
+  });
+
+  wireSettingsMenu();
+}
+
+function closeUserMenu() {
+  const toggle = document.getElementById("auth-user-toggle");
+  const menu = document.getElementById("auth-user-menu");
+  if (!menu) return;
+  menu.hidden = true;
+  if (toggle) toggle.setAttribute("aria-expanded", "false");
 }
 
 async function loadBookAndRender() {
@@ -1394,8 +1446,6 @@ async function loadBookAndRender() {
 function wireStaticControls() {
   const copyButton = document.getElementById("copy-summary-button");
   if (copyButton) copyButton.addEventListener("click", copySummary);
-
-  wireThemePicker();
 
   const editToggle = document.getElementById("edit-toggle");
   if (editToggle) {
@@ -1509,11 +1559,10 @@ function wireStaticControls() {
 
 // --- Theme picker ----------------------------------------------------------
 
-function wireThemePicker() {
-  const toggle = document.getElementById("settings-toggle");
-  const menu = document.getElementById("settings-menu");
+// Populate the appearance controls inside the combined user/settings menu.
+function wireSettingsMenu() {
   const options = document.getElementById("theme-options");
-  if (!toggle || !menu || !options) return;
+  if (!options) return;
 
   options.innerHTML = "";
   THEMES.forEach((theme) => {
@@ -1538,20 +1587,6 @@ function wireThemePicker() {
       });
     });
   }
-
-  toggle.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const open = menu.hidden;
-    menu.hidden = !open;
-    toggle.setAttribute("aria-expanded", String(open));
-  });
-
-  document.addEventListener("click", (e) => {
-    if (!menu.hidden && !menu.contains(e.target) && e.target !== toggle) {
-      menu.hidden = true;
-      toggle.setAttribute("aria-expanded", "false");
-    }
-  });
 }
 
 // --- Staples & shopping links rows -----------------------------------------
@@ -1850,6 +1885,7 @@ async function boot() {
   }
 
   wireStaticControls();
+  wireUserMenu();
 
   // auth.js is a separate module that may still be loading.
   if (window.recipeAuth) initAuth();

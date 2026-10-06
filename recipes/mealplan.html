@@ -32,54 +32,64 @@
         <div class="site-header__actions">
           <div class="auth-widget" id="auth-widget">
             <button
-              id="auth-signin"
-              class="btn btn--primary"
+              id="auth-user-toggle"
+              class="auth-user__trigger"
               type="button"
-              hidden
+              aria-label="Account and settings"
+              aria-haspopup="true"
+              aria-expanded="false"
             >
-              <i class="fa-brands fa-google" aria-hidden="true"></i> Sign in
-              with Google
-            </button>
-            <div id="auth-user" class="auth-user" hidden>
               <span class="auth-user__avatar">
                 <img
                   id="auth-user-photo"
                   class="auth-user__photo"
                   alt=""
                   referrerpolicy="no-referrer"
+                  hidden
                 />
                 <span
                   id="auth-user-initials"
                   class="auth-user__initials"
+                  hidden
                 ></span>
+                <i
+                  id="auth-user-icon"
+                  class="fa-solid fa-user auth-user__icon"
+                  aria-hidden="true"
+                ></i>
               </span>
-              <span id="auth-user-name" class="auth-user__name"></span>
-              <button
-                id="auth-switch"
-                class="btn btn--ghost"
-                type="button"
-                title="Switch Google account"
-              >
-                <i class="fa-solid fa-right-left" aria-hidden="true"></i> Switch
-              </button>
-              <button id="auth-signout" class="btn btn--ghost" type="button">
-                Sign out
-              </button>
-            </div>
-          </div>
-
-          <div class="settings">
-            <button
-              id="settings-toggle"
-              class="icon-btn icon-btn--on-color"
-              type="button"
-              aria-label="Settings"
-              aria-haspopup="true"
-              aria-expanded="false"
-            >
-              <i class="fa-solid fa-gear" aria-hidden="true"></i>
+              <span id="auth-user-name" class="auth-user__name" hidden></span>
+              <i
+                class="fa-solid fa-chevron-down auth-user__caret"
+                aria-hidden="true"
+              ></i>
             </button>
-            <div id="settings-menu" class="settings-menu" hidden>
+
+            <div
+              id="auth-user-menu"
+              class="settings-menu auth-user__menu"
+              hidden
+            >
+              <button id="auth-signin" class="settings-link" type="button">
+                <i class="fa-brands fa-google" aria-hidden="true"></i>
+                Sign in with Google
+              </button>
+
+              <div id="auth-account-actions" hidden>
+                <span class="settings-menu__label">Account</span>
+                <button id="auth-switch" class="settings-link" type="button">
+                  <i class="fa-solid fa-right-left" aria-hidden="true"></i>
+                  Switch account
+                </button>
+                <button id="auth-signout" class="settings-link" type="button">
+                  <i
+                    class="fa-solid fa-arrow-right-from-bracket"
+                    aria-hidden="true"
+                  ></i>
+                  Sign out
+                </button>
+              </div>
+
               <span class="settings-menu__label">Appearance</span>
               <div id="mode-options" class="appearance-options">
                 <button type="button" class="appearance-btn" data-mode="light">
