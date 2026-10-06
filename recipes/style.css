@@ -1520,6 +1520,7 @@ textarea:focus-visible,
     opacity: 0;
     transform: translateY(-6px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -1773,7 +1774,7 @@ button.settings-link {
 }
 
 /* Row tick affordance */
-#summary-list ul.summary-items > li {
+#summary-list ul.summary-items>li {
   grid-template-columns: auto 1fr auto;
   align-items: center;
   gap: 10px;
@@ -1938,6 +1939,7 @@ li.summary-item--done .summary-item__check {
   from {
     transform: translateY(100%);
   }
+
   to {
     transform: none;
   }
@@ -1986,6 +1988,7 @@ li.summary-item--done .summary-item__check {
     opacity: 0;
     transform: translateY(10px);
   }
+
   to {
     opacity: 1;
     transform: none;
@@ -2083,6 +2086,7 @@ li.summary-item--done .summary-item__check {
 /* --- v2 responsive: mobile shopping sheet --------------------------------- */
 
 @media (max-width: 1024px) {
+
   /* On small screens the shopping list lives in the bottom sheet, not beside  */
   /* the recipes. The card is relocated into #summary-sheet-slot by JS.        */
   #summary-panel {
