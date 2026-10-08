@@ -255,6 +255,7 @@ async function loadBook() {
       theme: typeof data.theme === "string" ? data.theme : "violet",
       mode: typeof data.mode === "string" ? data.mode : "light",
       view: typeof data.view === "string" ? data.view : "cards",
+      font: typeof data.font === "string" ? data.font : "nunito",
       checkedItems: Array.isArray(data.checkedItems) ? data.checkedItems : [],
       shoppingList: shoppingListToArray(data.shoppingList)
     };
@@ -368,6 +369,7 @@ async function saveBook(book) {
   if (typeof book.theme === "string") payload.theme = book.theme;
   if (typeof book.mode === "string") payload.mode = book.mode;
   if (typeof book.view === "string") payload.view = book.view;
+  if (typeof book.font === "string") payload.font = book.font;
   if (Array.isArray(book.checkedItems)) payload.checkedItems = book.checkedItems;
   if (Array.isArray(book.shoppingList)) payload.shoppingList = book.shoppingList;
   await setDoc(doc(db, "recipebooks", currentUser.uid), payload, {

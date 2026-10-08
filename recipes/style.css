@@ -141,6 +141,52 @@ html[data-theme="graphite"] {
   --sun-ink: #333333;
 }
 
+html[data-theme="cyan"] {
+  --accent: #00acc1;
+  --accent-dark: #0097a7;
+  --accent-soft: #e0f7fa;
+  --bg: #f1fbfd;
+  --sun: #a5e6f2;
+  --sun-ink: #00697a;
+}
+
+html[data-theme="tomato"] {
+  --accent: #d50000;
+  --accent-dark: #b71c1c;
+  --accent-soft: #fdecec;
+  --bg: #fdf5f5;
+  --sun: #f7a6a6;
+  --sun-ink: #8f0f0f;
+}
+
+html[data-theme="tangerine"] {
+  --accent: #f4511e;
+  --accent-dark: #e0430f;
+  --accent-soft: #feece4;
+  --bg: #fdf7f3;
+  --sun: #ffc1a3;
+  --sun-ink: #93330c;
+}
+
+html[data-theme="banana"] {
+  --accent: #f6bf26;
+  --accent-dark: #e0a800;
+  --accent-soft: #fdf3d3;
+  --bg: #fdfbf1;
+  --sun: #f9dd8a;
+  --sun-ink: #7a5c02;
+  --accent-contrast: #5b4508;
+}
+
+html[data-theme="grape"] {
+  --accent: #8e24aa;
+  --accent-dark: #7b1fa2;
+  --accent-soft: #f6e9fb;
+  --bg: #faf5fc;
+  --sun: #d9a8ea;
+  --sun-ink: #5e1480;
+}
+
 /* --- Dark mode (orthogonal to the theme) --------------------------------- */
 /* Overrides the neutral surfaces and derives accent tints from the theme via
    color-mix, so every palette gets a matching dark variant. */
@@ -1384,6 +1430,28 @@ footer p {
   line-height: 1.4;
 }
 
+.settings-select {
+  display: block;
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-sm);
+  background-color: var(--surface);
+  color: var(--text);
+  font-family: inherit;
+  font-size: 0.88rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.settings-select:hover,
+.settings-select:focus {
+  border-color: var(--accent);
+  outline: none;
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
 /* A gear/icon that sits on the coloured header bar. */
 .icon-btn--on-color {
   color: #fff;
@@ -1485,6 +1553,26 @@ footer p {
 
 .swatch-graphite {
   --swatch: #616161;
+}
+
+.swatch-cyan {
+  --swatch: #00acc1;
+}
+
+.swatch-tomato {
+  --swatch: #d50000;
+}
+
+.swatch-tangerine {
+  --swatch: #f4511e;
+}
+
+.swatch-banana {
+  --swatch: #f6bf26;
+}
+
+.swatch-grape {
+  --swatch: #8e24aa;
 }
 
 /* ==========================================================================

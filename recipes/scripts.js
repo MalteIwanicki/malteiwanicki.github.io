@@ -53,7 +53,7 @@ function normalizeIngredient(name) {
 
 // --- App state -------------------------------------------------------------
 
-let book = { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", checkedItems: [] };
+let book = { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", font: "nunito", checkedItems: [] };
 let parsedCache = new Map();
 let editMode = false;
 let selectedRecipes = [];
@@ -197,10 +197,15 @@ const THEMES = [
   "violet",
   "blueberry",
   "peacock",
+  "cyan",
   "lavender",
   "flamingo",
+  "tomato",
+  "tangerine",
+  "banana",
   "sage",
   "basil",
+  "grape",
   "graphite"
 ];
 const THEME_STORAGE = "recipeBookTheme";
@@ -258,6 +263,81 @@ function storedTheme() {
     return localStorage.getItem(THEME_STORAGE) || "violet";
   } catch (_) {
     return "violet";
+  }
+}
+
+// --- Font ------------------------------------------------------------------
+
+const FONTS = [
+  { id: "nunito", name: "Nunito",
+    url: "https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700;800&display=swap" },
+  { id: "quicksand", name: "Quicksand",
+    url: "https://fonts.googleapis.com/css2?family=Quicksand:wght@400;500;600;700&display=swap" },
+  { id: "poppins", name: "Poppins",
+    url: "https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700;800&display=swap" },
+  { id: "rubik", name: "Rubik",
+    url: "https://fonts.googleapis.com/css2?family=Rubik:wght@400;600;700;800&display=swap" },
+  { id: "jost", name: "Jost",
+    url: "https://fonts.googleapis.com/css2?family=Jost:wght@400;600;700;800&display=swap" },
+  { id: "karla", name: "Karla",
+    url: "https://fonts.googleapis.com/css2?family=Karla:wght@400;600;700;800&display=swap" },
+  { id: "fredoka", name: "Fredoka",
+    url: "https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" },
+  { id: "baloo2", name: "Baloo 2",
+    url: "https://fonts.googleapis.com/css2?family=Baloo+2:wght@400;600;700;800&display=swap" },
+  { id: "comfortaa", name: "Comfortaa",
+    url: "https://fonts.googleapis.com/css2?family=Comfortaa:wght@400;600;700&display=swap" },
+  { id: "dmsans", name: "DM Sans",
+    url: "https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700;800&display=swap" },
+  { id: "spacegrotesk", name: "Space Grotesk",
+    url: "https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap" },
+  { id: "inter", name: "Inter",
+    url: "https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800&display=swap" }
+];
+
+const FONT_STORAGE = "recipeBookFont";
+let loadedFonts = new Set();
+
+function fontFor(id) {
+  return FONTS.find((f) => f.id === id) || FONTS[0];
+}
+
+function loadFont(id) {
+  const f = fontFor(id);
+  if (!f || loadedFonts.has(f.id) || document.getElementById(`gf-${f.id}`)) return;
+  const link = document.createElement("link");
+  link.rel = "stylesheet";
+  link.id = `gf-${f.id}`;
+  link.href = f.url;
+  link.onload = () => loadedFonts.add(f.id);
+  link.onerror = () => loadedFonts.add(f.id);
+  document.head.appendChild(link);
+}
+
+function applyFont(font, persist = true) {
+  const f = fontFor(font);
+  document.documentElement.style.setProperty(
+    "--font",
+    `"${f.name}", system-ui, -apple-system, "Segoe UI", "Helvetica Neue", Arial, sans-serif`
+  );
+  book.font = f.id;
+  if (persist) {
+    try {
+      localStorage.setItem(FONT_STORAGE, f.id);
+    } catch (_) {
+      /* ignore */
+    }
+  }
+  const sel = document.getElementById("font-select");
+  if (sel) sel.value = f.id;
+  loadFont(f.id);
+}
+
+function storedFont() {
+  try {
+    return localStorage.getItem(FONT_STORAGE) || "nunito";
+  } catch (_) {
+    return "nunito";
   }
 }
 
@@ -1590,13 +1670,14 @@ async function loadBookAndRender() {
   if (!window.recipeStore || !window.recipeStore.isReady()) return;
   try {
     const loaded = await window.recipeStore.loadBook();
-    book = loaded || { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", checkedItems: [] };
+    book = loaded || { recipes: [], selectedMeals: [], staples: [], links: {}, theme: "violet", font: "nunito", checkedItems: [] };
     invalidate();
     renderBook();
     refreshIngredientNames();
     // The signed-in user's saved appearance wins; otherwise keep the local one.
     if (book.theme) applyTheme(book.theme);
     if (book.mode) applyMode(book.mode);
+    if (book.font) applyFont(book.font);
     applyView(book.view || storedView(), false);
   } catch (err) {
     console.error("Failed to load recipe book:", err);
@@ -1758,6 +1839,23 @@ function wireSettingsMenu() {
         applyMode(btn.dataset.mode);
         scheduleSave({ mode: btn.dataset.mode });
       });
+    });
+  }
+
+  const fontSelect = document.getElementById("font-select");
+  if (fontSelect) {
+    fontSelect.innerHTML = "";
+    FONTS.forEach((f) => {
+      const opt = document.createElement("option");
+      opt.value = f.id;
+      opt.textContent = f.name;
+      opt.style.fontFamily = `"${f.name}", sans-serif`;
+      fontSelect.appendChild(opt);
+    });
+    fontSelect.value = storedFont();
+    fontSelect.addEventListener("change", () => {
+      applyFont(fontSelect.value);
+      scheduleSave({ font: fontSelect.value });
     });
   }
 }
@@ -2049,6 +2147,7 @@ async function boot() {
   // storage or the OS preference).
   applyTheme(storedTheme());
   applyMode(storedMode() || (prefersDark() ? "dark" : "light"));
+  applyFont(storedFont(), false);
   applyView(storedView(), false);
 
   // Try to load the official Cooklang parser up-front; fall back if offline.
