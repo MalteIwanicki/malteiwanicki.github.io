@@ -564,8 +564,8 @@ function updateProgress() {
 // natively.
 
 const TAP_SLOP = 12; // px of movement still counted as a tap
-const SWIPE_START = 12; // px before a horizontal swipe begins
-const SWIPE_ACTION = 90; // px to trigger the swipe action
+const SWIPE_START = 10; // px before a horizontal swipe begins
+const SWIPE_ACTION = 70; // px to trigger the swipe action
 const LONG_PRESS = 380; // ms to pick up a row for dragging
 const SWIPE_MAX = 140; // furthest the content follows the finger
 
@@ -587,6 +587,7 @@ function wireItemGesture(li, content, it) {
   const onDown = (e) => {
     if (e.pointerType === "mouse" && e.button !== 0) return;
     if (dragState) return;
+
     // Let the amount field and the ✕ button work normally.
     if (e.target.closest(".sl-no-gesture") || e.target.closest(".sl-item__del")) {
       return;
@@ -693,7 +694,7 @@ function wireItemGesture(li, content, it) {
       endDrag();
       // Swallow the click that immediately follows the pointerup so releasing
       // a drag never ticks/unticks the row or opens the name editor.
-      suppressNextClick(li);
+      suppressNextClick();
       return;
     }
 
@@ -705,11 +706,16 @@ function wireItemGesture(li, content, it) {
       } else {
         settleBack(li, content);
       }
-      suppressNextClick(li);
+      suppressNextClick();
       return;
     }
 
     if (moved > TAP_SLOP || duration >= LONG_PRESS) return;
+    // A tap right on top of the previous one (e.g. a nervous double-tap that,
+    // after the first tick re-flowed the list, lands on a different item)
+    // would toggle the wrong row — treat it as a repeat and ignore it.
+    if (isRepeatTap(e)) return;
+    rememberTap(e);
 
     // On touch, tapping the name (or the empty area of the row) edits it;
     // the check circle and the desktop mouse toggle instead.
@@ -718,15 +724,18 @@ function wireItemGesture(li, content, it) {
       (onName || (startEl && startEl.closest && startEl.closest(".sl-item__body"))) &&
       pointerType !== "mouse"
     ) {
-      suppressNextClick(li);
+      suppressNextClick();
       const span = li.querySelector(".sl-item__name");
       if (span) editName(span, it);
       return;
     }
 
-    // Plain tap on the check circle (or a mouse click anywhere) → tick / untick.
+    // Plain tap on the check circle (or a mouse click anywhere) → tick /
+    // untick. Only THIS item: the synthetic click that follows the tap is
+    // swallowed document-wide (see suppressNextClick), so it can never land
+    // on the row that slid into the tapped position.
     applyToggle(it);
-    suppressNextClick(li);
+    suppressNextClick();
   };
 
   const onCancel = (e) => {
@@ -744,15 +753,22 @@ function wireItemGesture(li, content, it) {
 }
 
 // Swallow the click the browser fires right after a swipe/tap we already
-// handled, so the check button doesn't react a second time.
-function suppressNextClick(li) {
+// handled, so a check button doesn't react a second time.
+//
+// This MUST live on the document (capture phase), not on the row: ticking
+// re-renders the list, so by the time the synthetic click arrives the
+// original <li> is detached — the browser then hit-tests the click onto
+// whichever row now occupies the tap position, and its check button toggled
+// the wrong item (on mobile that was the "one tap, many ticks" bug). A
+// document-level capture listener swallows the click wherever it lands.
+function suppressNextClick() {
   const swallow = (e) => {
     e.stopPropagation();
     e.preventDefault();
-    li.removeEventListener("click", swallow, true);
+    document.removeEventListener("click", swallow, true);
   };
-  li.addEventListener("click", swallow, true);
-  setTimeout(() => li.removeEventListener("click", swallow, true), 400);
+  document.addEventListener("click", swallow, true);
+  setTimeout(() => document.removeEventListener("click", swallow, true), 450);
 }
 
 function settleBack(li, content) {
