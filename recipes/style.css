@@ -2712,26 +2712,17 @@ body.is-dragging {
   }
 }
 
-.sl-item__check {
-  width: 30px;
-  height: 30px;
-  flex: 0 0 30px;
+/* Done-state marker (a small dot instead of the old check button, which was
+   removed because on touch swiping is the way to tick/delete). */
+.sl-item__state {
+  flex: 0 0 auto;
+  width: 8px;
+  height: 8px;
   border-radius: 50%;
   border: 2px solid var(--border-strong);
-  background: var(--surface);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  color: transparent;
-  font-size: 0.8rem;
+  background: transparent;
   transition: background-color var(--dur-fast) var(--ease),
-    border-color var(--dur-fast) var(--ease), color var(--dur-fast) var(--ease);
-}
-
-.sl-item__check:hover {
-  border-color: var(--accent);
-  color: var(--accent);
+    border-color var(--dur-fast) var(--ease);
 }
 
 .sl-item__body {
@@ -2846,10 +2837,9 @@ body.is-dragging {
   text-decoration: none;
 }
 
-.sl-item--done .sl-item__check {
+.sl-item--done .sl-item__state {
   background: var(--accent);
   border-color: var(--accent);
-  color: var(--accent-contrast);
 }
 
 /* While swiping, no entry animation / snap-back transition interference. */
