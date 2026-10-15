@@ -1108,6 +1108,15 @@ function addToShoppingList() {
     `${String(it.name).toLowerCase()}|${String(it.amount || "").toLowerCase()}`;
   const seen = new Set(existing.map(keyOf));
 
+  // Next position at the very top of the list (below the current minimum),
+  // so copied items land on top in a stable order — and already carry a real
+  // `order` value, keeping the list's sort stable across live-sync snapshots.
+  let topOrder = 0;
+  existing.forEach((e) => {
+    if (Number.isFinite(e.order) && e.order < topOrder) topOrder = e.order;
+  });
+  const nextTopOrder = () => --topOrder;
+
   const toAdd = [];
   const toRevive = [];
   items.forEach((it) => {
@@ -1128,7 +1137,8 @@ function addToShoppingList() {
       amount: it.amount || "",
       note: it.note || "",
       done: false,
-      at: Date.now()
+      at: Date.now(),
+      order: nextTopOrder()
     };
     existing.push(item);
     toAdd.push(item);

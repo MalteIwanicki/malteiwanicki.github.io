@@ -270,16 +270,6 @@ function mergeLists(cloud, local) {
 
 // --- Ordering --------------------------------------------------------------
 
-// A key issued for items that should appear on top (newest first). Orders are
-// renumbered to 0..n-1 after every drag, so going below the minimum works.
-function nextTopOrder() {
-  let min = 0;
-  items.forEach((i) => {
-    if (Number.isFinite(i.order) && i.order < min) min = i.order;
-  });
-  return min - 1;
-}
-
 // Give every item a stable order. Items that don't have one yet (e.g. added
 // from the Recipe Book) are placed on top, newest first, matching the original
 // "just added on top" behaviour; everything else keeps its dragged order.
@@ -296,6 +286,19 @@ function ensureOrder() {
   unordered.concat(ordered).forEach((it, i) => {
     it.order = i;
   });
+
+  // Persist the fresh numbers (every item gets one written, so the stored
+  // list is self-consistent again). Without this the cloud list stays out of
+  // date — items copied from the Recipe Book used to arrive without an
+  // order — and every live-sync snapshot would re-run this renumbering,
+  // which re-sorted the open items on each refresh.
+  if (unordered.length) {
+    items.forEach((it) => persistItem(it.id, { order: it.order }));
+    // The per-item order writes settle back as a burst of live-sync
+    // snapshots; ignore any that only differ by order while they land (same
+    // window a drag uses), so the list isn't re-sorted mid-burst.
+    orderEchoUntil = Date.now() + ORDER_ECHO_MS;
+  }
 }
 
 // --- Rendering -------------------------------------------------------------
@@ -322,30 +325,15 @@ function rememberTap(e) {
   }
 }
 
-function makeCheck(it) {
-  const btn = document.createElement("button");
-  btn.type = "button";
-  btn.className = "sl-item__check";
-  btn.innerHTML = '<i class="fa-solid fa-check" aria-hidden="true"></i>';
-  btn.setAttribute("aria-pressed", String(it.done));
-  btn.setAttribute("aria-label", `${it.done ? "Untick" : "Tick"} ${it.name}`);
-  btn.addEventListener("click", (e) => toggle(it, e));
-  return btn;
-}
 
-function toggle(it, e) {
-  if (isRepeatTap(e)) return;
-  rememberTap(e);
-  applyToggle(it);
-}
-
-// Tick / untick (used by tap and by a right-swipe).
+// Tick / untick (used by tap and by a right-swipe). The item's position in
+// the list is deliberately untouched: ticking only moves it between the
+// "to buy" and "bought" groups, and unticking returns it to its original
+// spot among the open items.
 function applyToggle(it) {
   it.done = !it.done;
   it.at = Date.now();
-  // Unticking brings the item back among the "to buy" items, on top.
-  if (!it.done) it.order = nextTopOrder();
-  persistItem(it.id, { done: it.done, at: it.at, order: it.order });
+  persistItem(it.id, { done: it.done, at: it.at });
   vibrate(10);
   render();
 }
@@ -438,7 +426,13 @@ function row(it) {
   grip.setAttribute("aria-hidden", "true");
   content.appendChild(grip);
 
-  content.appendChild(makeCheck(it));
+  // Small dot marking the done state. The old check button was removed
+  // (swiping is how items get ticked on touch), but the row still needs a
+  // compact visual cue for bought vs. to-buy.
+  const stateDot = document.createElement("span");
+  stateDot.className = "sl-item__state";
+  stateDot.setAttribute("aria-hidden", "true");
+  content.appendChild(stateDot);
 
   const body = document.createElement("div");
   body.className = "sl-item__body";
@@ -727,16 +721,6 @@ function wireItemGesture(li, content, it) {
     // would toggle the wrong row — treat it as a repeat and ignore it.
     if (isRepeatTap(e)) return;
     rememberTap(e);
-
-    // On touch, ticking is swipe-only: a tap on the check circle is a no-op
-    // (the circle stays as the visual done-state). Desktop mouse keeps the
-    // click-to-tick behaviour.
-    const onCheck =
-      startEl && startEl.closest && startEl.closest(".sl-item__check");
-    if (onCheck && pointerType !== "mouse") {
-      suppressNextClick();
-      return;
-    }
 
     // On touch, tapping the name (or the empty area of the row) edits it.
     const onName = startEl && startEl.closest && startEl.closest(".sl-item__name");
