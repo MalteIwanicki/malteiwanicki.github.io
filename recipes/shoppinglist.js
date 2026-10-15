@@ -654,7 +654,10 @@ function wireItemGesture(li, content, it) {
       e.preventDefault();
       g.dx = Math.max(-SWIPE_MAX, Math.min(SWIPE_MAX, dx));
       content.style.transform = `translateX(${g.dx}px)`;
-      li.classList.toggle("is-swiping", true);
+      li.classList.add("is-swiping");
+      // Reveal the matching action background (green tick / red delete).
+      li.classList.toggle("swipe-right", g.dx > 0);
+      li.classList.toggle("swipe-left", g.dx < 0);
       return;
     }
 
@@ -690,6 +693,14 @@ function wireItemGesture(li, content, it) {
     const startEl = g.startEl;
     g = null;
 
+    // Cancelling the touch pointerup suppresses the synthetic click the
+    // browser would otherwise fire at the tap position. Because ticking
+    // re-renders the list first, that click would hit-test onto the row that
+    // slid into the old position and could toggle the wrong item. (The
+    // document-level click swallow below is the fallback for browsers that
+    // still emit the click anyway.)
+    if (pointerType !== "mouse") e.preventDefault();
+
     if (wasDrag) {
       endDrag();
       // Swallow the click that immediately follows the pointerup so releasing
@@ -717,8 +728,17 @@ function wireItemGesture(li, content, it) {
     if (isRepeatTap(e)) return;
     rememberTap(e);
 
-    // On touch, tapping the name (or the empty area of the row) edits it;
-    // the check circle and the desktop mouse toggle instead.
+    // On touch, ticking is swipe-only: a tap on the check circle is a no-op
+    // (the circle stays as the visual done-state). Desktop mouse keeps the
+    // click-to-tick behaviour.
+    const onCheck =
+      startEl && startEl.closest && startEl.closest(".sl-item__check");
+    if (onCheck && pointerType !== "mouse") {
+      suppressNextClick();
+      return;
+    }
+
+    // On touch, tapping the name (or the empty area of the row) edits it.
     const onName = startEl && startEl.closest && startEl.closest(".sl-item__name");
     if (
       (onName || (startEl && startEl.closest && startEl.closest(".sl-item__body"))) &&

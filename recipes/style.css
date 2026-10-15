@@ -2575,7 +2575,9 @@ body.shoppinglist {
 }
 
 /* Swipe action backgrounds sit behind the content and are revealed as it
-   slides. */
+   slides. Both are full-width, so only the one matching the swipe direction
+   is visible — otherwise the delete background (later in the DOM) would
+   cover the tick background and a right-swipe would look red. */
 .sl-item__action {
   position: absolute;
   top: 0;
@@ -2589,6 +2591,12 @@ body.shoppinglist {
   font-size: var(--text-sm);
   color: #fff;
   pointer-events: none;
+  visibility: hidden;
+}
+
+.sl-item.swipe-right .sl-item__action--tick,
+.sl-item.swipe-left .sl-item__action--delete {
+  visibility: visible;
 }
 
 .sl-item__action i {
